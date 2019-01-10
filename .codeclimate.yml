@@ -1,0 +1,42 @@
+version: "2"
+checks:
+  file-lines:
+    enabled: false
+  method-complexity:
+    enabled: false
+  method-lines:
+    enabled: false
+  similar-code:
+    enabled: false
+plugins:
+  markdownlint:
+    enabled: true
+    checks:
+      MD003:
+        enabled: false
+      MD013:
+        enabled: false
+      MD022:
+        enabled: false
+      MD033:
+        enabled: false
+      MD036:
+        enabled: false
+  nodesecurity:
+    enabled: true
+  tslint:
+    enabled: true
+exclude_patterns:
+  - "!src/**/*.ts"
+  - "!test/**/*.ts" 
+  - "src/cli.ts"
+  - "test/"
+  - ".github/"
+  - ".vscode/"
+  - "*.json"
+  - ".*.yml"
+  - "*.lock"
+  - ".editorconfig"
+  - ".git*"
+  - "wallaby.js"
+  - "**/*.d.ts"

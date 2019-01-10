@@ -1,0 +1,9 @@
+.nyc_output
+.DS_Store
+node_modules
+coverage
+out
+lib
+npm-debug.*
+*.lcov
+/.integrity.json

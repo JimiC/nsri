@@ -1,0 +1,12 @@
+{
+  "version": "1",
+  "hashes": {
+    "directory.1": {
+      "contents": {
+        "anotherFileToHash.txt": "sha1-EZ2w0rsSmXBOddIoz2IoOIuxGaQ=",
+        "otherFileToHash.txt": "sha1-B8FJ4uKgHESSgMvJUyrj3ix2uG8="
+      },
+      "hash": "sha512-AwzUWMMnbbRf+pow1dBJlkRAxtQwgm59xDMLa2Gm1pcKDolXTPfPGjRc4a0muGENgeZiM4tf17HfIdEOIlS78Q=="
+    }
+  }
+}

@@ -1,0 +1,42 @@
+language: node_js
+os:
+  - linux
+  - osx
+node_js:
+  - node # latest node
+  - 10
+  - 9
+  - 8
+  - 7
+  - 6 # minimum
+git:
+  depth: 5
+matrix:
+  allow_failures:
+    - node_js: node
+  fast_finish: true
+cache: yarn
+before_install:
+  - if [[ $TRAVIS_COMMIT_MESSAGE =~ ^[[:digit:]\.]+] && [$TRAVIS_BRANCH != $TRAVIS_TAG ]] ; then echo -e "Skiping due to existing tagged build" && exit 0 ; fi
+  - curl -L https://yarnpkg.com/install.sh | bash
+  - export PATH=$HOME/.yarn/bin:$PATH
+before_script: npm i codeclimate-test-reporter --no-save
+script: npm t
+after_success: if [[ $CODECLIMATE_REPO_TOKEN ]] ; then codeclimate-test-reporter < ./coverage/lcov.info ; fi
+
+jobs:
+  include:
+    - stage: publish
+      if: repo =~ ^JimiC AND tag IS present AND type = push
+      os: linux
+      node_js: 6
+      before_script:
+      script: npm run prepublishOnly
+      after_success:
+      deploy:
+        skip_cleanup: true
+        provider: npm
+        email: jimikar@gmail.com
+        api_key: $NPM_TOKEN
+        on:
+          tags: true

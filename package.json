@@ -1,0 +1,87 @@
+{
+  "name": "nsri",
+  "version": "0.0.0",
+  "description": "Node.js utility tool for creating and checking subresource integrity",
+  "license": "MIT",
+  "author": {
+    "email": "jimikar@gmail.com",
+    "name": "Jimi (Dimitris) Charalampidis"
+  },
+  "repository": {
+    "type": "git",
+    "url": "JimiC/nsri"
+  },
+  "bugs": {
+    "url": "https://github.com/JimiC/nsri/issues"
+  },
+  "homepage": "https://github.com/JimiC/nsri#readme",
+  "engines": {
+    "node": ">=6"
+  },
+  "keywords": [
+    "node",
+    "nodejs",
+    "cli",
+    "integrity",
+    "checker",
+    "check",
+    "validation",
+    "file",
+    "files",
+    "folder",
+    "forders",
+    "directory",
+    "directories",
+    "structure",
+    "hash",
+    "checksum",
+    "checksums",
+    "nsri"
+  ],
+  "main": "lib/index.js",
+  "bin": {
+    "nsri": "lib/cli.js"
+  },
+  "files": [
+    "lib"
+  ],
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "start": "node ./out/src/cli.js",
+    "lint": "tslint -p .",
+    "build:dev": "npm run build -- -p tsconfig.dev.json",
+    "prebuild": "npm run cleanup && npm run lint",
+    "build": "tsc",
+    "postbuild": "cpx \"src/schemas/**/*\" out/src/schemas",
+    "cleanup": "rimraf ./.nyc_output ./coverage ./out ./lib",
+    "pretest": "npm run build:dev",
+    "test": "nyc -x '' mocha",
+    "posttest": "nyc report -r lcov",
+    "prepublishOnly": "npm run build && cpx \"out/src/**/*\" lib"
+  },
+  "dependencies": {
+    "ajv": "^6.6.2",
+    "detect-indent": "^5.0.0",
+    "minimatch": "^3.0.4",
+    "yargs": "^12.0.5"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/detect-indent": "^5.0.0",
+    "@types/minimatch": "^3.0.3",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "6",
+    "@types/semver": "^5.5.0",
+    "@types/sinon": "^7.0.0",
+    "@types/yargs": "^12.0.1",
+    "chai": "^4.2.0",
+    "cpx": "^1.5.0",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
+    "rimraf": "^2.6.2",
+    "semver": "^5.6.0",
+    "sinon": "^7.2.2",
+    "tslint": "^5.11.0",
+    "typescript": "^3.2.2"
+  }
+}

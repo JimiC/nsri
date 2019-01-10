@@ -1,0 +1,45 @@
+{
+  "version": "1",
+  "hashes": {
+    "fixtures": {
+      "contents": {
+        "directory": {
+          "contents": {
+            "anotherFileToHash.txt": "sha1-EZ2w0rsSmXBOddIoz2IoOIuxGaQ=",
+            "otherFileToHash.txt": "sha1-B8FJ4uKgHESSgMvJUyrj3ix2uG8="
+          },
+          "hash": "sha512-Ze62278vNFKc3izakn2FgyvHIZEbnsuqKogaZLA1ihM1zk95RKlz+z7qk1XEysMaoJlpDNqSWx4PoPp2cFNBPw=="
+        },
+        "directory.1": {
+          "contents": {
+            "anotherFileToHash.txt": "sha1-EZ2w0rsSmXBOddIoz2IoOIuxGaQ=",
+            "otherFileToHash.txt": "sha1-B8FJ4uKgHESSgMvJUyrj3ix2uG8="
+          },
+          "hash": "sha512-AwzUWMMnbbRf+pow1dBJlkRAxtQwgm59xDMLa2Gm1pcKDolXTPfPGjRc4a0muGENgeZiM4tf17HfIdEOIlS78Q=="
+        },
+        "fileToHash.txt": "sha1-H58mYNjbMJTkiNvvNfj2YKl3ck0=",
+        "fixtures": {
+          "contents": {
+            "directory": {
+              "contents": {
+                "anotherFileToHash.txt": "sha1-EZ2w0rsSmXBOddIoz2IoOIuxGaQ="
+              },
+              "hash": "sha512-a7F1/1x1ZVAWMdcx7X9Dnzd9M4TY9wU21vNCt3ALW0+0npq85MKn7uhz8yGqjDbSmAUDf14uxgqjk2tMtkjK9w=="
+            },
+            "directory.1": {
+              "contents": {
+                "anotherFileToHash.txt": "sha1-EZ2w0rsSmXBOddIoz2IoOIuxGaQ=",
+                "otherFileToHash.txt": "sha1-B8FJ4uKgHESSgMvJUyrj3ix2uG8="
+              },
+              "hash": "sha512-AwzUWMMnbbRf+pow1dBJlkRAxtQwgm59xDMLa2Gm1pcKDolXTPfPGjRc4a0muGENgeZiM4tf17HfIdEOIlS78Q=="
+            },
+            "fileToHash.txt": "sha1-t56X7IQ267Hza0qjpSpqb9UPcfE="
+          },
+          "hash": "sha512-rDNKFYBCOuaCzpomiZEGyRLAmc3+IU/HoNj7NiKXqLG90rNko74LwpZ1DYKx+/aJptGTKCr/9mP8ggnl4QVNNw=="
+        },
+        "sameContentWithFileToHash.txt": "sha1-l5sOr3meWkHyZWPi2Ln4GM7/lrg="
+      },
+      "hash": "sha512-WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAhrHDdWLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="
+    }
+  }
+}
