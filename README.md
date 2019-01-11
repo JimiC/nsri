@@ -5,6 +5,7 @@
 
 [![Dependencies Status](https://david-dm.org/jimic/nsri/status.svg)](https://david-dm.org/jimic/nsri)
 [![DevDependencies Status](https://david-dm.org/jimic/nsri/dev-status.svg)](https://david-dm.org/jimic/nsri?type=dev)
+[![Greenkeeper badge](https://badges.greenkeeper.io/jimic/nsri.svg)](https://greenkeeper.io/)
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/80a63b3346eef535a228/maintainability)](https://codeclimate.com/github/JimiC/nsri/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/80a63b3346eef535a228/test_coverage)](https://codeclimate.com/github/JimiC/nsri/test_coverage)
