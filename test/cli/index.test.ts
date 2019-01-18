@@ -6,6 +6,7 @@ import readline, { ReadLine } from 'readline';
 import * as sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import nsri from '../../src/cli/index';
+import { ConfigExplorer } from '../../src/common/configExplorer';
 import { Logger } from '../../src/common/logger';
 import { YargsParser } from '../../src/common/yargsParser';
 import { IParsedArgs } from '../../src/interfaces//parsedArgs';
@@ -14,6 +15,7 @@ describe('CLI: tests', function () {
 
   let sandbox: sinon.SinonSandbox;
   let pargs: IParsedArgs;
+  let configExplorerStub: sinon.SinonStub;
   let ypParseStub: sinon.SinonStub;
   let icCreateStub: sinon.SinonStub;
   let icCheckStub: sinon.SinonStub;
@@ -34,6 +36,7 @@ describe('CLI: tests', function () {
     };
     sandbox = sinon.createSandbox();
     ypParseStub = sandbox.stub(YargsParser.prototype, 'parse').returns(pargs);
+    configExplorerStub = sandbox.stub(ConfigExplorer.prototype, 'assignArgs').resolves();
     icCreateStub = sandbox.stub(Integrity, 'create');
     icCheckStub = sandbox.stub(Integrity, 'check');
     sandbox.stub(Integrity, 'persist');
@@ -69,7 +72,7 @@ describe('CLI: tests', function () {
             consoleLogStub.restore();
             exitStub.restore();
             expect(spinnerLogStopSpy.calledOnce).to.be.true;
-            expect(spinnerLogStopSpy.calledOnce).to.be.true;
+            expect(spinnerLogStartSpy.calledOnce).to.be.true;
             expect(spinnerLogStartSpy.calledBefore(spinnerLogStopSpy)).to.be.true;
             expect(spinnerLogStartSpy.calledWith('Creating integrity hash')).to.be.true;
             const returnValue = spinnerLogStartSpy.returnValues[0];
@@ -90,7 +93,7 @@ describe('CLI: tests', function () {
             consoleLogStub.restore();
             exitStub.restore();
             expect(spinnerLogStopSpy.calledOnce).to.be.true;
-            expect(spinnerLogStopSpy.calledOnce).to.be.true;
+            expect(spinnerLogStartSpy.calledOnce).to.be.true;
             expect(spinnerLogStartSpy.calledBefore(spinnerLogStopSpy)).to.be.true;
             expect(spinnerLogStartSpy.calledWith('Creating integrity hash')).to.be.true;
             const returnValue = spinnerLogStartSpy.returnValues[0];
@@ -114,7 +117,7 @@ describe('CLI: tests', function () {
               consoleLogStub.restore();
               exitStub.restore();
               expect(spinnerLogStopSpy.calledOnce).to.be.true;
-              expect(spinnerLogStopSpy.calledOnce).to.be.true;
+              expect(spinnerLogStartSpy.calledOnce).to.be.true;
               expect(spinnerLogStartSpy.calledBefore(spinnerLogStopSpy)).to.be.true;
               expect(spinnerLogStartSpy.calledWith(`Checking integrity of: '${pargs.inPath}'`)).to.be.true;
               const returnValue = spinnerLogStartSpy.returnValues[0];
@@ -136,7 +139,7 @@ describe('CLI: tests', function () {
               consoleLogStub.restore();
               exitStub.restore();
               expect(spinnerLogStopSpy.calledOnce).to.be.true;
-              expect(spinnerLogStopSpy.calledOnce).to.be.true;
+              expect(spinnerLogStartSpy.calledOnce).to.be.true;
               expect(spinnerLogStartSpy.calledBefore(spinnerLogStopSpy)).to.be.true;
               expect(spinnerLogStartSpy.calledWith(`Checking integrity of: '${pargs.inPath}'`)).to.be.true;
               const returnValue = spinnerLogStartSpy.returnValues[0];
@@ -159,7 +162,7 @@ describe('CLI: tests', function () {
             consoleLogStub.restore();
             exitStub.restore();
             expect(spinnerLogStopSpy.calledOnce).to.be.true;
-            expect(spinnerLogStopSpy.calledOnce).to.be.true;
+            expect(spinnerLogStartSpy.calledOnce).to.be.true;
             expect(spinnerLogStartSpy.calledBefore(spinnerLogStopSpy)).to.be.true;
             expect(spinnerLogStartSpy.calledWith(`Checking integrity of: '${pargs.inPath}'`)).to.be.true;
             const returnValue = spinnerLogStartSpy.returnValues[0];
@@ -208,6 +211,19 @@ describe('CLI: tests', function () {
     });
 
     context('to call', function () {
+
+      it('the ConfigExplorer \'assignArgs\' function',
+      async function () {
+        pargs.command = 'check';
+        const exitStub = sandbox.stub(process, 'exit');
+        const consoleLogStub = sandbox.stub(console, 'log');
+        const stdoutStub = sandbox.stub(process.stdout, 'write');
+        await nsri();
+        stdoutStub.restore();
+        consoleLogStub.restore();
+        exitStub.restore();
+        expect(configExplorerStub.calledOnce).to.be.true;
+      });
 
       it('the YargsParser \'parse\' function',
         async function () {

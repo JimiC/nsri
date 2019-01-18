@@ -3,8 +3,10 @@ module.exports = {
     "src/**/*.ts",
     "src/schemas/**/*.json",
     "test/helper.ts",
-    "test/fixtures/**/*",
-    "test/fixtures/**/.integrity.json",
+    { pattern: "test/fixtures/**/*", instrument: false },
+    { pattern: "test/fixtures/**/.integrity.json", instrument: false },
+    { pattern: "test/cosmiconfig/**/*", instrument: false },
+    { pattern: "test/cosmiconfig/**/.*", instrument: false },
     "package.json"
   ],
   tests: [
@@ -16,15 +18,17 @@ module.exports = {
   preprocessors: {
     "package.json": (file, done) => done(file.rename(`../${file.path}`).content),
     "**/test/fixtures/**/*": (file, done) => done(file.rename(`../${file.path}`).content),
-    "**/test/fixtures/**/.integrity.json": (file, done) => done(file.rename(`../${file.path}`).content)
+    "**/test/fixtures/**/.integrity.json": (file, done) => done(file.rename(`../${file.path}`).content),
+    "**/test/cosmiconfig/**/*": (file, done) => done(file.rename(`../${file.path}`).content),
+    "**/test/cosmiconfig/**/.*": (file, done) => done(file.rename(`../${file.path}`).content),
   },
   hints: {
-    ignoreCoverage: /\/* wallaby ignore next\/*/
+    ignoreCoverage: /wallaby ignore next/
   },
   testFramework: "mocha",
   env: {
     type: "node",
-    // runner: process.platform === "win32" ? `${process.env.APPDATA}\\nvm\\v6.14.1\\node` : `${require('os').homedir()}/.nvm/versions/node/v6.14.1/bin/node`
+    runner: process.platform === "win32" ? `${process.env.APPDATA}\\nvm\\v6.14.4\\node` : `${require('os').homedir()}/.nvm/versions/node/v6.14.4/bin/node`
   },
   delays: {
     run: 500
