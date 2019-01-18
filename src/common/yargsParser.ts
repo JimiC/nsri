@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import * as y from 'yargs';
+import y from 'yargs';
 import { IParsedArgs } from '../interfaces/parsedArgs';
 import { sortObject } from './utils';
 
