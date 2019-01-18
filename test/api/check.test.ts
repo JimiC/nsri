@@ -2,7 +2,7 @@
 // tslint:disable no-unused-expression
 import { expect } from 'chai';
 import path from 'path';
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import * as utils from '../../src/common/utils';
 import { IntegrityOptions } from '../../src/interfaces/integrityOptions';

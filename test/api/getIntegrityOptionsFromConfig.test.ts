@@ -1,7 +1,7 @@
 // tslint:disable only-arrow-functions
 // tslint:disable no-unused-expression
 import { expect } from 'chai';
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import { ConfigExplorer } from '../../src/common/configExplorer';
 

@@ -3,7 +3,7 @@
 import { expect } from 'chai';
 import fs from 'fs';
 import path from 'path';
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 import { Readable } from 'stream';
 import { Integrity } from '../../src/app/integrity';
 import * as utils from '../../src/common/utils';

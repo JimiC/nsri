@@ -3,7 +3,7 @@
 import ajv from 'ajv';
 import { expect } from 'chai';
 import path from 'path';
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import { IntegrityOptions } from '../../src/interfaces/integrityOptions';
 import * as schema from '../../src/schemas/v1/schema.json';

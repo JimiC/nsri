@@ -3,7 +3,7 @@
 import { expect } from 'chai';
 import { EventEmitter } from 'events';
 import readline, { ReadLine } from 'readline';
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import nsri from '../../src/cli/index';
 import { ConfigExplorer } from '../../src/common/configExplorer';

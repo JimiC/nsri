@@ -2,7 +2,7 @@
 // tslint:disable no-unused-expression
 import { expect } from 'chai';
 import readline from 'readline';
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 import { Logger } from '../../src/common/logger';
 
 describe('Logger: tests', function () {

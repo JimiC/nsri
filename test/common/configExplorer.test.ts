@@ -2,7 +2,7 @@
 // tslint:disable no-unused-expression
 import { expect } from 'chai';
 import path from 'path';
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 import { ConfigExplorer } from '../../src/common/configExplorer';
 
 describe('ConfigExplorer: tests', function () {

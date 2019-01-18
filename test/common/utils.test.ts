@@ -1,7 +1,7 @@
 // tslint:disable only-arrow-functions
 // tslint:disable no-unused-expression
 import { expect } from 'chai';
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 import * as utils from '../../src/common/utils';
 import { IndexedObject } from '../../src/interfaces/indexedObject';
 

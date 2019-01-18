@@ -3,7 +3,7 @@
 import { expect } from 'chai';
 import fs from 'fs';
 import path from 'path';
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 import { YargsParser } from '../../src/common/yargsParser';
 
 describe('YargsParser: tests', function () {
