@@ -23,7 +23,7 @@ describe('Integrity: function \'getIntegrityOptionsFromConfig\' tests', function
 
     it('to return an empty object, when failing to find a configuration',
       async function () {
-        getConfigStub.resolves(null);
+        getConfigStub.resolves(undefined);
         const config = await Integrity.getIntegrityOptionsFromConfig();
         expect(config).to.eql({});
       });

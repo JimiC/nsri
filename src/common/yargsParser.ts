@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import y from 'yargs';
+import { IArguments } from '../interfaces/arguments';
 import { IParsedArgs } from '../interfaces/parsedArgs';
 import { sortObject } from './utils';
 
@@ -93,7 +94,7 @@ export class YargsParser {
           global: false,
         },
       })
-      .check((argv: y.Arguments) => this._validate(argv))
+      .check((argv: y.Arguments<IArguments>) => this._validate(argv))
       .strict();
   }
 
@@ -101,27 +102,28 @@ export class YargsParser {
     const _pargs = y.parse(process.argv.slice(2));
     // Set 'output' dir same as 'source' when not provided
     if (!_pargs.output) {
-      _pargs.output = fs.statSync(_pargs.source).isFile()
-        ? path.dirname(_pargs.source)
+      const _source = _pargs.source as string;
+      _pargs.output = fs.statSync(_source).isFile()
+        ? path.dirname(_source)
         : _pargs.source;
     }
     return {
       command: _pargs._[0],
-      dirAlgorithm: _pargs.diralgorithm,
-      encoding: _pargs.encoding,
-      exclude: _pargs.exclude,
-      fileAlgorithm: _pargs.filealgorithm,
-      inPath: _pargs.source,
-      integrity: _pargs.integrity,
-      manifest: _pargs.manifest,
-      outPath: _pargs.output,
-      verbose: _pargs.verbose,
+      dirAlgorithm: _pargs.diralgorithm as string,
+      encoding: _pargs.encoding as string,
+      exclude: _pargs.exclude as string[],
+      fileAlgorithm: _pargs.filealgorithm as string,
+      inPath: _pargs.source as string,
+      integrity: _pargs.integrity as string,
+      manifest: _pargs.manifest as boolean,
+      outPath: _pargs.output as string,
+      verbose: _pargs.verbose as boolean,
     };
   }
 
-  private _validate(argv: y.Arguments): boolean {
+  private _validate(argv: y.Arguments<IArguments>): boolean {
     let _errorMsg = '';
-    if (!fs.existsSync(argv.source)) {
+    if (!fs.existsSync(argv.source as string)) {
       _errorMsg = `ENOENT: no such file or directory, '${argv.source}'`;
     }
     if (argv._[0] === 'check' && !argv.manifest && !argv.integrity) {

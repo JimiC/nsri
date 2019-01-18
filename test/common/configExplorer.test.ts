@@ -34,7 +34,7 @@ describe('ConfigExplorer: tests', function () {
 
         it('to simply return when no configuration section is found',
           async function () {
-            getConfigStub.resolves(null);
+            getConfigStub.resolves(undefined);
             await configExplorer.assignArgs();
             expect(process.argv).to.eql([]);
           });
