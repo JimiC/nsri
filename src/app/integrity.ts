@@ -4,6 +4,7 @@ import { createHash, getHashes, Hash, HexBase64Latin1Encoding } from 'crypto';
 import fs from 'fs';
 import mm from 'minimatch';
 import path from 'path';
+import { ConfigExplorer } from '../common/configExplorer';
 import * as constants from '../common/constants';
 import { CryptoEncoding } from '../common/enums';
 import * as utils from '../common/utils';
@@ -129,12 +130,29 @@ export class Integrity {
     return this._writeFile(constants.manifestFile, data);
   }
 
+  public static async getIntegrityOptionsFromConfig(): Promise<IntegrityOptions> {
+    const _explorer = new ConfigExplorer();
+    const _config = await _explorer.getConfig();
+    if (!_config) {
+      return Promise.resolve({});
+    }
+    return {
+      cryptoOptions: {
+        dirAlgorithm: _config.cryptoOptions && _config.cryptoOptions.dirAlgorithm,
+        encoding: _config.cryptoOptions && _config.cryptoOptions.encoding,
+        fileAlgorithm: _config.cryptoOptions && _config.cryptoOptions.fileAlgorithm,
+      },
+      exclude: _config.exclude,
+      verbose: _config.verbose,
+    };
+  }
+
   /** @internal */
   // ['hex', 'base64', 'latin1']
   private static readonly _allowedCryptoEncodings = Object.keys(CryptoEncoding)
     .map<string>(k => CryptoEncoding[k as keyof typeof CryptoEncoding]);
 
-    /** @internal */
+  /** @internal */
   private static _exists = utils.promisify<boolean>(fs.exists);
 
   /** @internal */

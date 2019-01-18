@@ -180,6 +180,22 @@ All `API` calls are `static` members of the `Integrity` class.
 - [ES6+, Typescript](https://github.com/JimiC/nsri/blob/master/docs/examples/updateManifestIntegrity-js-ts.md)
 
 ---
+>## getIntegrityOptionsFromConfig
+
+`Description`:
+
+`Info`: `getIntegrityOptionsFromConfig` is a function designed to retrieve the integrity options from a `cosmiconfig` compatible configuration section.
+
+`Return Type`: `Promise<IntegrityOptions>`
+
+`Parameters`: None
+
+`Examples`
+
+- [ES5](https://github.com/JimiC/nsri/blob/master/docs/examples/getIntegrityOptionsFromConfig-es5-js.md)
+- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/master/docs/examples/getIntegrityOptionsFromConfig-js-ts.md)
+
+---
 
 ## Options
 
