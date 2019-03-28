@@ -59,9 +59,9 @@ export function promisify<T>(func: (...args: any[]) => any): (...args: any[]) =>
     throw new TypeError('Argument to promisify must be a function');
   }
   const _argumentNames = (func as IndexedObject)[typeof promisifyArgumentNames];
-  return (...args: any[]) => {
-    return new Promise((res, rej) => {
-      const _cb = (err: any, ...values: any[]) => {
+  return (...args: any[]): Promise<T> => {
+    return new Promise((res, rej): void => {
+      const _cb = (err: any, ...values: any[]): void => {
         if (err instanceof Error) { return rej(err); }
         if (typeof err === 'boolean') { values = [err, ...values]; }
         if (values.length === 1 || !_argumentNames) { return res(values[0]); }

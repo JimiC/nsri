@@ -48,7 +48,8 @@
     ],
     "typedef": [
       true,
-      "call-signature"
+      "call-signature",
+      "arrow-call-signature"
     ]
   }
 }

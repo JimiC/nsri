@@ -429,8 +429,8 @@ export class Integrity {
   /** @internal */
   private static _computeStreamHash(filePath: string, hash: Hash, algorithm: string, encoding?: HexBase64Latin1Encoding)
     : Promise<string> {
-    return new Promise((res, rej) => {
-      const _result = () => res(encoding
+    return new Promise((res, rej): void => {
+      const _result = (): void => res(encoding
         ? `${algorithm}-${hash.digest(encoding)}`
         : '');
       hash.update(path.basename(filePath));

@@ -56,7 +56,7 @@ describe('Integrity: function \'check\' tests', function (): void {
             .returns(true);
           // @ts-ignore
           const lstatStub = sandbox.stub(Integrity, '_lstat')
-            .returns({ isDirectory: () => false, isFile: () => true });
+            .returns({ isDirectory: (): boolean => false, isFile: (): boolean => true });
           try {
             await Integrity.check(fileToHashFilePath, 'package.json');
           } catch (error) {
@@ -92,7 +92,7 @@ describe('Integrity: function \'check\' tests', function (): void {
         async function (): Promise<void> {
           // @ts-ignore
           const lstatStub = sandbox.stub(Integrity, '_lstat')
-            .returns({ isDirectory: () => false, isFile: () => false });
+            .returns({ isDirectory: (): boolean => false, isFile: (): boolean => false });
           try {
             await Integrity.check(fileToHashFilePath, integrityTestFilePath);
           } catch (error) {

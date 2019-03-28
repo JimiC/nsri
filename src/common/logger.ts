@@ -67,7 +67,7 @@ export class Logger extends BaseLogger {
 
   public handleForcedExit(hasInfoLogging: boolean): void {
     if (!process.stdout.isTTY) { return process.exit(); }
-    const moveAndClear = () => {
+    const moveAndClear = (): void => {
       this.moveCursorTo(-1);
       readline.clearLine(process.stdout, 0);
     };
@@ -92,7 +92,7 @@ export class Logger extends BaseLogger {
     if (!process.stdout.isTTY) { return setImmediate(() => void 0); }
     let _index = 0;
     this._cursorHide();
-    const iteration = () => {
+    const iteration = (): void => {
       const _frame = this.frames[_index = ++_index % this.frames.length];
       const _msg = this.showSpinnerInFront
         ? `${this._getHeader(groupId)}${_frame}${message}`

@@ -38,7 +38,7 @@ describe('Integrity: function \'create\' tests', function (): void {
       async function (): Promise<void> {
         // @ts-ignore
         const lstatStub = sinon.stub(Integrity, '_lstat')
-          .returns({ isDirectory: () => false, isFile: () => false });
+          .returns({ isDirectory: (): boolean => false, isFile: (): boolean => false });
         const sut = await Integrity.create(fixturesDirPath);
         lstatStub.restore();
         expect(lstatStub.calledOnce).to.be.true;

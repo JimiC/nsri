@@ -112,7 +112,7 @@ describe('YargsParser: tests', function (): void {
         const consoleErrorStub = sandbox.stub(console, 'error');
         const stderrStub = sandbox.stub(process.stderr, 'write');
         const exitStub = sandbox.stub(process, 'exit');
-        const statStub = sandbox.stub(fs, 'statSync').returns({ isFile: () => true } as any);
+        const statStub = sandbox.stub(fs, 'statSync').returns({ isFile: (): boolean => true } as any);
         args.pop();
         args.push('file.io');
         argv.value(args);
@@ -134,7 +134,7 @@ describe('YargsParser: tests', function (): void {
         const consoleErrorStub = sandbox.stub(console, 'error');
         const stderrStub = sandbox.stub(process.stderr, 'write');
         const exitStub = sandbox.stub(process, 'exit');
-        const statStub = sandbox.stub(fs, 'statSync').returns({ isFile: () => true } as any);
+        const statStub = sandbox.stub(fs, 'statSync').returns({ isFile: (): boolean => true } as any);
         args.splice(2, 1, 'check');
         args.push(...['-m', '-i', '.']);
         argv.value(args);
@@ -156,7 +156,7 @@ describe('YargsParser: tests', function (): void {
         const consoleErrorStub = sandbox.stub(console, 'error');
         const stderrStub = sandbox.stub(process.stderr, 'write');
         const exitStub = sandbox.stub(process, 'exit');
-        const statStub = sandbox.stub(fs, 'statSync').returns({ isFile: () => true } as any);
+        const statStub = sandbox.stub(fs, 'statSync').returns({ isFile: (): boolean => true } as any);
         args.splice(2, 1, 'check');
         argv.value(args);
         parser.parse();
