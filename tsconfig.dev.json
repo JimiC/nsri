@@ -12,6 +12,7 @@
     "noUnusedParameters": true,
     "outDir": "out",
     "pretty": true,
+    "resolveJsonModule": true,
     "rootDir": ".",
     "skipLibCheck": true,
     "sourceMap": true,
