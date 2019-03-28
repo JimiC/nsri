@@ -4,14 +4,14 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 
-describe('Integrity: function \'getManifestIntegrity\' tests', function () {
+describe('Integrity: function \'getManifestIntegrity\' tests', function (): void {
 
-  context('expects', function () {
+  context('expects', function (): void {
 
-    context('to return an Error when', function () {
+    context('to return an Error when', function (): void {
 
       it('the manifest file is not found',
-        async function () {
+        async function (): Promise<void> {
           // @ts-ignore
           const existsStub = sinon.stub(Integrity, '_exists').returns(false);
           try {
@@ -24,7 +24,7 @@ describe('Integrity: function \'getManifestIntegrity\' tests', function () {
         });
 
       it('the manifest is \'null\'',
-        async function () {
+        async function (): Promise<void> {
           // @ts-ignore
           const existsStub = sinon.stub(Integrity, '_exists').returns(true);
           // @ts-ignore
@@ -42,10 +42,10 @@ describe('Integrity: function \'getManifestIntegrity\' tests', function () {
 
     });
 
-    context('to get the manifest integrity object', function () {
+    context('to get the manifest integrity object', function (): void {
 
       it('and return \'undefined\' when it\'s NOT found',
-        async function () {
+        async function (): Promise<void> {
           // @ts-ignore
           const existsStub = sinon.stub(Integrity, '_exists').returns(true);
           // @ts-ignore
@@ -59,7 +59,7 @@ describe('Integrity: function \'getManifestIntegrity\' tests', function () {
         });
 
       it('when it\'s found',
-        async function () {
+        async function (): Promise<void> {
           // @ts-ignore
           const existsStub = sinon.stub(Integrity, '_exists').returns(true);
           // @ts-ignore
@@ -73,7 +73,7 @@ describe('Integrity: function \'getManifestIntegrity\' tests', function () {
         });
 
       it('using the indentation indent',
-        async function () {
+        async function (): Promise<void> {
           // @ts-ignore
           const getManifestStub = sinon.stub(Integrity, '_getManifestInfo')
             .resolves({ manifest: { integrity: { hash: '' } }, indentation: { indent: '  ' } });
@@ -84,7 +84,7 @@ describe('Integrity: function \'getManifestIntegrity\' tests', function () {
         });
 
       it('using the indentation amount',
-        async function () {
+        async function (): Promise<void> {
           // @ts-ignore
           const getManifestStub = sinon.stub(Integrity, '_getManifestInfo')
             .resolves({ manifest: { integrity: { hash: '' } }, indentation: { amount: 2 } });

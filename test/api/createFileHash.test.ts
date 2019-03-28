@@ -9,9 +9,9 @@ import { Integrity } from '../../src/app/integrity';
 import * as utils from '../../src/common/utils';
 import { checker } from '../helper';
 
-describe('Integrity: function \'createFileHash\' tests', function () {
+describe('Integrity: function \'createFileHash\' tests', function (): void {
 
-  context('expects', function () {
+  context('expects', function (): void {
 
     let fileToHashFilename: string;
     let integrityTestFilename: string;
@@ -21,7 +21,7 @@ describe('Integrity: function \'createFileHash\' tests', function () {
     let md5Length: number;
     let sha1Length: number;
 
-    before(function () {
+    before(function (): void {
       fileToHashFilename = 'fileToHash.txt';
       integrityTestFilename = '.integrity.json';
 
@@ -29,23 +29,23 @@ describe('Integrity: function \'createFileHash\' tests', function () {
       sha1Length = 40;
     });
 
-    beforeEach(function () {
+    beforeEach(function (): void {
       fixturesDirPath = path.resolve(__dirname, '../../../test/fixtures');
       fileToHashFilePath = path.resolve(fixturesDirPath, fileToHashFilename);
       integrityTestFilePath = path.resolve(fixturesDirPath, integrityTestFilename);
     });
 
-    context('to throw an Error when', function () {
+    context('to throw an Error when', function (): void {
 
       it('the provided algorithm is not supported',
-        function () {
+        function (): void {
           const cryptoOptions = { fileAlgorithm: 'md1' };
           Integrity.createFileHash(fileToHashFilePath, cryptoOptions)
             .catch(error => expect(error).to.be.an.instanceof(Error).that.matches(/ENOSUP:/));
         });
 
       it('the provided encoding is not supported',
-        function () {
+        function (): void {
           const cryptoOptions = { encoding: 'ascii' };
           // @ts-ignore
           Integrity.createFileHash(fileToHashFilePath, cryptoOptions)
@@ -53,19 +53,19 @@ describe('Integrity: function \'createFileHash\' tests', function () {
         });
 
       it('the provided path is not a file',
-        function () {
+        function (): void {
           Integrity.createFileHash(fixturesDirPath)
             .catch(error => expect(error).to.be.an.instanceof(Error).that.matches(/ENOTFILE:/));
         });
 
       it('the provided path is not allowed',
-        function () {
+        function (): void {
           Integrity.createFileHash(integrityTestFilePath)
             .catch(error => expect(error).to.be.an.instanceof(Error).that.matches(/ENOTALW:/));
         });
 
       it('the file can not be read',
-        function () {
+        function (): void {
           const createReadStreamStub = sinon.stub(fs, 'createReadStream').returns(new Readable() as fs.ReadStream);
           Integrity.createFileHash(fileToHashFilePath)
             .catch(error => {
@@ -77,7 +77,7 @@ describe('Integrity: function \'createFileHash\' tests', function () {
     });
 
     it('to return by default an \'sha1\' and \'base64\' encoded hash string',
-      async function () {
+      async function (): Promise<void> {
         const sut = await Integrity.createFileHash(fileToHashFilePath);
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty(fileToHashFilename)
@@ -86,7 +86,7 @@ describe('Integrity: function \'createFileHash\' tests', function () {
       });
 
     it('to return an \'sha1\' and \'hex\' encoded hash string',
-      async function () {
+      async function (): Promise<void> {
         const sut = await Integrity.createFileHash(fileToHashFilePath, { encoding: 'hex' });
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty(fileToHashFilename)
@@ -95,7 +95,7 @@ describe('Integrity: function \'createFileHash\' tests', function () {
       });
 
     it('to return an \'sha1\' and \'latin1\' encoded hash string',
-      async function () {
+      async function (): Promise<void> {
         const sut = await Integrity.createFileHash(fileToHashFilePath, { encoding: 'latin1' });
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty(fileToHashFilename)
@@ -104,7 +104,7 @@ describe('Integrity: function \'createFileHash\' tests', function () {
       });
 
     it('to return an \'md5\' and \'base64\' encoded hash string',
-      async function () {
+      async function (): Promise<void> {
         const sut = await Integrity.createFileHash(fileToHashFilePath, { fileAlgorithm: 'md5' });
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty(fileToHashFilename)
@@ -113,7 +113,7 @@ describe('Integrity: function \'createFileHash\' tests', function () {
       });
 
     it('to return an \'md5\' and \'hex\' encoded hash string',
-      async function () {
+      async function (): Promise<void> {
         const sut = await Integrity.createFileHash(
           fileToHashFilePath,
           { fileAlgorithm: 'md5', encoding: 'hex' });

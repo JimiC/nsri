@@ -6,28 +6,28 @@ import path from 'path';
 import sinon from 'sinon';
 import { YargsParser } from '../../src/common/yargsParser';
 
-describe('YargsParser: tests', function () {
+describe('YargsParser: tests', function (): void {
 
   let sandbox: sinon.SinonSandbox;
   let argv: sinon.SinonStub;
   let parser: YargsParser;
   let args: string[];
 
-  beforeEach(function () {
+  beforeEach(function (): void {
     sandbox = sinon.createSandbox();
     argv = sandbox.stub(process, 'argv');
     parser = new YargsParser();
     args = ['node', 'nsri', 'create', '-s', '.'];
   });
 
-  afterEach(function () {
+  afterEach(function (): void {
     sandbox.restore();
   });
 
-  context('expects', function () {
+  context('expects', function (): void {
 
     it('the returned parsed arguments object to have the correct properties',
-      function () {
+      function (): void {
         argv.value([...args]);
         const sut = parser.parse();
         const props = ['dirAlgorithm', 'fileAlgorithm', 'command', 'encoding',
@@ -38,48 +38,48 @@ describe('YargsParser: tests', function () {
       });
 
     it('that the \'fileAlgorithm\' option gets parsed correctly',
-      function () {
+      function (): void {
         args = [...args, '--fa', 'sha'];
         argv.value(args);
         expect(parser.parse()).to.be.have.property('fileAlgorithm', args[6]);
       });
 
     it('that the \'dirAlgorithm\' option gets parsed correctly',
-      function () {
+      function (): void {
         args = [...args, '--da', 'sha'];
         argv.value(args);
         expect(parser.parse()).to.be.have.property('dirAlgorithm', args[6]);
       });
 
     it('that the \'command\' gets parsed correctly',
-      function () {
+      function (): void {
         argv.value([...args]);
         expect(parser.parse()).to.be.have.property('command', args[2]);
       });
 
     it('that the \'encoding\' option gets parsed correctly',
-      function () {
+      function (): void {
         args = [...args, '-e', 'base64'];
         argv.value(args);
         expect(parser.parse()).to.be.have.property('encoding', args[6]);
       });
 
     it('that the \'exclude\' option gets parsed correctly',
-      function () {
+      function (): void {
         args = [...args, '-x', 'some/path'];
         argv.value(args);
         expect(parser.parse()).to.be.have.property('exclude').with.members([args[6]]);
       });
 
     it('that the \'inPath\' option gets parsed correctly',
-      function () {
+      function (): void {
         args = [...args];
         argv.value(args);
         expect(parser.parse()).to.be.have.property('inPath', args[4]);
       });
 
     it('that the \'integrity\' option gets parsed correctly',
-      function () {
+      function (): void {
         args.splice(2, 1, 'check');
         args = [...args, '-i', '123456789'];
         argv.value(args);
@@ -87,28 +87,28 @@ describe('YargsParser: tests', function () {
       });
 
     it('that the \'manifest\' option gets parsed correctly',
-      function () {
+      function (): void {
         args = [...args, '-m', 'true'];
         argv.value(args);
         expect(parser.parse()).to.be.have.property('manifest', true);
       });
 
     it('that the \'outPath\' option gets parsed correctly',
-      function () {
+      function (): void {
         args = [...args, '-o', './out'];
         argv.value(args);
         expect(parser.parse()).to.be.have.property('outPath', args[6]);
       });
 
     it('that the \'verbose\' option gets parsed correctly',
-      function () {
+      function (): void {
         args = [...args, '-v', 'true'];
         argv.value(args);
         expect(parser.parse()).to.be.have.property('verbose', true);
       });
 
     it('to throw an Error on invalid file path',
-      function () {
+      function (): void {
         const consoleErrorStub = sandbox.stub(console, 'error');
         const stderrStub = sandbox.stub(process.stderr, 'write');
         const exitStub = sandbox.stub(process, 'exit');
@@ -130,7 +130,7 @@ describe('YargsParser: tests', function () {
 
     it('to throw an Error on invalid use of ' +
       '\'manifest\' and \'integrity\' options with the \'check\' command',
-      function () {
+      function (): void {
         const consoleErrorStub = sandbox.stub(console, 'error');
         const stderrStub = sandbox.stub(process.stderr, 'write');
         const exitStub = sandbox.stub(process, 'exit');
@@ -152,7 +152,7 @@ describe('YargsParser: tests', function () {
 
     it('to throw an Error on invalid use of ' +
       '\'integrity\' options with the \'check\' command',
-      function () {
+      function (): void {
         const consoleErrorStub = sandbox.stub(console, 'error');
         const stderrStub = sandbox.stub(process.stderr, 'write');
         const exitStub = sandbox.stub(process, 'exit');
@@ -171,10 +171,10 @@ describe('YargsParser: tests', function () {
         exitStub.restore();
       });
 
-    context('that the \'outPath\' gets assigned to', function () {
+    context('that the \'outPath\' gets assigned to', function (): void {
 
       it('the input directory when \'input\' is a file',
-        function () {
+        function (): void {
           const filePath = path.resolve(__dirname, '../../../test/fixtures/fileToHash.txt');
           args.pop();
           args.push(filePath);
@@ -183,7 +183,7 @@ describe('YargsParser: tests', function () {
         });
 
       it('the input when \'input\' is a directory',
-        function () {
+        function (): void {
           const dirPath = path.resolve(__dirname, '../../../test/fixtures');
           args.pop();
           args.push(dirPath);

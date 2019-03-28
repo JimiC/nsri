@@ -6,27 +6,27 @@ import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import { IntegrityObject } from '../../src/interfaces/integrityObject';
 
-describe('Integrity: function \'persist\' tests', function () {
+describe('Integrity: function \'persist\' tests', function (): void {
 
-  context('expects', function () {
+  context('expects', function (): void {
 
     let integrityTestFilename: string;
     let integrityTestObject: IntegrityObject;
     let fixturesDirPath: string;
 
-    before(function () {
+    before(function (): void {
       integrityTestFilename = '.integrity.json';
     });
 
-    beforeEach(function () {
+    beforeEach(function (): void {
       fixturesDirPath = path.resolve(__dirname, '../../../test/fixtures');
       integrityTestObject = { hashes: {}, version: '' };
     });
 
-    context('to persist the created hash file', function () {
+    context('to persist the created hash file', function (): void {
 
       it('on the provided path',
-        async function () {
+        async function (): Promise<void> {
           // @ts-ignore
           const writeFileStub = sinon.stub(Integrity, '_writeFile');
           const dirPath = path.resolve(fixturesDirPath, integrityTestFilename);
@@ -37,7 +37,7 @@ describe('Integrity: function \'persist\' tests', function () {
         });
 
       it('on the default path',
-        async function () {
+        async function (): Promise<void> {
           // @ts-ignore
           const writeFileStub = sinon.stub(Integrity, '_writeFile');
           await Integrity.persist(integrityTestObject);

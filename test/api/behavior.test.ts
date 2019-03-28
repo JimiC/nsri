@@ -4,9 +4,9 @@ import { expect } from 'chai';
 import path from 'path';
 import { Integrity } from '../../src/app/integrity';
 
-describe('Integrity: behavior tests', function () {
+describe('Integrity: behavior tests', function (): void {
 
-  context('expects', function () {
+  context('expects', function (): void {
 
     let anotherFileToHashFilename: string;
     let fileToHashFilename: string;
@@ -16,12 +16,12 @@ describe('Integrity: behavior tests', function () {
     let anotherFileToHashFilePath: string;
     let fileToHashFilePath: string;
 
-    before(function () {
+    before(function (): void {
       anotherFileToHashFilename = 'anotherFileToHash.txt';
       fileToHashFilename = 'fileToHash.txt';
     });
 
-    beforeEach(function () {
+    beforeEach(function (): void {
       fixturesDirPath = path.resolve(__dirname, '../../../test/fixtures');
       directoryDirPath = path.resolve(fixturesDirPath, 'directory');
       directoryOneDirPath = path.resolve(fixturesDirPath, 'directory.1');
@@ -29,10 +29,10 @@ describe('Integrity: behavior tests', function () {
       fileToHashFilePath = path.resolve(fixturesDirPath, fileToHashFilename);
     });
 
-    context('to pass integrity check when', function () {
+    context('to pass integrity check when', function (): void {
 
       it('files have the same name and the same content',
-        async function () {
+        async function (): Promise<void> {
           const sutFilePath = path.resolve(fixturesDirPath, './fixtures/directory/anotherFileToHash.txt');
           const hash = await Integrity.create(sutFilePath);
           const sut = await Integrity.check(anotherFileToHashFilePath, JSON.stringify(hash));
@@ -41,7 +41,7 @@ describe('Integrity: behavior tests', function () {
         });
 
       it('directories have the same name and the same content',
-        async function () {
+        async function (): Promise<void> {
           const sutDirPath = path.resolve(fixturesDirPath, './fixtures/directory.1');
           const hash = await Integrity.create(sutDirPath);
           const sut = await Integrity.check(directoryOneDirPath, JSON.stringify(hash));
@@ -51,10 +51,10 @@ describe('Integrity: behavior tests', function () {
 
     });
 
-    context('to fail integrity check when', function () {
+    context('to fail integrity check when', function (): void {
 
       it('files have the same content but different names',
-        async function () {
+        async function (): Promise<void> {
           const sutFilePath = path.resolve(fixturesDirPath, './sameContentWithFileToHash.txt');
           const hash = await Integrity.create(sutFilePath);
           const sut = await Integrity.check(fileToHashFilePath, JSON.stringify(hash));
@@ -63,7 +63,7 @@ describe('Integrity: behavior tests', function () {
         });
 
       it('files have the same name but different content',
-        async function () {
+        async function (): Promise<void> {
           const sutFilePath = path.resolve(fixturesDirPath, './fixtures/fileToHash.txt');
           const hash = await Integrity.create(sutFilePath);
           const sut = await Integrity.check(fileToHashFilePath, JSON.stringify(hash));
@@ -72,7 +72,7 @@ describe('Integrity: behavior tests', function () {
         });
 
       it('directories have the same name but different content',
-        async function () {
+        async function (): Promise<void> {
           const sutDirPath = path.resolve(fixturesDirPath, './fixtures/directory');
           const hash = await Integrity.create(sutDirPath);
           const sut = await Integrity.check(directoryDirPath, JSON.stringify(hash));
@@ -81,7 +81,7 @@ describe('Integrity: behavior tests', function () {
         });
 
       it('directories have the same content but different names',
-        async function () {
+        async function (): Promise<void> {
           const sutDirPath = path.resolve(fixturesDirPath, './directory.1');
           const hash = await Integrity.create(sutDirPath);
           const sut = await Integrity.check(directoryDirPath, JSON.stringify(hash));

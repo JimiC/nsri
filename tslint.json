@@ -45,6 +45,10 @@
     "no-implicit-dependencies": [
       true,
       "dev"
+    ],
+    "typedef": [
+      true,
+      "call-signature"
     ]
   }
 }

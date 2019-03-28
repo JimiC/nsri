@@ -11,7 +11,7 @@ import { Logger } from '../../src/common/logger';
 import { YargsParser } from '../../src/common/yargsParser';
 import { IParsedArgs } from '../../src/interfaces//parsedArgs';
 
-describe('CLI: tests', function () {
+describe('CLI: tests', function (): void {
 
   let sandbox: sinon.SinonSandbox;
   let pargs: IParsedArgs;
@@ -21,7 +21,7 @@ describe('CLI: tests', function () {
   let icCheckStub: sinon.SinonStub;
   let isTTY: true | undefined;
 
-  beforeEach(function () {
+  beforeEach(function (): void {
     pargs = {
       command: '',
       dirAlgorithm: 'md5',
@@ -47,19 +47,19 @@ describe('CLI: tests', function () {
     process.stdin.setMaxListeners(Infinity);
   });
 
-  afterEach(function () {
+  afterEach(function (): void {
     process.stdout.isTTY = isTTY;
     sandbox.restore();
   });
 
-  context('expects', function () {
+  context('expects', function (): void {
 
-    context('to log', function () {
+    context('to log', function (): void {
 
-      context('process messages', function () {
+      context('process messages', function (): void {
 
         it('when creating an integrity file',
-          async function () {
+          async function (): Promise<void> {
             pargs.command = 'create';
             pargs.manifest = false;
             const exitStub = sandbox.stub(process, 'exit');
@@ -80,7 +80,7 @@ describe('CLI: tests', function () {
           });
 
         it('when creating an integrity property in manifest',
-          async function () {
+          async function (): Promise<void> {
             pargs.command = 'create';
             pargs.manifest = true;
             const exitStub = sandbox.stub(process, 'exit');
@@ -100,10 +100,10 @@ describe('CLI: tests', function () {
             expect(spinnerLogStopSpy.calledWith(returnValue, 'Integrity hash created -> Manifest updated')).to.be.true;
           });
 
-        context('when integrity check passes against an integrity', function () {
+        context('when integrity check passes against an integrity', function (): void {
 
           it('file',
-            async function () {
+            async function (): Promise<void> {
               pargs.command = 'check';
               pargs.manifest = false;
               icCheckStub.returns(true);
@@ -125,7 +125,7 @@ describe('CLI: tests', function () {
             });
 
           it('in manifest',
-            async function () {
+            async function (): Promise<void> {
               pargs.command = 'check';
               pargs.manifest = true;
               icCheckStub.returns(true);
@@ -149,7 +149,7 @@ describe('CLI: tests', function () {
         });
 
         it('when integrity check fails',
-          async function () {
+          async function (): Promise<void> {
             pargs.command = 'check';
             icCheckStub.returns(false);
             const exitStub = sandbox.stub(process, 'exit');
@@ -172,7 +172,7 @@ describe('CLI: tests', function () {
       });
 
       it('informative messages',
-        async function () {
+        async function (): Promise<void> {
           process.stdout.isTTY = true;
           pargs.command = 'check';
           const exitStub = sandbox.stub(process, 'exit');
@@ -189,7 +189,7 @@ describe('CLI: tests', function () {
         });
 
       it('Error messages',
-        async function () {
+        async function (): Promise<void> {
           process.stdout.isTTY = true;
           pargs.command = 'check';
           const error = new Error();
@@ -210,10 +210,10 @@ describe('CLI: tests', function () {
 
     });
 
-    context('to call', function () {
+    context('to call', function (): void {
 
       it('the ConfigExplorer \'assignArgs\' function',
-      async function () {
+      async function (): Promise<void> {
         pargs.command = 'check';
         const exitStub = sandbox.stub(process, 'exit');
         const consoleLogStub = sandbox.stub(console, 'log');
@@ -226,7 +226,7 @@ describe('CLI: tests', function () {
       });
 
       it('the YargsParser \'parse\' function',
-        async function () {
+        async function (): Promise<void> {
           pargs.command = 'check';
           const exitStub = sandbox.stub(process, 'exit');
           const consoleLogStub = sandbox.stub(console, 'log');
@@ -239,7 +239,7 @@ describe('CLI: tests', function () {
         });
 
       it('the Integrity \'create\' function',
-        async function () {
+        async function (): Promise<void> {
           pargs.command = 'create';
           const exitStub = sandbox.stub(process, 'exit');
           const consoleLogStub = sandbox.stub(console, 'log');
@@ -252,7 +252,7 @@ describe('CLI: tests', function () {
         });
 
       it('the Integrity \'check\' function',
-        async function () {
+        async function (): Promise<void> {
           pargs.command = 'check';
           const exitStub = sandbox.stub(process, 'exit');
           const consoleLogStub = sandbox.stub(console, 'log');
@@ -266,10 +266,10 @@ describe('CLI: tests', function () {
 
     });
 
-    context('when signaled to exit', function () {
+    context('when signaled to exit', function (): void {
 
       it('to call \'handleForcedExit\'',
-        function () {
+        function (): Promise<void> {
           pargs.command = 'create';
           const exitStub = sandbox.stub(process, 'exit');
           const consoleLogStub = sandbox.stub(console, 'log');

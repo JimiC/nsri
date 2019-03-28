@@ -5,20 +5,20 @@ import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import { IntegrityObject } from '../../src/interfaces/integrityObject';
 
-describe('Integrity: function \'updateManifestIntegrity\' tests', function () {
+describe('Integrity: function \'updateManifestIntegrity\' tests', function (): void {
 
-  context('expects', function () {
+  context('expects', function (): void {
 
-    context('to update the manifest with the integrity object', function () {
+    context('to update the manifest with the integrity object', function (): void {
 
       let integrityTestObject: IntegrityObject;
 
-      beforeEach(function () {
+      beforeEach(function (): void {
         integrityTestObject = { hashes: {}, version: '' };
       });
 
       it('using the indentation indent',
-        async function () {
+        async function (): Promise<void> {
           // @ts-ignore
           const writeFileStub = sinon.stub(Integrity, '_writeFile');
           // @ts-ignore
@@ -35,7 +35,7 @@ describe('Integrity: function \'updateManifestIntegrity\' tests', function () {
         });
 
       it('using the indentation amount',
-        async function () {
+        async function (): Promise<void> {
           // @ts-ignore
           const writeFileStub = sinon.stub(Integrity, '_writeFile');
           // @ts-ignore
@@ -52,7 +52,7 @@ describe('Integrity: function \'updateManifestIntegrity\' tests', function () {
         });
 
       it('replacing the existing manifest integrity property',
-        async function () {
+        async function (): Promise<void> {
           // @ts-ignore
           const writeFileStub = sinon.stub(Integrity, '_writeFile');
           // @ts-ignore

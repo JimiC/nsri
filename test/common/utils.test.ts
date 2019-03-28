@@ -5,46 +5,46 @@ import sinon from 'sinon';
 import * as utils from '../../src/common/utils';
 import { IndexedObject } from '../../src/interfaces/indexedObject';
 
-describe('Utils: tests', function () {
+describe('Utils: tests', function (): void {
 
-  context('expects', function () {
+  context('expects', function (): void {
 
-    context('function \'getAbsolutePath\'', function () {
+    context('function \'getAbsolutePath\'', function (): void {
 
       let platformStub: sinon.SinonStub;
 
-      beforeEach(function () {
+      beforeEach(function (): void {
         platformStub = sinon.stub(process, 'platform');
       });
 
-      afterEach(function () {
+      afterEach(function (): void {
         platformStub.restore();
       });
 
-      context('to return an absolute path', function () {
+      context('to return an absolute path', function (): void {
 
-        context('when provided array elements', function () {
+        context('when provided array elements', function (): void {
 
-          context('do not include the root path', function () {
+          context('do not include the root path', function (): void {
 
-            context('and the platform is', function () {
+            context('and the platform is', function (): void {
 
               it('*nix',
-                function () {
+                function (): void {
                   platformStub.value('free-bsd');
                   const array = ['path', 'to'];
                   expect(utils.getAbsolutePath(array, array.length - 1)).to.equal('/path/to');
                 });
 
               it('linux',
-                function () {
+                function (): void {
                   platformStub.value('linux');
                   const array = ['path', 'to'];
                   expect(utils.getAbsolutePath(array, array.length - 1)).to.equal('/path/to');
                 });
 
               it('darwin (macos)',
-                function () {
+                function (): void {
                   platformStub.value('darwin');
                   const array = ['path', 'to'];
                   expect(utils.getAbsolutePath(array, array.length - 1)).to.equal('/path/to');
@@ -54,33 +54,33 @@ describe('Utils: tests', function () {
 
           });
 
-          context('include the root path', function () {
+          context('include the root path', function (): void {
 
-            context('and the platform is', function () {
+            context('and the platform is', function (): void {
 
               it('win32',
-                function () {
+                function (): void {
                   platformStub.value('win32');
                   const array = ['d:', 'path', 'to'];
                   expect(utils.getAbsolutePath(array, array.length - 1)).to.equal('d:/path/to');
                 });
 
               it('*nix',
-                function () {
+                function (): void {
                   platformStub.value('free-bsd');
                   const array = ['/', 'path', 'to'];
                   expect(utils.getAbsolutePath(array, array.length - 1)).to.equal('/path/to');
                 });
 
               it('linux',
-                function () {
+                function (): void {
                   platformStub.value('linux');
                   const array = ['/', 'path', 'to'];
                   expect(utils.getAbsolutePath(array, array.length - 1)).to.equal('/path/to');
                 });
 
               it('darwin (macos)',
-                function () {
+                function (): void {
                   platformStub.value('darwin');
                   const array = ['/', 'path', 'to'];
                   expect(utils.getAbsolutePath(array, array.length - 1)).to.equal('/path/to');
@@ -96,18 +96,18 @@ describe('Utils: tests', function () {
 
     });
 
-    context('function \'parseJSON\'', function () {
+    context('function \'parseJSON\'', function (): void {
 
-      context('to return a JSON when passed parameter is of type', function () {
+      context('to return a JSON when passed parameter is of type', function (): void {
 
         it('string',
-          function () {
+          function (): void {
             const data = '{"some": "valid JSON"}';
             expect(utils.parseJSON(data)).to.eql({ some: 'valid JSON' });
           });
 
         it('Buffer',
-          function () {
+          function (): void {
             const data = Buffer.from('{"some": "valid JSON"}');
             expect(utils.parseJSON(data)).to.eql({ some: 'valid JSON' });
           });
@@ -115,17 +115,17 @@ describe('Utils: tests', function () {
       });
 
       it('to return \'null\' when provided text is not a valid JSON',
-        function () {
+        function (): void {
           const text = 'some invalid json';
           expect(utils.parseJSON(text)).to.be.null;
         });
 
     });
 
-    context('function \'sortObject\'', function () {
+    context('function \'sortObject\'', function (): void {
 
       it('to sort the object properties',
-        function () {
+        function (): void {
           const sut = { c: [], a: '', d: {}, b: 0 };
           const expectedObj = { a: '', b: 0, c: [], d: {} };
           expect(utils.sortObject(sut)).to.eql(expectedObj);
@@ -133,15 +133,15 @@ describe('Utils: tests', function () {
 
     });
 
-    context('function \'asyncForEach\'', function () {
+    context('function \'asyncForEach\'', function (): void {
 
       it('to return a Promise',
-        function () {
+        function (): void {
           expect(utils.asyncForEach([1], () => void 0)).to.be.a('promise');
         });
 
       it('to call the callback function',
-        function () {
+        function (): void {
           const spy = sinon.spy();
           utils.asyncForEach([1], spy);
           expect(spy.called).to.be.true;
@@ -151,20 +151,20 @@ describe('Utils: tests', function () {
 
     });
 
-    context('function \'promisify\'', function () {
+    context('function \'promisify\'', function (): void {
 
       it('to throw a TypeError when passed parameter is not a function',
-        function () {
+        function (): void {
           expect(utils.promisify.bind(utils, [] as any)).to.throw(TypeError);
         });
 
       it('to return a Promise',
-        function () {
+        function (): void {
           expect(utils.promisify(() => void 0)()).to.be.a('promise');
         });
 
       it('to return an Error when the passed function throws one',
-        async function () {
+        async function (): Promise<void> {
           const stub = sinon.stub().callsFake(cb => cb(new Error()));
           try {
             await utils.promisify(stub)();
@@ -174,41 +174,41 @@ describe('Utils: tests', function () {
         });
 
       it('to correctly handle a \'true\' response',
-        async function () {
+        async function (): Promise<void> {
           const stub = sinon.stub().callsFake(cb => cb(true));
           const response = await utils.promisify(stub)();
-          return expect(response).to.be.true;
+          expect(response).to.be.true;
         });
 
       it('to correctly handle a \'false\' response',
-        async function () {
+        async function (): Promise<void> {
           const stub = sinon.stub().callsFake(cb => cb(false));
           const response = await utils.promisify(stub)();
           expect(response).to.be.false;
         });
 
       it('to return all named arguments of the passed function',
-        async function () {
+        async function (): Promise<void> {
           const stub = sinon.stub().callsFake(cb => cb(null, 1, 2, 3));
           (stub as IndexedObject)[typeof utils.promisifyArgumentNames] = ['one', 'two', 'three'];
           const response = await utils.promisify(stub)();
-          return expect(response).to.eql({ one: 1, two: 2, three: 3 });
+          expect(response).to.eql({ one: 1, two: 2, three: 3 });
         });
 
       it('to return named arguments of the passed function',
-        async function () {
+        async function (): Promise<void> {
           const stub = sinon.stub().callsFake(cb => cb(null, 1, 2, 3));
           (stub as IndexedObject)[typeof utils.promisifyArgumentNames] = ['one', 'two'];
           const response = await utils.promisify(stub)();
-          return expect(response).to.eql({ one: 1, two: 2 });
+          expect(response).to.eql({ one: 1, two: 2 });
         });
 
     });
 
-    context('function \'getIndentation\'', function () {
+    context('function \'getIndentation\'', function (): void {
 
       it('to return indent info',
-        function () {
+        function (): void {
           const info = utils.getIndentation('  ');
           expect(info.amount).to.equal(2);
           expect(info.indent).to.equal('  ');

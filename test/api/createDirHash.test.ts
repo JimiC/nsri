@@ -11,9 +11,9 @@ import { IntegrityOptions } from '../../src/interfaces/integrityOptions';
 import { IVerboseHashObject } from '../../src/interfaces/verboseHashObject';
 import { checker } from '../helper';
 
-describe('Integrity: function \'createDirHash\' tests', function () {
+describe('Integrity: function \'createDirHash\' tests', function (): void {
 
-  context('expects', function () {
+  context('expects', function (): void {
 
     let otherFileToHashFilename: string;
     let fileToHashFilename: string;
@@ -23,7 +23,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
     let sha1Length: number;
     let sha512Length: number;
 
-    before(function () {
+    before(function (): void {
       otherFileToHashFilename = 'otherFileToHash.txt';
       fileToHashFilename = 'fileToHash.txt';
 
@@ -34,7 +34,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
 
     let options: IntegrityOptions;
 
-    beforeEach(function () {
+    beforeEach(function (): void {
       fixturesDirPath = path.resolve(__dirname, '../../../test/fixtures');
       fileToHashFilePath = path.resolve(fixturesDirPath, fileToHashFilename);
       options = {
@@ -44,17 +44,17 @@ describe('Integrity: function \'createDirHash\' tests', function () {
       };
     });
 
-    context('to throw an Error when', function () {
+    context('to throw an Error when', function (): void {
 
       it('the provided algorithm is not supported',
-        function () {
+        function (): void {
           options.cryptoOptions = { dirAlgorithm: 'md1' };
           Integrity.createDirHash(fixturesDirPath, options)
             .catch(error => expect(error).to.be.an.instanceof(Error).that.matches(/ENOSUP:/));
         });
 
       it('the provided encoding is not supported',
-        function () {
+        function (): void {
           // @ts-ignore
           options.cryptoOptions = { encoding: 'ascii' };
           Integrity.createDirHash(fixturesDirPath, options)
@@ -62,14 +62,14 @@ describe('Integrity: function \'createDirHash\' tests', function () {
         });
 
       it('the provided path is not a directory',
-        function () {
+        function (): void {
           options.verbose = false;
           Integrity.createDirHash(fileToHashFilePath, options)
             .catch(error => expect(error).to.be.an.instanceof(Error).that.matches(/ENOTDIR:/));
         });
 
       it('a file can not be read',
-        function () {
+        function (): void {
           options.verbose = false;
           const createReadStreamStub = sinon.stub(fs, 'createReadStream').returns(new Readable() as fs.ReadStream);
           Integrity.createDirHash(fixturesDirPath, options)
@@ -82,7 +82,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
     });
 
     it('to return by default an \'sha512\' and \'base64\' encoded hash string',
-      async function () {
+      async function (): Promise<void> {
         options.verbose = false;
         const sut = await Integrity.createDirHash(fixturesDirPath, options);
         expect(sut).to.be.an('object')
@@ -95,7 +95,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
       });
 
     it('to return an \'sha512\' and \'hex\' encoded hash string',
-      async function () {
+      async function (): Promise<void> {
         options.cryptoOptions = { encoding: 'hex' };
         options.verbose = false;
         const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -109,7 +109,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
       });
 
     it('to return an \'sha512\' and \'latin1\' encoded hash string',
-      async function () {
+      async function (): Promise<void> {
         options.cryptoOptions = { encoding: 'latin1' };
         options.verbose = false;
         const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -123,7 +123,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
       });
 
     it('to return an \'md5\' and \'base64\' encoded hash string',
-      async function () {
+      async function (): Promise<void> {
         options.cryptoOptions = { dirAlgorithm: 'md5' };
         options.verbose = false;
         const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -136,7 +136,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
       });
 
     it('to return an \'md5\' and \'hex\' encoded hash string',
-      async function () {
+      async function (): Promise<void> {
         options.cryptoOptions = { dirAlgorithm: 'md5', encoding: 'hex' };
         options.verbose = false;
         const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -148,14 +148,14 @@ describe('Integrity: function \'createDirHash\' tests', function () {
               'md5', md5Length));
       });
 
-    context('to verbosely compute a hash JSON', function () {
+    context('to verbosely compute a hash JSON', function (): void {
 
-      beforeEach(function () {
+      beforeEach(function (): void {
         options.verbose = true;
       });
 
       it('with \'sha1\' and \'base64\' encoding by default',
-        async function () {
+        async function (): Promise<void> {
           const sut = await Integrity.createDirHash(fixturesDirPath, options);
           expect(sut).to.be.an('object')
             .and.to.haveOwnProperty('fixtures')
@@ -166,7 +166,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
         });
 
       it('with \'sha1\' and \'hex\' encoding',
-        async function () {
+        async function (): Promise<void> {
           options.cryptoOptions = { encoding: 'hex' };
           const sut = await Integrity.createDirHash(fixturesDirPath, options);
           expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
@@ -180,7 +180,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
         });
 
       it('with \'sha1\' and \'latin1\' encoding',
-        async function () {
+        async function (): Promise<void> {
           options.cryptoOptions = { encoding: 'latin1' };
           const sut = await Integrity.createDirHash(fixturesDirPath, options);
           expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
@@ -192,7 +192,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
         });
 
       it('with \'md5\' and \'base64\' encoding',
-        async function () {
+        async function (): Promise<void> {
           options.cryptoOptions = { fileAlgorithm: 'md5' };
           const sut = await Integrity.createDirHash(fixturesDirPath, options);
           expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
@@ -206,7 +206,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
         });
 
       it('with \'md5\' and \'hex\' encoding',
-        async function () {
+        async function (): Promise<void> {
           options.cryptoOptions = { fileAlgorithm: 'md5', encoding: 'hex' };
           const sut = await Integrity.createDirHash(fixturesDirPath, options);
           expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
@@ -221,12 +221,12 @@ describe('Integrity: function \'createDirHash\' tests', function () {
 
     });
 
-    context('to exclude', function () {
+    context('to exclude', function (): void {
 
-      context('in non-verbosely computation', function () {
+      context('in non-verbosely computation', function (): void {
 
         it('the provided file',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = [fileToHashFilename];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -240,7 +240,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided file (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/fileToHash.txt'];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -254,7 +254,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided files',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = [fileToHashFilename, otherFileToHashFilename];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -268,7 +268,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided files (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/fileToHash.txt', '**/otherFileToHash.txt'];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -282,7 +282,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided files (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/*.txt'];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -296,7 +296,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided files (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/*.*'];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -310,7 +310,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided directory',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['fixtures'];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -318,7 +318,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided directory (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/fixtures'];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -326,7 +326,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided directory (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/fixtures/**'];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -340,7 +340,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided directory (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/*'];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -348,7 +348,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided subdirectory',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['directory'];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -362,7 +362,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided subdirectory (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/directory'];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -376,7 +376,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided subdirectory (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/directory/**'];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -391,14 +391,14 @@ describe('Integrity: function \'createDirHash\' tests', function () {
 
       });
 
-      context('in verbosely computation', function () {
+      context('in verbosely computation', function (): void {
 
-        beforeEach(function () {
+        beforeEach(function (): void {
           options.verbose = true;
         });
 
         it('the provided file',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = [fileToHashFilename];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
@@ -415,7 +415,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided file (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/fileToHash.txt'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
@@ -432,7 +432,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided files',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = [fileToHashFilename, otherFileToHashFilename];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
@@ -457,7 +457,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided files (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/fileToHash.txt', '**/otherFileToHash.txt'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
@@ -474,7 +474,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided \'txt\' files (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/*.txt'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
@@ -491,7 +491,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('all files (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/*.*'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
@@ -508,7 +508,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided directory',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['fixtures'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object');
@@ -518,7 +518,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided directory (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/fixtures'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object');
@@ -528,7 +528,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided directory contents (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/fixtures/**'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object');
@@ -546,7 +546,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('everything (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/*'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object');
@@ -556,7 +556,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided subdirectory',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['directory'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object');
@@ -580,7 +580,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided subdirectory (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/directory'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object');
@@ -604,7 +604,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('the provided subdirectory contents (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/directory/**'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object');
@@ -627,16 +627,16 @@ describe('Integrity: function \'createDirHash\' tests', function () {
 
     });
 
-    context('to include', function () {
+    context('to include', function (): void {
 
-      context('in verbosely computation', function () {
+      context('in verbosely computation', function (): void {
 
-        beforeEach(function () {
+        beforeEach(function (): void {
           options.verbose = true;
         });
 
         it('the provided file (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['!**/fixtures', '!**/fileToHash.txt'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object');
@@ -669,7 +669,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('only the provided root directory file (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['**/fixtures/', '!**/fileToHash.txt'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object');
@@ -694,7 +694,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('only the provided subdirectory file (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['!**/fixtures', '!**/fixtures/fixtures/fileToHash.txt'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object');
@@ -726,7 +726,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('only the provided root directory contents (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['!**/fixtures/*.txt'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object');
@@ -754,7 +754,7 @@ describe('Integrity: function \'createDirHash\' tests', function () {
           });
 
         it('only the provided subdirectory contents (glob pattern)',
-          async function () {
+          async function (): Promise<void> {
             options.exclude = ['!**/fixtures',
               '**/fixtures/fixtures',
               '!**/fixtures/directory',

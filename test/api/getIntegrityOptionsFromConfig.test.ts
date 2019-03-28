@@ -5,31 +5,31 @@ import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import { ConfigExplorer } from '../../src/common/configExplorer';
 
-describe('Integrity: function \'getIntegrityOptionsFromConfig\' tests', function () {
+describe('Integrity: function \'getIntegrityOptionsFromConfig\' tests', function (): void {
 
-  context('expects', function () {
+  context('expects', function (): void {
 
     let sandbox: sinon.SinonSandbox;
     let getConfigStub: sinon.SinonStub;
 
-    beforeEach(function () {
+    beforeEach(function (): void {
       sandbox = sinon.createSandbox();
       getConfigStub = sandbox.stub(ConfigExplorer.prototype, 'getConfig');
     });
 
-    afterEach(function () {
+    afterEach(function (): void {
       sandbox.restore();
     });
 
     it('to return an empty object, when failing to find a configuration',
-      async function () {
+      async function (): Promise<void> {
         getConfigStub.resolves(undefined);
         const config = await Integrity.getIntegrityOptionsFromConfig();
         expect(config).to.eql({});
       });
 
     it('to return the integrity options',
-      async function () {
+      async function (): Promise<void> {
         const rc = {
           cryptoOptions: {
             dirAlgorithm: 'mr',

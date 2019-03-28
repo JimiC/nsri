@@ -6,9 +6,9 @@ import { Integrity } from '../../src/app/integrity';
 import * as utils from '../../src/common/utils';
 import { checker } from '../helper';
 
-describe('Integrity: function \'createFilesHash\' tests', function () {
+describe('Integrity: function \'createFilesHash\' tests', function (): void {
 
-  context('expects', function () {
+  context('expects', function (): void {
 
     let anotherFileToHashFilename: string;
     let otherFileToHashFilename: string;
@@ -21,7 +21,7 @@ describe('Integrity: function \'createFilesHash\' tests', function () {
     let md5Length: number;
     let sha1Length: number;
 
-    before(function () {
+    before(function (): void {
       anotherFileToHashFilename = 'anotherFileToHash.txt';
       otherFileToHashFilename = 'otherFileToHash.txt';
       fileToHashFilename = 'fileToHash.txt';
@@ -30,7 +30,7 @@ describe('Integrity: function \'createFilesHash\' tests', function () {
       sha1Length = 40;
     });
 
-    beforeEach(function () {
+    beforeEach(function (): void {
       fixturesDirPath = path.resolve(__dirname, '../../../test/fixtures');
       directoryDirPath = path.resolve(fixturesDirPath, 'directory');
       anotherFileToHashFilePath = path.resolve(directoryDirPath, anotherFileToHashFilename);
@@ -38,17 +38,17 @@ describe('Integrity: function \'createFilesHash\' tests', function () {
       fileToHashFilePath = path.resolve(fixturesDirPath, fileToHashFilename);
     });
 
-    context('to throw an Error when', function () {
+    context('to throw an Error when', function (): void {
 
       it('the provided algorithm is not supported',
-        function () {
+        function (): void {
           const cryptoOptions = { fileAlgorithm: 'md1' };
           Integrity.createFilesHash([fileToHashFilePath], cryptoOptions)
             .catch(error => expect(error).to.be.an.instanceof(Error).that.matches(/ENOSUP:/));
         });
 
       it('the provided encoding is not supported',
-        function () {
+        function (): void {
           const cryptoOptions = { encoding: 'ascii' };
           // @ts-ignore
           Integrity.createFilesHash([fileToHashFilePath], cryptoOptions)
@@ -58,7 +58,7 @@ describe('Integrity: function \'createFilesHash\' tests', function () {
     });
 
     it('to return by default an \'sha1\' and \'base64\' encoded hash JSON',
-      async function () {
+      async function (): Promise<void> {
         const files = [anotherFileToHashFilePath, otherFileToHashFilePath];
         const sut = await Integrity.createFilesHash(files);
         expect(sut).to.be.an('object');
@@ -71,7 +71,7 @@ describe('Integrity: function \'createFilesHash\' tests', function () {
       });
 
     it('to return an \'sha1\' and \'hex\' encoded hash JSON',
-      async function () {
+      async function (): Promise<void> {
         const files = [anotherFileToHashFilePath, otherFileToHashFilePath];
         const sut = await Integrity.createFilesHash(files, { encoding: 'hex' });
         expect(sut).to.be.an('object');
@@ -88,7 +88,7 @@ describe('Integrity: function \'createFilesHash\' tests', function () {
       });
 
     it('to return an \'sha1\' and \'latin1\' encoded hash JSON',
-      async function () {
+      async function (): Promise<void> {
         const files = [anotherFileToHashFilePath, otherFileToHashFilePath];
         const sut = await Integrity.createFilesHash(files, { encoding: 'latin1' });
         expect(sut).to.be.an('object');
@@ -101,7 +101,7 @@ describe('Integrity: function \'createFilesHash\' tests', function () {
       });
 
     it('to return an \'md5\' and \'base64\' encoded hash JSON',
-      async function () {
+      async function (): Promise<void> {
         const files = [anotherFileToHashFilePath, otherFileToHashFilePath];
         const sut = await Integrity.createFilesHash(files, { fileAlgorithm: 'md5' });
         expect(sut).to.be.an('object');
@@ -114,7 +114,7 @@ describe('Integrity: function \'createFilesHash\' tests', function () {
       });
 
     it('to return an \'md5\' and \'hex\' encoded hash JSON',
-      async function () {
+      async function (): Promise<void> {
         const files = [anotherFileToHashFilePath, otherFileToHashFilePath];
         const sut = await Integrity.createFilesHash(files, { fileAlgorithm: 'md5', encoding: 'hex' });
         expect(sut).to.be.an('object');
