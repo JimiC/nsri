@@ -48,6 +48,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "start": "node ./out/src/cli.js",
+    "lint-staged": "lint-staged",
     "lint": "tslint -p .",
     "build:dev": "npm run build -- -p tsconfig.dev.json",
     "prebuild": "npm run cleanup && npm run lint",
@@ -77,6 +78,8 @@
     "@types/yargs": "^12.0.5",
     "chai": "^4.2.0",
     "cpx": "^1.5.0",
+    "husky": "^1.3.1",
+    "lint-staged": "^8.1.5",
     "mocha": "^5.2.0",
     "nyc": "^13.1.0",
     "rimraf": "^2.6.3",
