@@ -1,6 +1,7 @@
 // tslint:disable only-arrow-functions
 // tslint:disable no-unused-expression
 import { expect } from 'chai';
+import { Config } from 'cosmiconfig';
 import path from 'path';
 import sinon from 'sinon';
 import { ConfigExplorer } from '../../src/common/configExplorer';
@@ -11,7 +12,7 @@ describe('ConfigExplorer: tests', function (): void {
 
     let sandbox: sinon.SinonSandbox;
     let configExplorer: ConfigExplorer;
-    let getConfigStub: sinon.SinonStub;
+    let getConfigStub: sinon.SinonStub<[(string | undefined)?], Promise<Config>>;
     let baseConfigDirPath: string;
 
     beforeEach(function (): void {
@@ -34,7 +35,7 @@ describe('ConfigExplorer: tests', function (): void {
 
         it('to simply return when no configuration section is found',
           async function (): Promise<void> {
-            getConfigStub.resolves(undefined);
+            getConfigStub.resolves({});
             await configExplorer.assignArgs();
             expect(process.argv).to.eql([]);
           });
@@ -119,6 +120,14 @@ describe('ConfigExplorer: tests', function (): void {
             } catch (error) {
               expect(error).to.be.an.instanceOf(Error).and.match(/CosmiConfig not initialized/);
             }
+          });
+
+        it('to return an empty object when \'explorer\' returns \'null\'',
+          async function (): Promise<void> {
+            // @ts-ignore
+            sandbox.stub(configExplorer._explorer, 'search').resolves(null);
+            const config = await configExplorer.getConfig();
+            expect(config).to.be.an('object').that.is.empty;
           });
 
         context('to retrieve the configuration values from', function (): void {

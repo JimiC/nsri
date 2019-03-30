@@ -133,7 +133,7 @@ export class Integrity {
   public static async getIntegrityOptionsFromConfig(): Promise<IntegrityOptions> {
     const _explorer = new ConfigExplorer();
     const _config = await _explorer.getConfig();
-    if (!_config) {
+    if (!Object.keys(_config).length) {
       return Promise.resolve({});
     }
     return {
