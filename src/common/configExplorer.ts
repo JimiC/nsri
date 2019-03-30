@@ -9,7 +9,7 @@ export class ConfigExplorer {
 
   public async assignArgs(): Promise<void> {
     const _config = await this.getConfig();
-    if (!_config) {
+    if (!Object.keys(_config).length) {
       return Promise.resolve();
     }
     if (!this._existsArg(['-m', 'manifest']) && _config.manifest !== undefined) {
@@ -41,13 +41,13 @@ export class ConfigExplorer {
     }
   }
 
-  public async getConfig(fromPath?: string): Promise<cc.Config | null> {
+  public async getConfig(fromPath?: string): Promise<cc.Config> {
     if (!this._explorer) {
       return Promise.reject(new Error('CosmiConfig not initialized'));
     }
     this._explorer.clearSearchCache();
     const _result = await this._explorer.search(fromPath);
-    return _result && _result.config;
+    return _result ? _result.config : {};
   }
 
   private _existsArg(args: string[]): boolean {

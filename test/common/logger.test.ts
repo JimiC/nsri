@@ -438,11 +438,17 @@ describe('Logger: tests', function (): void {
 
         context('if the terminal', function (): void {
 
-          let moveCursorStub: sinon.SinonStub;
-          let clearLineStub: sinon.SinonStub;
-          let cursorToStub: sinon.SinonStub;
-          let updateLogStub: sinon.SinonStub;
-          let cursorShowStub: sinon.SinonStub;
+          type sn = string | number;
+          type nu = number | undefined;
+          type su = string | undefined;
+          // tslint:disable-next-line
+          type fu = Function | undefined;
+
+          let moveCursorStub: sinon.SinonStub<[NodeJS.WritableStream, sn, sn], void>;
+          let clearLineStub: sinon.SinonStub<[NodeJS.WritableStream, number], void>;
+          let cursorToStub: sinon.SinonStub<[NodeJS.WritableStream, number, (nu)?], void>;
+          let updateLogStub: sinon.SinonStub<[string, (nu)?, (su)?], void>;
+          let cursorShowStub: sinon.SinonStub<[string, (su)?, (fu)?], boolean>;
 
           beforeEach(function (): void {
             moveCursorStub = sandbox.stub(readline, 'moveCursor');

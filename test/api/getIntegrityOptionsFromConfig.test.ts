@@ -1,6 +1,7 @@
 // tslint:disable only-arrow-functions
 // tslint:disable no-unused-expression
 import { expect } from 'chai';
+import { Config } from 'cosmiconfig';
 import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import { ConfigExplorer } from '../../src/common/configExplorer';
@@ -10,7 +11,7 @@ describe('Integrity: function \'getIntegrityOptionsFromConfig\' tests', function
   context('expects', function (): void {
 
     let sandbox: sinon.SinonSandbox;
-    let getConfigStub: sinon.SinonStub;
+    let getConfigStub: sinon.SinonStub<[(string | undefined)?], Promise<Config>>;
 
     beforeEach(function (): void {
       sandbox = sinon.createSandbox();
@@ -23,7 +24,7 @@ describe('Integrity: function \'getIntegrityOptionsFromConfig\' tests', function
 
     it('to return an empty object, when failing to find a configuration',
       async function (): Promise<void> {
-        getConfigStub.resolves(undefined);
+        getConfigStub.resolves({});
         const config = await Integrity.getIntegrityOptionsFromConfig();
         expect(config).to.eql({});
       });
