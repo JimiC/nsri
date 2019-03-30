@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/JimiC/nsri#readme",
   "engines": {
-    "node": ">=6"
+    "node": "6.* || 8.* || >= 10.*"
   },
   "keywords": [
     "node",
