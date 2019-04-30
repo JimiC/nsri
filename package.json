@@ -63,7 +63,7 @@
   "dependencies": {
     "ajv": "^6.10.0",
     "cosmiconfig": "^5.2.0",
-    "detect-indent": "^5.0.0",
+    "detect-indent": "^6.0.0",
     "minimatch": "^3.0.4",
     "yargs": "^13.2.2"
   },
