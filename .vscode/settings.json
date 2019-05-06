@@ -1,5 +1,8 @@
 {
-  "eslint.enable": false,
-  "tslint.enable": true,
+  "files.associations": {
+    ".huskyrc": "json",
+    ".lintstagedrc": "json",
+    ".nycrc": "json"
+  },
   "typescript.tsdk": "node_modules/typescript/lib"
 }

@@ -1,6 +1,0 @@
-out/test
---colors
---exit
---recursive
---retries 2
---timeout 15000
