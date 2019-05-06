@@ -5,6 +5,7 @@
     "declaration": true,
     "diagnostics": false,
     "sourceMap": false,
-    "stripInternal": true
+    "stripInternal": true,
+    "removeComments": true
   }
 }

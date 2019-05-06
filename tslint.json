@@ -50,6 +50,7 @@
       true,
       "call-signature",
       "arrow-call-signature"
-    ]
+    ],
+    "interface-name": false
   }
 }

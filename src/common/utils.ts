@@ -79,6 +79,6 @@ export function promisify<T>(func: (...args: any[]) => any): (...args: any[]) =>
 }
 
 /** @internal */
-export function getIndentation(text: string): detectIndent.IndentInfo {
+export function getIndentation(text: string): detectIndent.Indent {
   return detectIndent(text);
 }
