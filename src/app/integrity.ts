@@ -417,7 +417,7 @@ export class Integrity {
 
   /** @internal */
   private static _match = (target: string, pattern: string): boolean =>
-    mm(target, pattern, { dot: true })
+    mm(target, pattern, { dot: true, matchBase: true })
 
   /** @internal */
   private static _excludePath(curPath: string, options: INormalizedIntegrityOptions): boolean {
