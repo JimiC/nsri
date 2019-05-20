@@ -46,37 +46,52 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
 
     context('to throw an Error when', function (): void {
 
-      it('the provided algorithm is not supported',
-        function (): void {
+      it(`the provided 'algorithm' is not supported`,
+        async function (): Promise<void> {
           options.cryptoOptions = { dirAlgorithm: 'md1' };
-          Integrity.createDirHash(fixturesDirPath, options)
-            .catch(error => expect(error).to.be.an.instanceof(Error).that.matches(/ENOSUP:/));
+
+          try {
+            await Integrity.createDirHash(fixturesDirPath, options);
+          } catch (error) {
+            expect(error).to.be.an.instanceof(Error).that.matches(/ENOSUP:/);
+          }
         });
 
-      it('the provided encoding is not supported',
-        function (): void {
+      it(`the provided 'encoding' is not supported`,
+        async function (): Promise<void> {
           // @ts-ignore
           options.cryptoOptions = { encoding: 'ascii' };
-          Integrity.createDirHash(fixturesDirPath, options)
-            .catch((error: any) => expect(error).to.be.an.instanceof(Error).that.matches(/ENOSUP:/));
+
+          try {
+            await Integrity.createDirHash(fixturesDirPath, options);
+          } catch (error) {
+            expect(error).to.be.an.instanceof(Error).that.matches(/ENOSUP:/);
+          }
         });
 
-      it('the provided path is not a directory',
-        function (): void {
+      it(`the provided 'path' is not a directory`,
+        async function (): Promise<void> {
           options.verbose = false;
-          Integrity.createDirHash(fileToHashFilePath, options)
-            .catch(error => expect(error).to.be.an.instanceof(Error).that.matches(/ENOTDIR:/));
+
+          try {
+            await Integrity.createDirHash(fileToHashFilePath, options);
+          } catch (error) {
+            expect(error).to.be.an.instanceof(Error).that.matches(/ENOTDIR:/);
+          }
         });
 
       it('a file can not be read',
-        function (): void {
+        async function (): Promise<void> {
           options.verbose = false;
           const createReadStreamStub = sinon.stub(fs, 'createReadStream').returns(new Readable() as fs.ReadStream);
-          Integrity.createDirHash(fixturesDirPath, options)
-            .catch(error => {
-              createReadStreamStub.restore();
-              expect(error).to.be.an.instanceof(Error);
-            });
+
+          try {
+            await Integrity.createDirHash(fixturesDirPath, options);
+          } catch (error) {
+            expect(error).to.be.an.instanceof(Error);
+          } finally {
+            createReadStreamStub.restore();
+          }
         });
 
     });
