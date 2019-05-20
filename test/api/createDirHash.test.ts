@@ -11,7 +11,7 @@ import { IntegrityOptions } from '../../src/interfaces/integrityOptions';
 import { IVerboseHashObject } from '../../src/interfaces/verboseHashObject';
 import { checker } from '../helper';
 
-describe('Integrity: function \'createDirHash\' tests', function (): void {
+describe(`Integrity: function 'createDirHash' tests`, function (): void {
 
   context('expects', function (): void {
 
@@ -81,7 +81,7 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
 
     });
 
-    it('to return by default an \'sha512\' and \'base64\' encoded hash string',
+    it(`to return by default an 'sha512' and 'base64' encoded hash string`,
       async function (): Promise<void> {
         options.verbose = false;
         const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -94,7 +94,7 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
               'sha512'));
       });
 
-    it('to return an \'sha512\' and \'hex\' encoded hash string',
+    it(`to return an 'sha512' and 'hex' encoded hash string`,
       async function (): Promise<void> {
         options.cryptoOptions = { encoding: 'hex' };
         options.verbose = false;
@@ -108,7 +108,7 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
               'sha512', sha512Length));
       });
 
-    it('to return an \'sha512\' and \'latin1\' encoded hash string',
+    it(`to return an 'sha512' and 'latin1' encoded hash string`,
       async function (): Promise<void> {
         options.cryptoOptions = { encoding: 'latin1' };
         options.verbose = false;
@@ -122,7 +122,7 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
               'sha512'));
       });
 
-    it('to return an \'md5\' and \'base64\' encoded hash string',
+    it(`to return an 'md5' and 'base64' encoded hash string`,
       async function (): Promise<void> {
         options.cryptoOptions = { dirAlgorithm: 'md5' };
         options.verbose = false;
@@ -135,7 +135,7 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
               'md5'));
       });
 
-    it('to return an \'md5\' and \'hex\' encoded hash string',
+    it(`to return an 'md5' and 'hex' encoded hash string`,
       async function (): Promise<void> {
         options.cryptoOptions = { dirAlgorithm: 'md5', encoding: 'hex' };
         options.verbose = false;
@@ -154,7 +154,7 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
         options.verbose = true;
       });
 
-      it('with \'sha1\' and \'base64\' encoding by default',
+      it(`with 'sha1' and 'base64' encoding by default`,
         async function (): Promise<void> {
           const sut = await Integrity.createDirHash(fixturesDirPath, options);
           expect(sut).to.be.an('object')
@@ -165,7 +165,7 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
               checker(hash, utils.base64RegexPattern, 'H58mYNjbMJTkiNvvNfj2YKl3ck0='));
         });
 
-      it('with \'sha1\' and \'hex\' encoding',
+      it(`with 'sha1' and 'hex' encoding`,
         async function (): Promise<void> {
           options.cryptoOptions = { encoding: 'hex' };
           const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -179,7 +179,7 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
                 'sha1', sha1Length));
         });
 
-      it('with \'sha1\' and \'latin1\' encoding',
+      it(`with 'sha1' and 'latin1' encoding`,
         async function (): Promise<void> {
           options.cryptoOptions = { encoding: 'latin1' };
           const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -191,7 +191,7 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
               checker(hash, utils.latin1RegexPattern, '\u001f&`ØÛ0äÛï5øö`©wrM'));
         });
 
-      it('with \'md5\' and \'base64\' encoding',
+      it(`with 'md5' and 'base64' encoding`,
         async function (): Promise<void> {
           options.cryptoOptions = { fileAlgorithm: 'md5' };
           const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -205,7 +205,7 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
                 'md5'));
         });
 
-      it('with \'md5\' and \'hex\' encoding',
+      it(`with 'md5' and 'hex' encoding`,
         async function (): Promise<void> {
           options.cryptoOptions = { fileAlgorithm: 'md5', encoding: 'hex' };
           const sut = await Integrity.createDirHash(fixturesDirPath, options);

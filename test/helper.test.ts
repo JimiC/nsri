@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import { hexRegexPattern } from '../src/common/utils';
 import { checker } from './helper';
 
-describe('Helper: function \'checker\' tests', function (): void {
+describe(`Helper: function 'checker' tests`, function (): void {
 
   it('to fail when hash is not of SRI',
     function (): void {

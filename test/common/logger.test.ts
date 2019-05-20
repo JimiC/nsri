@@ -33,12 +33,12 @@ describe('Logger: tests', function (): void {
         expect(logger).to.have.deep.property('spinnerLogStop');
       });
 
-    it('to have own \'frames\' property',
+    it(`to have own 'frames' property`,
       function (): void {
         expect(logger).to.haveOwnProperty('frames');
       });
 
-    it('to have own \'_countLines\' property',
+    it(`to have own '_countLines' property`,
       function (): void {
         expect(logger).to.haveOwnProperty('_countLines');
       });
@@ -58,7 +58,7 @@ describe('Logger: tests', function (): void {
         timer.restore();
       });
 
-      context('function \'log\'', function (): void {
+      context(`function 'log'`, function (): void {
 
         it('the process stdout write function is called',
           function (): void {
@@ -79,7 +79,7 @@ describe('Logger: tests', function (): void {
             expect(stub.calledWith('test\n')).to.be.true;
           });
 
-        it('to display the \'groupId\' when provided',
+        it(`to display the 'groupId' when provided`,
           function (): void {
             const stub = sandbox.stub(process.stdout, 'write');
             logger.log('test', 'Mocha');
@@ -89,7 +89,7 @@ describe('Logger: tests', function (): void {
 
       });
 
-      context('function \'error\'', function (): void {
+      context(`function 'error'`, function (): void {
 
         it('the process stderr write function is called',
           function (): void {
@@ -110,7 +110,7 @@ describe('Logger: tests', function (): void {
             expect(stub.calledWith('test\n')).to.be.true;
           });
 
-        it('to display the \'groupId\' when provided',
+        it(`to display the 'groupId' when provided`,
           function (): void {
             const stub = sandbox.stub(process.stderr, 'write');
             logger.error('test', 'Mocha');
@@ -120,13 +120,13 @@ describe('Logger: tests', function (): void {
 
       });
 
-      context('function \'updateLog\'', function (): void {
+      context(`function 'updateLog'`, function (): void {
 
         context('if the terminal', function (): void {
 
           context('is TTY', function (): void {
 
-            it('to display the \'groupId\' when provided',
+            it(`to display the 'groupId' when provided`,
               function (): void {
                 process.stdout.isTTY = true;
                 const stub = sandbox.stub(process.stdout, 'write');
@@ -200,7 +200,7 @@ describe('Logger: tests', function (): void {
 
           context('is not TTY', function (): void {
 
-            it('to display the \'groupId\' when provided',
+            it(`to display the 'groupId' when provided`,
               function (): void {
                 process.stdout.isTTY = undefined;
                 const writeStub = sandbox.stub(process.stdout, 'write');
@@ -230,7 +230,7 @@ describe('Logger: tests', function (): void {
 
       });
 
-      context('function \'spinnerLogStart\'', function (): void {
+      context(`function 'spinnerLogStart'`, function (): void {
 
         context('if the terminal', function (): void {
 
@@ -256,7 +256,7 @@ describe('Logger: tests', function (): void {
                   expect(writeStub.calledWith('\u001B[?25l')).to.be.true;
                 });
 
-              it('and the \'groupId\' when provided',
+              it(`and the 'groupId' when provided`,
                 function (): void {
                   process.stdout.isTTY = true;
                   const writeStub = sandbox.stub(process.stdout, 'write');
@@ -293,7 +293,7 @@ describe('Logger: tests', function (): void {
                   expect(writeStub.calledWith('\u001B[?25l')).to.be.true;
                 });
 
-              it('and the \'groupId\' when provided',
+              it(`and the 'groupId' when provided`,
                 function (): void {
                   process.stdout.isTTY = true;
                   logger.showSpinnerInFront = false;
@@ -338,7 +338,7 @@ describe('Logger: tests', function (): void {
 
       });
 
-      context('function \'spinnerLogStop\'', function (): void {
+      context(`function 'spinnerLogStop'`, function (): void {
 
         context('if the terminal', function (): void {
 
@@ -358,7 +358,7 @@ describe('Logger: tests', function (): void {
                 expect(writeStub.calledWith('\u001B[?25h')).to.be.true;
               });
 
-            it('to display the \'groupId\' when provided',
+            it(`to display the 'groupId' when provided`,
               function (): void {
                 process.stdout.isTTY = true;
                 const writeStub = sandbox.stub(process.stdout, 'write');
@@ -394,7 +394,7 @@ describe('Logger: tests', function (): void {
 
       });
 
-      context('function \'moveCursorTo\'', function (): void {
+      context(`function 'moveCursorTo'`, function (): void {
 
         context('if the terminal', function (): void {
 
@@ -434,7 +434,7 @@ describe('Logger: tests', function (): void {
 
       });
 
-      context('function \'handleForcedExit\'', function (): void {
+      context(`function 'handleForcedExit'`, function (): void {
 
         context('if the terminal', function (): void {
 

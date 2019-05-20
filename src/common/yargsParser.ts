@@ -56,7 +56,7 @@ export class YargsParser {
     output: {
       alias: 'o',
       description: 'The directory path where to persist the created integrity file' +
-        '(ignored when \'manifest\' option specified)',
+        ` (ignored when 'manifest' option specified)`,
       type: 'string',
     },
   };
@@ -66,7 +66,7 @@ export class YargsParser {
       alias: 'i',
       conflicts: 'manifest',
       description: 'The integrity hash, JSON, file or directory path, to check against' +
-        ' ([required] when \'manifest\' option not specified)',
+        ` ([required] when 'manifest' option not specified)`,
       type: 'string',
     },
   };
@@ -75,10 +75,10 @@ export class YargsParser {
     y
       .usage('Usage: $0 {command} [options]')
       .command('create [options]',
-        'Creates integrity hash from the provided source (use \'--help\' for [options] details)',
+        `Creates integrity hash from the provided source (use '--help' for [options] details)`,
         sortObject({ ...this._createOptions, ...this._commonOptions }))
       .command('check [options]',
-        'Checks integrity hash against the provided source (use \'--help\' for [options] details)',
+        `Checks integrity hash against the provided source (use '--help' for [options] details)`,
         sortObject({ ...this._checkOptions, ...this._commonOptions }))
       .demandCommand(1, 'Missing command')
       .recommendCommands()

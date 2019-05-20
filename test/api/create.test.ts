@@ -8,7 +8,7 @@ import { Integrity } from '../../src/app/integrity';
 import { IntegrityOptions } from '../../src/interfaces/integrityOptions';
 import * as schema from '../../src/schemas/v1/schema.json';
 
-describe('Integrity: function \'create\' tests', function (): void {
+describe(`Integrity: function 'create' tests`, function (): void {
 
   context('expects', function (): void {
 

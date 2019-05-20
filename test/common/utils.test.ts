@@ -9,7 +9,7 @@ describe('Utils: tests', function (): void {
 
   context('expects', function (): void {
 
-    context('function \'getAbsolutePath\'', function (): void {
+    context(`function 'getAbsolutePath'`, function (): void {
 
       let platformStub: sinon.SinonStub;
 
@@ -96,7 +96,7 @@ describe('Utils: tests', function (): void {
 
     });
 
-    context('function \'parseJSON\'', function (): void {
+    context(`function 'parseJSON'`, function (): void {
 
       context('to return a JSON when passed parameter is of type', function (): void {
 
@@ -114,7 +114,7 @@ describe('Utils: tests', function (): void {
 
       });
 
-      it('to return \'null\' when provided text is not a valid JSON',
+      it(`to return 'null' when provided text is not a valid JSON`,
         function (): void {
           const text = 'some invalid json';
           expect(utils.parseJSON(text)).to.be.null;
@@ -122,7 +122,7 @@ describe('Utils: tests', function (): void {
 
     });
 
-    context('function \'sortObject\'', function (): void {
+    context(`function 'sortObject'`, function (): void {
 
       it('to sort the object properties',
         function (): void {
@@ -133,7 +133,7 @@ describe('Utils: tests', function (): void {
 
     });
 
-    context('function \'asyncForEach\'', function (): void {
+    context(`function 'asyncForEach'`, function (): void {
 
       it('to return a Promise',
         function (): void {
@@ -151,7 +151,7 @@ describe('Utils: tests', function (): void {
 
     });
 
-    context('function \'promisify\'', function (): void {
+    context(`function 'promisify'`, function (): void {
 
       it('to throw a TypeError when passed parameter is not a function',
         function (): void {
@@ -173,14 +173,14 @@ describe('Utils: tests', function (): void {
           }
         });
 
-      it('to correctly handle a \'true\' response',
+      it(`to correctly handle a 'true' response`,
         async function (): Promise<void> {
           const stub = sinon.stub().callsFake(cb => cb(true));
           const response = await utils.promisify(stub)();
           expect(response).to.be.true;
         });
 
-      it('to correctly handle a \'false\' response',
+      it(`to correctly handle a 'false' response`,
         async function (): Promise<void> {
           const stub = sinon.stub().callsFake(cb => cb(false));
           const response = await utils.promisify(stub)();
@@ -205,7 +205,7 @@ describe('Utils: tests', function (): void {
 
     });
 
-    context('function \'getIndentation\'', function (): void {
+    context(`function 'getIndentation'`, function (): void {
 
       it('to return indent info',
         function (): void {

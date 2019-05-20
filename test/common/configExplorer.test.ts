@@ -27,7 +27,7 @@ describe('ConfigExplorer: tests', function (): void {
 
     context('when calling', function (): void {
 
-      context('function \'assignArgs\'', function (): void {
+      context(`function 'assignArgs'`, function (): void {
         beforeEach(function (): void {
           getConfigStub = sandbox.stub(ConfigExplorer.prototype, 'getConfig');
           sandbox.stub(process, 'argv').value([]);
@@ -42,63 +42,63 @@ describe('ConfigExplorer: tests', function (): void {
 
         context('to assign to the process arguments', function (): void {
 
-          it('the \'manifest\' value',
+          it(`the 'manifest' value`,
             async function (): Promise<void> {
               getConfigStub.resolves({ manifest: true });
               await configExplorer.assignArgs();
               expect(process.argv).to.contain('-m').and.to.contain(true);
             });
 
-          it('the \'source\' value',
+          it(`the 'source' value`,
             async function (): Promise<void> {
               getConfigStub.resolves({ source: '/some/path/' });
               await configExplorer.assignArgs();
               expect(process.argv).to.contain('-s').and.to.contain('/some/path/');
             });
 
-          it('the \'verbose\' value',
+          it(`the 'verbose' value`,
             async function (): Promise<void> {
               getConfigStub.resolves({ verbose: true });
               await configExplorer.assignArgs();
               expect(process.argv).to.contain('-v').and.to.contain(true);
             });
 
-          it('the \'diralgorithm\' value',
+          it(`the 'diralgorithm' value`,
             async function (): Promise<void> {
               getConfigStub.resolves({ cryptoOptions: { dirAlgorithm: 'sha512' } });
               await configExplorer.assignArgs();
               expect(process.argv).to.contain('-da').and.to.contain('sha512');
             });
 
-          it('the \'filealgorithm\' value',
+          it(`the 'filealgorithm' value`,
             async function (): Promise<void> {
               getConfigStub.resolves({ cryptoOptions: { fileAlgorithm: 'sha1' } });
               await configExplorer.assignArgs();
               expect(process.argv).to.contain('-fa').and.to.contain('sha1');
             });
 
-          it('the \'encoding\' value',
+          it(`the 'encoding' value`,
             async function (): Promise<void> {
               getConfigStub.resolves({ cryptoOptions: { encoding: 'base64' } });
               await configExplorer.assignArgs();
               expect(process.argv).to.contain('-e').and.to.contain('base64');
             });
 
-          it('the \'exclude\' value',
+          it(`the 'exclude' value`,
             async function (): Promise<void> {
               getConfigStub.resolves({ exclude: ['dir', 'file'] });
               await configExplorer.assignArgs();
               expect(process.argv).to.contain('-x').and.to.contain('dir').and.to.contain('file');
             });
 
-          it('the \'integrity\' value',
+          it(`the 'integrity' value`,
             async function (): Promise<void> {
               getConfigStub.resolves({ integrity: '/path/to/integrity/' });
               await configExplorer.assignArgs();
               expect(process.argv).to.contain('-i').and.to.contain('/path/to/integrity/');
             });
 
-          it('the \'output\' value',
+          it(`the 'output' value`,
             async function (): Promise<void> {
               getConfigStub.resolves({ output: '/' });
               await configExplorer.assignArgs();
@@ -109,9 +109,9 @@ describe('ConfigExplorer: tests', function (): void {
 
       });
 
-      context('function \'getConfig\'', function (): void {
+      context(`function 'getConfig'`, function (): void {
 
-        it('to throw an Error when \'explorer\' is not initialized',
+        it(`to throw an Error when 'explorer' is not initialized`,
           async function (): Promise<void> {
             // @ts-ignore
             sandbox.stub(configExplorer, '_explorer').value(undefined);
@@ -122,7 +122,7 @@ describe('ConfigExplorer: tests', function (): void {
             }
           });
 
-        it('to return an empty object when \'explorer\' returns \'null\'',
+        it(`to return an empty object when 'explorer' returns 'null'`,
           async function (): Promise<void> {
             // @ts-ignore
             sandbox.stub(configExplorer._explorer, 'search').resolves(null);
@@ -132,7 +132,7 @@ describe('ConfigExplorer: tests', function (): void {
 
         context('to retrieve the configuration values from', function (): void {
 
-          it('a \'package.json\' file',
+          it(`a 'package.json' file`,
             async function (): Promise<void> {
               const dirPath = path.join(baseConfigDirPath, 'packagejson');
               const config = await configExplorer.getConfig(dirPath);
@@ -141,7 +141,7 @@ describe('ConfigExplorer: tests', function (): void {
               expect(config).to.haveOwnProperty('exclude');
             });
 
-          it('an \'rc\' file',
+          it(`an 'rc' file`,
             async function (): Promise<void> {
               const dirPath = path.join(baseConfigDirPath, 'rc');
               const config = await configExplorer.getConfig(dirPath);
@@ -150,7 +150,7 @@ describe('ConfigExplorer: tests', function (): void {
               expect(config).to.haveOwnProperty('exclude');
             });
 
-          it('a \'.config.js\' file',
+          it(`a '.config.js' file`,
             async function (): Promise<void> {
               const dirPath = path.join(baseConfigDirPath, 'configjs');
               const config = await configExplorer.getConfig(dirPath);
@@ -159,7 +159,7 @@ describe('ConfigExplorer: tests', function (): void {
               expect(config).to.haveOwnProperty('exclude');
             });
 
-          it('a \'json\' file',
+          it(`a 'json' file`,
             async function (): Promise<void> {
               const dirPath = path.join(baseConfigDirPath, 'json');
               const config = await configExplorer.getConfig(dirPath);
@@ -167,7 +167,7 @@ describe('ConfigExplorer: tests', function (): void {
               expect(config).to.haveOwnProperty('exclude');
             });
 
-          it('a \'js\' file',
+          it(`a 'js' file`,
             async function (): Promise<void> {
               const dirPath = path.join(baseConfigDirPath, 'js');
               const config = await configExplorer.getConfig(dirPath);
@@ -176,7 +176,7 @@ describe('ConfigExplorer: tests', function (): void {
               expect(config).to.haveOwnProperty('exclude');
             });
 
-          it('a \'yaml\' file',
+          it(`a 'yaml' file`,
             async function (): Promise<void> {
               const dirPath = path.join(baseConfigDirPath, 'yaml');
               const config = await configExplorer.getConfig(dirPath);
@@ -185,7 +185,7 @@ describe('ConfigExplorer: tests', function (): void {
               expect(config).to.haveOwnProperty('exclude');
             });
 
-          it('a \'yml\' file',
+          it(`a 'yml' file`,
             async function (): Promise<void> {
               const dirPath = path.join(baseConfigDirPath, 'yml');
               const config = await configExplorer.getConfig(dirPath);

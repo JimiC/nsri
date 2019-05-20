@@ -6,7 +6,7 @@ import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import { IntegrityObject } from '../../src/interfaces/integrityObject';
 
-describe('Integrity: function \'persist\' tests', function (): void {
+describe(`Integrity: function 'persist' tests`, function (): void {
 
   context('expects', function (): void {
 

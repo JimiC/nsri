@@ -7,7 +7,7 @@ import { Integrity } from '../../src/app/integrity';
 import * as utils from '../../src/common/utils';
 import { IntegrityOptions } from '../../src/interfaces/integrityOptions';
 
-describe('Integrity: function \'check\' tests', function (): void {
+describe(`Integrity: function 'check' tests`, function (): void {
 
   context('expects', function (): void {
 
@@ -47,7 +47,7 @@ describe('Integrity: function \'check\' tests', function (): void {
       sandbox.restore();
     });
 
-    context('to throw an Error when \'integrity\'', function (): void {
+    context(`to throw an Error when 'integrity'`, function (): void {
 
       it('is a file path and filename is invalid',
         async function (): Promise<void> {
@@ -667,7 +667,7 @@ describe('Integrity: function \'check\' tests', function (): void {
 
     context('when detecting options', function (): void {
 
-      it('to preserve \'exclude\' option',
+      it(`to preserve 'exclude' option`,
         async function (): Promise<void> {
           options.exclude = [fileToHashFilename];
           const sut = await Integrity.check(fixturesDirPath, integrityTestFilePath, options);
@@ -711,7 +711,7 @@ describe('Integrity: function \'check\' tests', function (): void {
             expect(sut).to.be.a('boolean').and.to.be.true;
           });
 
-        it('no \'fileAlgorithm\'',
+        it(`no 'fileAlgorithm'`,
           async function (): Promise<void> {
             const hashObj = '{"version":"1","hashes":{"fixtures":{' +
               '"contents":{"directory":{' +
@@ -850,7 +850,7 @@ describe('Integrity: function \'check\' tests', function (): void {
               expect(sut).to.be.a('boolean').and.to.be.false;
             });
 
-          it('invalid \'array\' type',
+          it(`invalid 'array' type`,
             async function (): Promise<void> {
               const hashObj = '{"version":"1","hashes":{"fixtures":[]}}';
               try {
@@ -860,7 +860,7 @@ describe('Integrity: function \'check\' tests', function (): void {
               }
             });
 
-          it('invalid \'number\' type',
+          it(`invalid 'number' type`,
             async function (): Promise<void> {
               const hashObj = '{"version":"1","hashes":{"fixtures":0}}';
               try {
@@ -870,7 +870,7 @@ describe('Integrity: function \'check\' tests', function (): void {
               }
             });
 
-          it('invalid \'boolean\' type',
+          it(`invalid 'boolean' type`,
             async function (): Promise<void> {
               const hashObj = '{"version":"1","hashes":{"fixtures":true}}';
               try {
@@ -880,7 +880,7 @@ describe('Integrity: function \'check\' tests', function (): void {
               }
             });
 
-          it('invalid \'null\' type',
+          it(`invalid 'null' type`,
             async function (): Promise<void> {
               const hashObj = '{"version":"1","hashes":{"fixtures":null}}';
               try {
