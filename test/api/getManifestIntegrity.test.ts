@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 
-describe('Integrity: function \'getManifestIntegrity\' tests', function (): void {
+describe(`Integrity: function 'getManifestIntegrity' tests`, function (): void {
 
   context('expects', function (): void {
 
@@ -23,7 +23,7 @@ describe('Integrity: function \'getManifestIntegrity\' tests', function (): void
           }
         });
 
-      it('the manifest is \'null\'',
+      it(`the manifest is 'null'`,
         async function (): Promise<void> {
           // @ts-ignore
           const existsStub = sinon.stub(Integrity, '_exists').returns(true);
@@ -44,7 +44,7 @@ describe('Integrity: function \'getManifestIntegrity\' tests', function (): void
 
     context('to get the manifest integrity object', function (): void {
 
-      it('and return \'undefined\' when it\'s NOT found',
+      it(`and return 'undefined' when it's NOT found`,
         async function (): Promise<void> {
           // @ts-ignore
           const existsStub = sinon.stub(Integrity, '_exists').returns(true);

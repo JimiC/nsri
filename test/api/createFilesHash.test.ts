@@ -6,7 +6,7 @@ import { Integrity } from '../../src/app/integrity';
 import * as utils from '../../src/common/utils';
 import { checker } from '../helper';
 
-describe('Integrity: function \'createFilesHash\' tests', function (): void {
+describe(`Integrity: function 'createFilesHash' tests`, function (): void {
 
   context('expects', function (): void {
 
@@ -57,7 +57,7 @@ describe('Integrity: function \'createFilesHash\' tests', function (): void {
 
     });
 
-    it('to return by default an \'sha1\' and \'base64\' encoded hash JSON',
+    it(`to return by default an 'sha1' and 'base64' encoded hash JSON`,
       async function (): Promise<void> {
         const files = [anotherFileToHashFilePath, otherFileToHashFilePath];
         const sut = await Integrity.createFilesHash(files);
@@ -70,7 +70,7 @@ describe('Integrity: function \'createFilesHash\' tests', function (): void {
             checker(hash, utils.base64RegexPattern, 'B8FJ4uKgHESSgMvJUyrj3ix2uG8='));
       });
 
-    it('to return an \'sha1\' and \'hex\' encoded hash JSON',
+    it(`to return an 'sha1' and 'hex' encoded hash JSON`,
       async function (): Promise<void> {
         const files = [anotherFileToHashFilePath, otherFileToHashFilePath];
         const sut = await Integrity.createFilesHash(files, { encoding: 'hex' });
@@ -87,7 +87,7 @@ describe('Integrity: function \'createFilesHash\' tests', function (): void {
               'sha1', sha1Length));
       });
 
-    it('to return an \'sha1\' and \'latin1\' encoded hash JSON',
+    it(`to return an 'sha1' and 'latin1' encoded hash JSON`,
       async function (): Promise<void> {
         const files = [anotherFileToHashFilePath, otherFileToHashFilePath];
         const sut = await Integrity.createFilesHash(files, { encoding: 'latin1' });
@@ -100,7 +100,7 @@ describe('Integrity: function \'createFilesHash\' tests', function (): void {
             checker(hash, utils.latin1RegexPattern, '\u0007ÁIââ \u001cDËÉS*ãÞ,v¸o'));
       });
 
-    it('to return an \'md5\' and \'base64\' encoded hash JSON',
+    it(`to return an 'md5' and 'base64' encoded hash JSON`,
       async function (): Promise<void> {
         const files = [anotherFileToHashFilePath, otherFileToHashFilePath];
         const sut = await Integrity.createFilesHash(files, { fileAlgorithm: 'md5' });
@@ -113,7 +113,7 @@ describe('Integrity: function \'createFilesHash\' tests', function (): void {
             checker(hash, utils.base64RegexPattern, 'qrJbDxeJ/oiVXO5tI3Dntw==', 'md5'));
       });
 
-    it('to return an \'md5\' and \'hex\' encoded hash JSON',
+    it(`to return an 'md5' and 'hex' encoded hash JSON`,
       async function (): Promise<void> {
         const files = [anotherFileToHashFilePath, otherFileToHashFilePath];
         const sut = await Integrity.createFilesHash(files, { fileAlgorithm: 'md5', encoding: 'hex' });

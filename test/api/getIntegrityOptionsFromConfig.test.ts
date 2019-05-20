@@ -6,7 +6,7 @@ import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import { ConfigExplorer } from '../../src/common/configExplorer';
 
-describe('Integrity: function \'getIntegrityOptionsFromConfig\' tests', function (): void {
+describe(`Integrity: function 'getIntegrityOptionsFromConfig' tests`, function (): void {
 
   context('expects', function (): void {
 

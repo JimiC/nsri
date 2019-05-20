@@ -18,9 +18,9 @@ export const defaultCryptoEncoding: HexBase64Latin1Encoding = CryptoEncoding.Bas
 
 /** @internal */
 export const defaultExclutions = [
-  `${integrityFilename}`,
-  '.git*',
-  '.hg*',
-  '.svn*',
-  'node_modules',
+  `**/${integrityFilename}`,
+  '**/.git*',
+  '**/.hg*',
+  '**/.svn*',
+  '**/node_modules/**',
 ];

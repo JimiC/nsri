@@ -54,7 +54,7 @@
     "prebuild": "npm run cleanup && npm run lint",
     "build": "tsc",
     "cleanup": "rimraf ./.nyc_output ./coverage ./out ./lib",
-    "copy-dist": "cpx \"out/src/**/*\" lib",
+    "copy-dist": "cpy \"**/*\" ../../lib --parents --cwd out/src/",
     "pretest": "npm run build:dev",
     "test": "nyc mocha",
     "posttest": "nyc report -r lcov",
@@ -62,10 +62,10 @@
   },
   "dependencies": {
     "ajv": "^6.10.0",
-    "cosmiconfig": "^5.2.0",
+    "cosmiconfig": "^5.2.1",
     "detect-indent": "^6.0.0",
     "minimatch": "^3.0.4",
-    "yargs": "^13.2.2"
+    "yargs": "^13.2.4"
   },
   "devDependencies": {
     "@types/cosmiconfig": "^5.0.3",
@@ -77,11 +77,11 @@
     "@types/sinon": "^7.0.11",
     "@types/yargs": "^13.0.0",
     "chai": "^4.2.0",
-    "cpx": "^1.5.0",
-    "husky": "^2.2.0",
-    "lint-staged": "^8.1.6",
+    "cpy-cli": "^2.0.0",
+    "husky": "^2.3.0",
+    "lint-staged": "^8.1.7",
     "mocha": "^6.1.4",
-    "nyc": "^14.1.0",
+    "nyc": "^14.1.1",
     "rimraf": "^2.6.3",
     "sinon": "^7.3.2",
     "tslint": "^5.16.0",

@@ -214,7 +214,7 @@ describe('CLI: tests', function (): void {
 
     context('to call', function (): void {
 
-      it('the ConfigExplorer \'assignArgs\' function',
+      it(`the ConfigExplorer 'assignArgs' function`,
       async function (): Promise<void> {
         pargs.command = 'check';
         const exitStub = sandbox.stub(process, 'exit');
@@ -227,7 +227,7 @@ describe('CLI: tests', function (): void {
         expect(configExplorerStub.calledOnce).to.be.true;
       });
 
-      it('the YargsParser \'parse\' function',
+      it(`the YargsParser 'parse' function`,
         async function (): Promise<void> {
           pargs.command = 'check';
           const exitStub = sandbox.stub(process, 'exit');
@@ -240,7 +240,7 @@ describe('CLI: tests', function (): void {
           expect(ypParseStub.calledOnce).to.be.true;
         });
 
-      it('the Integrity \'create\' function',
+      it(`the Integrity 'create' function`,
         async function (): Promise<void> {
           pargs.command = 'create';
           const exitStub = sandbox.stub(process, 'exit');
@@ -253,7 +253,7 @@ describe('CLI: tests', function (): void {
           expect(icCreateStub.calledOnce).to.be.true;
         });
 
-      it('the Integrity \'check\' function',
+      it(`the Integrity 'check' function`,
         async function (): Promise<void> {
           pargs.command = 'check';
           const exitStub = sandbox.stub(process, 'exit');
@@ -270,7 +270,7 @@ describe('CLI: tests', function (): void {
 
     context('when signaled to exit', function (): void {
 
-      it('to call \'handleForcedExit\'',
+      it(`to call 'handleForcedExit'`,
         function (): Promise<void> {
           pargs.command = 'create';
           const exitStub = sandbox.stub(process, 'exit');
