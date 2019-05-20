@@ -66,7 +66,7 @@ export class Integrity {
 
   public static async create(fileOrDirPath: string, options?: IntegrityOptions): Promise<IntegrityObject> {
     const _ls: fs.Stats = await this._lstat(fileOrDirPath);
-    const _obj: IntegrityObject = { hashes: {}, version: this.CurrentSchemaVersion };
+    const _obj: IntegrityObject = { version: this.CurrentSchemaVersion, hashes: {} };
     if (_ls.isDirectory()) {
       _obj.hashes = await Integrity.createDirHash(fileOrDirPath, options);
     }
@@ -79,15 +79,17 @@ export class Integrity {
 
   public static async createDirHash(dirPath: string, options?: IntegrityOptions)
     : Promise<IHashObject> {
+    this._rootDirPath = dirPath;
     const _ls: fs.Stats = await this._lstat(dirPath);
     if (!_ls.isDirectory()) {
-      throw new Error(`ENOTDIR: not a directory, '${path.basename(dirPath)}'`);
+      throw new Error(`ENOTDIR: not a directory, '${dirPath}'`);
     }
     const _options = this._normalizeOptions(options);
     const _hashes: string | IVerboseHashObject = _options.verbose
-      ? await this._computeHashVerbosely(dirPath, _options)
-      : await this._computeHash(dirPath, _options);
-    return !!_hashes ? { [path.basename(dirPath)]: _hashes } : {};
+      ? await this._computeHashVerbosely(_options, dirPath)
+      : await this._computeHash(_options, dirPath);
+    const _hasHashes = typeof _hashes === 'string' ? !!_hashes : !!_hashes.hash;
+    return _hasHashes ? { [path.basename(dirPath)]: _hashes } : {};
   }
 
   public static async createFileHash(filePath: string, options?: ICryptoOptions): Promise<IHashObject> {
@@ -151,6 +153,9 @@ export class Integrity {
   // ['hex', 'base64', 'latin1']
   private static readonly _allowedCryptoEncodings = Object.keys(CryptoEncoding)
     .map<string>(k => CryptoEncoding[k as keyof typeof CryptoEncoding]);
+
+  /** @internal */
+  private static _rootDirPath = '';
 
   /** @internal */
   private static _exists = utils.promisify<boolean>(fs.exists);
@@ -302,25 +307,25 @@ export class Integrity {
   /** @internal */
   private static _normalizeOptions(options?: IntegrityOptions): INormalizedIntegrityOptions {
     const _getExclutions = (exclutions: string[]): { include: string[], exclude: string[] } => {
-      let _exclude = ([] as string[]).concat(exclutions);
-      const _include = _exclude.filter(excl => excl.startsWith('!')).map(excl => excl.slice(1));
-      _exclude = _exclude.filter(excl => !excl.startsWith('!'));
-      if (!_exclude.length) {
-        _exclude = _exclude.concat(constants.defaultExclutions);
-      } else {
-        constants.defaultExclutions.forEach(excl => _exclude.push(excl));
-      }
+      const commentsPattern = /^\s*#/;
+      let _exclude = exclutions.filter(excl => !!excl && !commentsPattern.test(excl));
+      const directoryPattern = /(^|\/)[^/]*\*[^/]*$/;
+      _exclude = [..._exclude, ..._exclude
+        .filter(excl => !directoryPattern.test(excl))
+        .map(excl => /\/$/.test(excl) ? `${excl}**` : `${excl}/**`)];
+      const negatePattern = /^\s*!/;
+      const _include = _exclude.filter(excl => negatePattern.test(excl)).map(excl => excl.slice(1));
+      _exclude = [
+        ..._exclude.filter(excl => !negatePattern.test(excl)),
+        ...constants.defaultExclutions,
+      ];
       return {
         exclude: _exclude,
         include: _include,
       };
     };
-    const _cryptoOptions = options
-      ? this._normalizeCryptoOptions(options.cryptoOptions)
-      : this._normalizeCryptoOptions();
-    const { exclude, include } = options
-      ? _getExclutions(options.exclude || [])
-      : _getExclutions([]);
+    const _cryptoOptions = this._normalizeCryptoOptions(options && options.cryptoOptions);
+    const { exclude, include } = _getExclutions((options && options.exclude) || []);
     const _verbose = options && options.verbose !== undefined
       ? options.verbose
       : false;
@@ -417,13 +422,12 @@ export class Integrity {
 
   /** @internal */
   private static _match = (target: string, pattern: string): boolean =>
-    mm(target, pattern, { dot: true, matchBase: true })
+    mm(target, pattern, { dot: true })
 
   /** @internal */
   private static _excludePath(curPath: string, options: INormalizedIntegrityOptions): boolean {
-    return (options.exclude.some(excl => !!excl && this._match(curPath, excl)))
-      || (!!options.include.length
-        && !options.include.some(incl => !!incl && this._match(curPath, incl)));
+    return options.exclude.some(excl => this._match(curPath, excl))
+      && !options.include.some(incl => this._match(curPath, incl));
   }
 
   /** @internal */
@@ -442,59 +446,89 @@ export class Integrity {
   }
 
   /** @internal */
-  private static async _computeHash(dirPath: string, options: INormalizedIntegrityOptions): Promise<string> {
+  private static async _computeHash(
+    options: INormalizedIntegrityOptions,
+    rootDirPath: string,
+    dirPath?: string,
+  ): Promise<string> {
     const { dirAlgorithm, encoding }: INormalizedCryptoOptions = this._normalizeCryptoOptions(options.cryptoOptions);
-    const _recurse = async (_dirPath: string, _hash: Hash, _algorithm: string): Promise<Hash> => {
+    const _recurse = async (_dirPath: string, _algorithm: string, _hash?: Hash): Promise<Hash | undefined> => {
       const _callback = async (filename: string): Promise<void> => {
         const _curPath = path.join(_dirPath, filename);
-        if (this._excludePath(_curPath, options)) {
-          return;
-        }
         const _curPathStats: fs.Stats = await this._lstat(_curPath);
         if (_curPathStats.isDirectory()) {
-          await _recurse(_curPath, _hash, _algorithm);
+          await _recurse(_curPath, _algorithm, _hash);
         }
         if (_curPathStats.isFile()) {
-          await this._computeStreamHash(_curPath, _hash, _algorithm);
+          if (this._excludePath(this._pathFromRoot(_curPath), options)) {
+            return;
+          }
+          await this._computeStreamHash(_curPath, _hash!, _algorithm);
         }
       };
+      const _collectedAllFilePaths = async (_dPath: string): Promise<string[]> => {
+        const _subDirs: string[] = await this._readdir(_dPath);
+        const _iterator = async (subDir: string): Promise<string[]> => {
+          const _resolvedPath = path.resolve(_dPath, subDir);
+          const _ls = await this._lstat(_resolvedPath);
+          return _ls.isDirectory()
+            ? _collectedAllFilePaths(_resolvedPath)
+            : [_resolvedPath];
+        };
+        const _promises: Array<Promise<string[]>> = _subDirs.map(_iterator);
+        const _files: string[][] = await Promise.all(_promises);
+        return _files.reduce((collection: string[], filePath: string[]) => [...collection, ...filePath], []);
+      };
+      const _allFilePaths = await _collectedAllFilePaths(_dirPath);
+      const _includedFilePaths = _allFilePaths
+        .filter((fPath: string) => !this._excludePath(this._pathFromRoot(fPath), options));
+      if (!_includedFilePaths.length) {
+        return;
+      }
+      _hash = _hash || createHash(dirAlgorithm);
       _hash.update(path.basename(_dirPath));
       await utils.asyncForEach(await this._readdir(_dirPath), _callback);
       return _hash;
     };
-    if (options.exclude.some(excl => this._match(dirPath, excl))) {
-      return '';
-    }
-    const _finalHash = await _recurse(dirPath, createHash(dirAlgorithm), dirAlgorithm);
-    return `${dirAlgorithm}-${_finalHash.digest(encoding)}`;
+    const _finalHash = await _recurse(dirPath || rootDirPath, dirAlgorithm);
+    return _finalHash ? `${dirAlgorithm}-${_finalHash.digest(encoding)}` : '';
   }
 
   /** @internal */
-  private static async _computeHashVerbosely(dirPath: string, options: INormalizedIntegrityOptions)
+  private static async _computeHashVerbosely(options: INormalizedIntegrityOptions, rootDirPath: string)
     : Promise<IVerboseHashObject> {
-    const _recurseVerbosely = async (_dirPath: string): Promise<IVerboseHashObject> => {
+    const _recurseVerbosely = async (dirPath: string): Promise<IVerboseHashObject> => {
       const _callback = async (filename: string, contents: IHashObject): Promise<void> => {
-        const _curPath = path.join(_dirPath, filename);
-        if (this._excludePath(_curPath, options)) {
-          return;
-        }
+        const _curPath = path.join(dirPath, filename);
         const _curPathStats: fs.Stats = await this._lstat(_curPath);
         if (_curPathStats.isDirectory()) {
-          Object.assign(contents, { [path.basename(_curPath)]: await _recurseVerbosely(_curPath) });
+          const _hashObj = await _recurseVerbosely(_curPath);
+          if (!Reflect.ownKeys(_hashObj.contents).length) {
+            return;
+          }
+          Object.assign(contents, { [path.basename(_curPath)]: _hashObj });
         }
         if (_curPathStats.isFile()) {
+          if (this._excludePath(this._pathFromRoot(_curPath), options)) {
+            return;
+          }
           Object.assign(contents, await this.createFileHash(_curPath, options.cryptoOptions));
         }
       };
-      const _verbHashObj: IVerboseHashObject = { contents: {}, hash: await this._computeHash(_dirPath, options) };
-      await utils.asyncForEach(await this._readdir(_dirPath),
+      const _verbHashObj: IVerboseHashObject = { contents: {}, hash: '' };
+      await utils.asyncForEach(await this._readdir(dirPath),
         (filename: string) => _callback(filename, _verbHashObj.contents));
+      if (Reflect.ownKeys(_verbHashObj.contents).length) {
+        _verbHashObj.hash = await this._computeHash(options, rootDirPath, dirPath);
+      }
       return _verbHashObj;
     };
-    if (options.exclude.some(excl => this._match(dirPath, excl))) {
-      return { contents: {}, hash: '' };
-    }
-    return _recurseVerbosely(dirPath);
+    return _recurseVerbosely(rootDirPath);
+  }
+
+  /** @internal */
+  private static _pathFromRoot(directory: string): string {
+    return directory.replace(`${this._rootDirPath}/`, '');
   }
 
   /** @internal */

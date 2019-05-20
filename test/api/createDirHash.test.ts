@@ -225,7 +225,7 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
 
       context('in non-verbosely computation', function (): void {
 
-        it('the provided file',
+        it('the provided root file',
           async function (): Promise<void> {
             options.exclude = [fileToHashFilename];
             options.verbose = false;
@@ -234,14 +234,14 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
               .and.to.haveOwnProperty('fixtures')
               .and.to.satisfy((hash: string) =>
                 checker(hash, utils.base64RegexPattern,
-                  'Sh3ed4hhzI8eSodzoJphpTle3D9uimG+srSpn0g8OLqW' +
-                  '5F2GTp2az4L5iE/haYpFRCv1pHqP4LoFXJc+0dtgaQ==',
+                  'yTngky0kneOY4JOKvrbfRDk3VNWhDs90Gp7rlNpbQPy0' +
+                  'Gfw9Qo7dBFT+yqZieA5HYeOKULyPBOUQrMng/pfzkw==',
                   'sha512'));
           });
 
-        it('the provided file (glob pattern)',
+        it('the provided file (leading glob pattern)',
           async function (): Promise<void> {
-            options.exclude = ['**/fileToHash.txt'];
+            options.exclude = [`**/${fileToHashFilename}`];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
@@ -255,21 +255,21 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
 
         it('the provided files',
           async function (): Promise<void> {
-            options.exclude = [fileToHashFilename, otherFileToHashFilename];
+            options.exclude = [fileToHashFilename, `**/${otherFileToHashFilename}`];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures')
               .and.to.satisfy((hash: string) =>
                 checker(hash, utils.base64RegexPattern,
-                  'D5JDvAmGPhnjGqzANq7d1PyuAcamcOUeZnTW8ziOQ8YI' +
-                  'KT27zUArHQfkI0sro+62AQPr/GzVa5MBqDh0GiabrQ==',
+                  'Wk6BW5uO0UZfXTgY7wLqoY9bNzA+PyyE9j6n63QpXu9J' +
+                  'hZW01gpxczrAqOXWaSf137c5VUYhQSbviRtDRAGOeg==',
                   'sha512'));
           });
 
-        it('the provided files (glob pattern)',
+        it('the provided files (leading glob pattern)',
           async function (): Promise<void> {
-            options.exclude = ['**/fileToHash.txt', '**/otherFileToHash.txt'];
+            options.exclude = [`**/${fileToHashFilename}`, `**/${otherFileToHashFilename}`];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
@@ -281,48 +281,142 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
                   'sha512'));
           });
 
-        it('the provided files (glob pattern)',
+        it(`all root 'txt' files (glob pattern)`,
+          async function (): Promise<void> {
+            options.exclude = ['*.txt'];
+            options.verbose = false;
+            const sut = await Integrity.createDirHash(fixturesDirPath, options);
+            expect(sut).to.be.an('object')
+              .and.to.haveOwnProperty('fixtures')
+              .and.to.satisfy((hash: string) =>
+                checker(hash, utils.base64RegexPattern,
+                  'VegLTUIJV6ET06h8wMXtf+VF2BDVEHd8n2NngoubqzhR' +
+                  'i5LLGhJ8bljcSstaEV6CcH2qqz7G4IOJAlOXSqca4A==',
+                  'sha512'));
+          });
+
+        it(`all 'txt' files (leading glob pattern)`,
           async function (): Promise<void> {
             options.exclude = ['**/*.txt'];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
+            expect(sut).to.be.an('object').that.is.empty;
+          });
+
+        it('all root files (glob pattern)',
+          async function (): Promise<void> {
+            options.exclude = ['*.*'];
+            options.verbose = false;
+            const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures')
               .and.to.satisfy((hash: string) =>
                 checker(hash, utils.base64RegexPattern,
-                  'zhTA6hn1p6hmlSU3I1VT1zbtS/xwB7VU2Y+EOgd3n2bj' +
-                  '0nsAJEJdmp1yw41cO23JnB92oDrZUOI2UcnN3k9c7A==',
+                  'VegLTUIJV6ET06h8wMXtf+VF2BDVEHd8n2NngoubqzhR' +
+                  'i5LLGhJ8bljcSstaEV6CcH2qqz7G4IOJAlOXSqca4A==',
                   'sha512'));
           });
 
-        it('the provided files (glob pattern)',
+        it('all dotted root directories (glob pattern)',
+          async function (): Promise<void> {
+            options.exclude = ['*.*/'];
+            options.verbose = false;
+            const sut = await Integrity.createDirHash(fixturesDirPath, options);
+            expect(sut).to.be.an('object')
+              .and.to.haveOwnProperty('fixtures')
+              .and.to.satisfy((hash: string) =>
+                checker(hash, utils.base64RegexPattern,
+                  'YO+lMzZetbscCuJcmQ+Gvawbkm2qb4AXPxYXge62cSZB' +
+                  'fVUuC8FDZ96VvqDB/SSIQO0tPDhGzxa1ueshcpy/bw==',
+                  'sha512'));
+          });
+
+        it('all files (leading glob pattern)',
           async function (): Promise<void> {
             options.exclude = ['**/*.*'];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
-            expect(sut).to.be.an('object')
-              .and.to.haveOwnProperty('fixtures')
-              .and.to.satisfy((hash: string) =>
-                checker(hash, utils.base64RegexPattern,
-                  'S3Hwm/DiUVVrGKpl/mWimwLKL2buJyDd9YzQj/ZS2ykH' +
-                  'UaVStToOAc30OZx0H2gWwYqJjZoVquZWVN4A/WGVhg==',
-                  'sha512'));
+            expect(sut).to.be.an('object').that.is.empty;
           });
 
-        it('the provided directory',
+        it('everything',
+          async function (): Promise<void> {
+            options.exclude = ['**'];
+            options.verbose = false;
+            const sut = await Integrity.createDirHash(fixturesDirPath, options);
+            expect(sut).to.be.an('object').that.is.empty;
+          });
+
+        it('everything (leading glob pattern)',
+          async function (): Promise<void> {
+            options.exclude = ['**/'];
+            options.verbose = false;
+            const sut = await Integrity.createDirHash(fixturesDirPath, options);
+            expect(sut).to.be.an('object').that.is.empty;
+          });
+
+        it('everything (leading / trailing glob pattern)',
+          async function (): Promise<void> {
+            options.exclude = ['**/*'];
+            options.verbose = false;
+            const sut = await Integrity.createDirHash(fixturesDirPath, options);
+            expect(sut).to.be.an('object').that.is.empty;
+          });
+
+        it('the provided subdirectory',
           async function (): Promise<void> {
             options.exclude = ['fixtures'];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
-            expect(sut).to.be.an('object').that.is.empty;
+            expect(sut).to.be.an('object')
+              .and.to.haveOwnProperty('fixtures')
+              .and.to.satisfy((hash: string) =>
+                checker(hash, utils.base64RegexPattern,
+                  'l+RFq7YS2sKbzyhXAzmpiKF3YdDLkORqI3YQiFZzcPN8' +
+                  'Qi7QGADl3AvE53yS4vPJGaEGVOTwx/hPkei+Ttr7jQ==',
+                  'sha512'));
           });
 
-        it('the provided directory (glob pattern)',
+        it('the provided subdirectory (leading glob pattern)',
           async function (): Promise<void> {
             options.exclude = ['**/fixtures'];
             options.verbose = false;
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
-            expect(sut).to.be.an('object').that.is.empty;
+            expect(sut).to.be.an('object')
+              .and.to.haveOwnProperty('fixtures')
+              .and.to.satisfy((hash: string) =>
+                checker(hash, utils.base64RegexPattern,
+                  'l+RFq7YS2sKbzyhXAzmpiKF3YdDLkORqI3YQiFZzcPN8' +
+                  'Qi7QGADl3AvE53yS4vPJGaEGVOTwx/hPkei+Ttr7jQ==',
+                  'sha512'));
+          });
+
+        it('the provided subdirectory',
+          async function (): Promise<void> {
+            options.exclude = ['fixtures/'];
+            options.verbose = false;
+            const sut = await Integrity.createDirHash(fixturesDirPath, options);
+            expect(sut).to.be.an('object')
+              .and.to.haveOwnProperty('fixtures')
+              .and.to.satisfy((hash: string) =>
+                checker(hash, utils.base64RegexPattern,
+                  'l+RFq7YS2sKbzyhXAzmpiKF3YdDLkORqI3YQiFZzcPN8' +
+                  'Qi7QGADl3AvE53yS4vPJGaEGVOTwx/hPkei+Ttr7jQ==',
+                  'sha512'));
+          });
+
+        it('the provided subdirectory (trailing glob pattern)',
+          async function (): Promise<void> {
+            options.exclude = ['fixtures/**'];
+            options.verbose = false;
+            const sut = await Integrity.createDirHash(fixturesDirPath, options);
+            expect(sut).to.be.an('object')
+              .and.to.haveOwnProperty('fixtures')
+              .and.to.satisfy((hash: string) =>
+                checker(hash, utils.base64RegexPattern,
+                  'l+RFq7YS2sKbzyhXAzmpiKF3YdDLkORqI3YQiFZzcPN8' +
+                  'Qi7QGADl3AvE53yS4vPJGaEGVOTwx/hPkei+Ttr7jQ==',
+                  'sha512'));
           });
 
         it('the provided directory (glob pattern)',
@@ -334,17 +428,9 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
               .and.to.haveOwnProperty('fixtures')
               .and.to.satisfy((hash: string) =>
                 checker(hash, utils.base64RegexPattern,
-                  'VS0vn1tFpwFNeOnneQ2kuMyXkTxgm1zBS76hApwMFVHh' +
-                  'WoHUg+A0zF3WxCqTys2GR2GPUvbCnvLUb48IsOPNGQ==',
+                  'l+RFq7YS2sKbzyhXAzmpiKF3YdDLkORqI3YQiFZzcPN8' +
+                  'Qi7QGADl3AvE53yS4vPJGaEGVOTwx/hPkei+Ttr7jQ==',
                   'sha512'));
-          });
-
-        it('the provided directory (glob pattern)',
-          async function (): Promise<void> {
-            options.exclude = ['**/*'];
-            options.verbose = false;
-            const sut = await Integrity.createDirHash(fixturesDirPath, options);
-            expect(sut).to.be.an('object').that.is.empty;
           });
 
         it('the provided subdirectory',
@@ -356,12 +442,12 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
               .and.to.haveOwnProperty('fixtures')
               .and.to.satisfy((hash: string) =>
                 checker(hash, utils.base64RegexPattern,
-                  'Mxema7+o7uDni/0O3OCjsr+CeG05csSon2FK8yYVJkaM' +
-                  'WbRoh3Grh6OGuA+zwYqwLjef3w8c0ei8svO5AVQPFw==',
+                  'dI656yTlMZ7dYYmsYo4m6P+xxPsNHhMHANEupJhy61i6' +
+                  'PqB5H2EUQVWk/ZwDB/djqvc9E+5WV8di/zl5jihFXw==',
                   'sha512'));
           });
 
-        it('the provided subdirectory (glob pattern)',
+        it('the provided subdirectory (leading glob pattern)',
           async function (): Promise<void> {
             options.exclude = ['**/directory'];
             options.verbose = false;
@@ -375,7 +461,7 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
                   'sha512'));
           });
 
-        it('the provided subdirectory (glob pattern)',
+        it('the provided subdirectory (leading / trailing glob pattern)',
           async function (): Promise<void> {
             options.exclude = ['**/directory/**'];
             options.verbose = false;
@@ -384,8 +470,8 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
               .and.to.haveOwnProperty('fixtures')
               .and.to.satisfy((hash: string) =>
                 checker(hash, utils.base64RegexPattern,
-                  '0W+w+kRaPwvCI5ykMarvTPG90y/w+g5Qa0hbstaRaOsC' +
-                  'lgXpJ11z38wdsXHkD1KMQ2ofl7nIvGBRoSv7WQcU9Q==',
+                  'Mxema7+o7uDni/0O3OCjsr+CeG05csSon2FK8yYVJkaM' +
+                  'WbRoh3Grh6OGuA+zwYqwLjef3w8c0ei8svO5AVQPFw==',
                   'sha512'));
           });
 
@@ -397,7 +483,7 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
           options.verbose = true;
         });
 
-        it('the provided file',
+        it('the provided root file',
           async function (): Promise<void> {
             options.exclude = [fileToHashFilename];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -405,18 +491,18 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
             const fixtures = sut.fixtures as IVerboseHashObject;
             expect(fixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
             const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
-            expect(fcfixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
+            expect(fcfixtures.contents).to.haveOwnProperty(fileToHashFilename);
             expect(fixtures.hash)
-              .and.to.satisfy((hash: string) =>
+              .to.satisfy((hash: string) =>
                 checker(hash, utils.base64RegexPattern,
-                  'Sh3ed4hhzI8eSodzoJphpTle3D9uimG+srSpn0g8OLqW' +
-                  '5F2GTp2az4L5iE/haYpFRCv1pHqP4LoFXJc+0dtgaQ==',
+                  'yTngky0kneOY4JOKvrbfRDk3VNWhDs90Gp7rlNpbQPy0' +
+                  'Gfw9Qo7dBFT+yqZieA5HYeOKULyPBOUQrMng/pfzkw==',
                   'sha512'));
           });
 
-        it('the provided file (glob pattern)',
+        it('the provided file (leading glob pattern)',
           async function (): Promise<void> {
-            options.exclude = ['**/fileToHash.txt'];
+            options.exclude = [`**/${fileToHashFilename}`];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
             const fixtures = sut.fixtures as IVerboseHashObject;
@@ -424,7 +510,7 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
             const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
             expect(fcfixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
             expect(fixtures.hash)
-              .and.to.satisfy((hash: string) =>
+              .to.satisfy((hash: string) =>
                 checker(hash, utils.base64RegexPattern,
                   'Sh3ed4hhzI8eSodzoJphpTle3D9uimG+srSpn0g8OLqW' +
                   '5F2GTp2az4L5iE/haYpFRCv1pHqP4LoFXJc+0dtgaQ==',
@@ -433,7 +519,7 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
 
         it('the provided files',
           async function (): Promise<void> {
-            options.exclude = [fileToHashFilename, otherFileToHashFilename];
+            options.exclude = [fileToHashFilename, `**/${otherFileToHashFilename}`];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
             const fixtures = sut.fixtures as IVerboseHashObject;
@@ -443,22 +529,22 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
             const fcdirectory = fixtures.contents.directory as IVerboseHashObject;
             expect(fcdirectory.contents).to.not.haveOwnProperty(otherFileToHashFilename);
             const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
-            expect(fcfixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
+            expect(fcfixtures.contents).to.haveOwnProperty(fileToHashFilename);
             const fcfcdirectorydot1 = fcfixtures.contents['directory.1'] as IVerboseHashObject;
             expect(fcfcdirectorydot1.contents).to.not.haveOwnProperty(otherFileToHashFilename);
             const fcfcdirectory = fcfixtures.contents.directory as IVerboseHashObject;
             expect(fcfcdirectory.contents).to.not.haveOwnProperty(otherFileToHashFilename);
             expect(fixtures.hash)
-              .and.to.satisfy((hash: string) =>
+              .to.satisfy((hash: string) =>
                 checker(hash, utils.base64RegexPattern,
-                  'D5JDvAmGPhnjGqzANq7d1PyuAcamcOUeZnTW8ziOQ8YI' +
-                  'KT27zUArHQfkI0sro+62AQPr/GzVa5MBqDh0GiabrQ==',
+                  'Wk6BW5uO0UZfXTgY7wLqoY9bNzA+PyyE9j6n63QpXu9J' +
+                  'hZW01gpxczrAqOXWaSf137c5VUYhQSbviRtDRAGOeg==',
                   'sha512'));
           });
 
-        it('the provided files (glob pattern)',
+        it('the provided files (leading glob pattern)',
           async function (): Promise<void> {
-            options.exclude = ['**/fileToHash.txt', '**/otherFileToHash.txt'];
+            options.exclude = [`**/${fileToHashFilename}`, `**/${otherFileToHashFilename}`];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
             const fixtures = sut.fixtures as IVerboseHashObject;
@@ -466,93 +552,184 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
             const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
             expect(fcfixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
             expect(fixtures.hash)
-              .and.to.satisfy((hash: string) =>
+              .to.satisfy((hash: string) =>
                 checker(hash, utils.base64RegexPattern,
                   'D5JDvAmGPhnjGqzANq7d1PyuAcamcOUeZnTW8ziOQ8YI' +
                   'KT27zUArHQfkI0sro+62AQPr/GzVa5MBqDh0GiabrQ==',
                   'sha512'));
           });
 
-        it('the provided \'txt\' files (glob pattern)',
+        it(`all root 'txt' files (glob pattern)`,
+          async function (): Promise<void> {
+            options.exclude = ['*.txt'];
+            const sut = await Integrity.createDirHash(fixturesDirPath, options);
+            expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
+            const fixtures = sut.fixtures as IVerboseHashObject;
+            expect(fixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
+            expect(fixtures.contents).to.not.haveOwnProperty('sameContentWithFileToHash.txt');
+            const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
+            expect(fcfixtures.contents).to.haveOwnProperty(fileToHashFilename);
+            expect(fixtures.hash)
+              .to.satisfy((hash: string) =>
+                checker(hash, utils.base64RegexPattern,
+                  'VegLTUIJV6ET06h8wMXtf+VF2BDVEHd8n2NngoubqzhR' +
+                  'i5LLGhJ8bljcSstaEV6CcH2qqz7G4IOJAlOXSqca4A==',
+                  'sha512'));
+          });
+
+        it(`all 'txt' files (leading glob pattern)`,
           async function (): Promise<void> {
             options.exclude = ['**/*.txt'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
-            expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
+            expect(sut).to.be.an('object').that.is.empty;
+          });
+
+        it('all root files (glob pattern)',
+          async function (): Promise<void> {
+            options.exclude = ['*.*'];
+            const sut = await Integrity.createDirHash(fixturesDirPath, options);
+            expect(sut).to.be.an('object')
+              .and.to.haveOwnProperty('fixtures');
             const fixtures = sut.fixtures as IVerboseHashObject;
             expect(fixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
-            const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
-            expect(fcfixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
+            expect(fixtures.contents).to.not.haveOwnProperty('sameContentWithFileToHash.txt');
+            expect(fixtures.contents).to.haveOwnProperty('directory.1');
+            expect(fixtures.contents).to.haveOwnProperty('directory');
+            expect(fixtures.contents).to.haveOwnProperty('fixtures');
             expect(fixtures.hash)
-              .and.to.satisfy((hash: string) =>
+              .to.satisfy((hash: string) =>
                 checker(hash, utils.base64RegexPattern,
-                  'zhTA6hn1p6hmlSU3I1VT1zbtS/xwB7VU2Y+EOgd3n2bj' +
-                  '0nsAJEJdmp1yw41cO23JnB92oDrZUOI2UcnN3k9c7A==',
+                  'VegLTUIJV6ET06h8wMXtf+VF2BDVEHd8n2NngoubqzhR' +
+                  'i5LLGhJ8bljcSstaEV6CcH2qqz7G4IOJAlOXSqca4A==',
                   'sha512'));
           });
 
-        it('all files (glob pattern)',
+        it('all dotted root directories (glob pattern)',
+          async function (): Promise<void> {
+            options.exclude = ['*.*/'];
+            const sut = await Integrity.createDirHash(fixturesDirPath, options);
+            expect(sut).to.be.an('object')
+              .and.to.haveOwnProperty('fixtures');
+            const fixtures = sut.fixtures as IVerboseHashObject;
+            expect(fixtures.contents).to.haveOwnProperty(fileToHashFilename);
+            expect(fixtures.contents).to.haveOwnProperty('sameContentWithFileToHash.txt');
+            expect(fixtures.contents).to.not.haveOwnProperty('directory.1');
+            expect(fixtures.contents).to.haveOwnProperty('directory');
+            expect(fixtures.contents).to.haveOwnProperty('fixtures');
+            expect(fixtures.hash)
+              .to.satisfy((hash: string) =>
+                checker(hash, utils.base64RegexPattern,
+                  'YO+lMzZetbscCuJcmQ+Gvawbkm2qb4AXPxYXge62cSZB' +
+                  'fVUuC8FDZ96VvqDB/SSIQO0tPDhGzxa1ueshcpy/bw==',
+                  'sha512'));
+          });
+
+        it('all files (leading glob pattern)',
           async function (): Promise<void> {
             options.exclude = ['**/*.*'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
-            expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
-            const fixtures = sut.fixtures as IVerboseHashObject;
-            expect(fixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
-            const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
-            expect(fcfixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
-            expect(fixtures.hash)
-              .and.to.satisfy((hash: string) =>
-                checker(hash, utils.base64RegexPattern,
-                  'S3Hwm/DiUVVrGKpl/mWimwLKL2buJyDd9YzQj/ZS2ykH' +
-                  'UaVStToOAc30OZx0H2gWwYqJjZoVquZWVN4A/WGVhg==',
-                  'sha512'));
+            expect(sut).to.be.an('object').that.is.empty;
+          });
+
+        it('everything',
+          async function (): Promise<void> {
+            options.exclude = ['**'];
+            const sut = await Integrity.createDirHash(fixturesDirPath, options);
+            expect(sut).to.be.an('object').that.is.empty;
+          });
+
+        it('everything (leading glob pattern)',
+          async function (): Promise<void> {
+            options.exclude = ['**/'];
+            const sut = await Integrity.createDirHash(fixturesDirPath, options);
+            expect(sut).to.be.an('object').that.is.empty;
+          });
+
+        it('everything (leading / trailing glob pattern)',
+          async function (): Promise<void> {
+            options.exclude = ['**/*'];
+            const sut = await Integrity.createDirHash(fixturesDirPath, options);
+            expect(sut).to.be.an('object').that.is.empty;
           });
 
         it('the provided directory',
           async function (): Promise<void> {
             options.exclude = ['fixtures'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
-            expect(sut).to.be.an('object');
+            expect(sut).to.be.an('object')
+              .and.to.haveOwnProperty('fixtures');
             const fixtures = sut.fixtures as IVerboseHashObject;
-            expect(fixtures.contents).to.be.empty;
-            expect(fixtures.hash).to.be.empty;
+            expect(fixtures.contents).to.haveOwnProperty(fileToHashFilename);
+            expect(fixtures.contents).to.haveOwnProperty('sameContentWithFileToHash.txt');
+            expect(fixtures.contents).to.haveOwnProperty('directory');
+            expect(fixtures.contents).to.haveOwnProperty('directory.1');
+            expect(fixtures.contents).to.not.haveOwnProperty('fixtures');
+            expect(fixtures.hash)
+              .to.satisfy((hash: string) =>
+                checker(hash, utils.base64RegexPattern,
+                  'l+RFq7YS2sKbzyhXAzmpiKF3YdDLkORqI3YQiFZzcPN8' +
+                  'Qi7QGADl3AvE53yS4vPJGaEGVOTwx/hPkei+Ttr7jQ==',
+                  'sha512'));
           });
 
-        it('the provided directory (glob pattern)',
+        it('the provided subdirectory (leading glob pattern)',
           async function (): Promise<void> {
             options.exclude = ['**/fixtures'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
-            expect(sut).to.be.an('object');
+            expect(sut).to.be.an('object')
+              .and.to.haveOwnProperty('fixtures');
             const fixtures = sut.fixtures as IVerboseHashObject;
-            expect(fixtures.contents).to.be.empty;
-            expect(fixtures.hash).to.be.empty;
+            expect(fixtures.contents).to.haveOwnProperty(fileToHashFilename);
+            expect(fixtures.contents).to.haveOwnProperty('sameContentWithFileToHash.txt');
+            expect(fixtures.contents).to.haveOwnProperty('directory');
+            expect(fixtures.contents).to.haveOwnProperty('directory.1');
+            expect(fixtures.contents).to.not.haveOwnProperty('fixtures');
+            expect(fixtures.hash)
+              .to.satisfy((hash: string) =>
+                checker(hash, utils.base64RegexPattern,
+                  'l+RFq7YS2sKbzyhXAzmpiKF3YdDLkORqI3YQiFZzcPN8' +
+                  'Qi7QGADl3AvE53yS4vPJGaEGVOTwx/hPkei+Ttr7jQ==',
+                  'sha512'));
+          });
+
+        it('the provided subdirectory',
+          async function (): Promise<void> {
+            options.exclude = ['fixtures/'];
+            const sut = await Integrity.createDirHash(fixturesDirPath, options);
+            expect(sut).to.be.an('object')
+              .and.to.haveOwnProperty('fixtures');
+            const fixtures = sut.fixtures as IVerboseHashObject;
+            expect(fixtures.contents).to.haveOwnProperty(fileToHashFilename);
+            expect(fixtures.contents).to.haveOwnProperty('sameContentWithFileToHash.txt');
+            expect(fixtures.contents).to.haveOwnProperty('directory');
+            expect(fixtures.contents).to.haveOwnProperty('directory.1');
+            expect(fixtures.contents).to.not.haveOwnProperty('fixtures');
+            expect(fixtures.hash)
+              .to.satisfy((hash: string) =>
+                checker(hash, utils.base64RegexPattern,
+                  'l+RFq7YS2sKbzyhXAzmpiKF3YdDLkORqI3YQiFZzcPN8' +
+                  'Qi7QGADl3AvE53yS4vPJGaEGVOTwx/hPkei+Ttr7jQ==',
+                  'sha512'));
           });
 
         it('the provided directory contents (glob pattern)',
           async function (): Promise<void> {
             options.exclude = ['**/fixtures/**'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
-            expect(sut).to.be.an('object');
-            expect(sut)
-              .to.haveOwnProperty('fixtures')
-              .and.that.to.haveOwnProperty('contents')
-              .and.that.to.be.empty;
+            expect(sut).to.be.an('object')
+              .and.to.haveOwnProperty('fixtures');
             const fixtures = sut.fixtures as IVerboseHashObject;
+            expect(fixtures.contents).to.haveOwnProperty(fileToHashFilename);
+            expect(fixtures.contents).to.haveOwnProperty('sameContentWithFileToHash.txt');
+            expect(fixtures.contents).to.haveOwnProperty('directory');
+            expect(fixtures.contents).to.haveOwnProperty('directory.1');
+            expect(fixtures.contents).to.not.haveOwnProperty('fixtures');
             expect(fixtures.hash)
-              .and.to.satisfy((hash: string) =>
+              .to.satisfy((hash: string) =>
                 checker(hash, utils.base64RegexPattern,
-                  'VS0vn1tFpwFNeOnneQ2kuMyXkTxgm1zBS76hApwMFVHh' +
-                  'WoHUg+A0zF3WxCqTys2GR2GPUvbCnvLUb48IsOPNGQ==',
+                  'l+RFq7YS2sKbzyhXAzmpiKF3YdDLkORqI3YQiFZzcPN8' +
+                  'Qi7QGADl3AvE53yS4vPJGaEGVOTwx/hPkei+Ttr7jQ==',
                   'sha512'));
-          });
-
-        it('everything (glob pattern)',
-          async function (): Promise<void> {
-            options.exclude = ['**/*'];
-            const sut = await Integrity.createDirHash(fixturesDirPath, options);
-            expect(sut).to.be.an('object');
-            const fixtures = sut.fixtures as IVerboseHashObject;
-            expect(fixtures.contents).to.be.empty;
-            expect(fixtures.hash).to.be.empty;
           });
 
         it('the provided subdirectory',
@@ -569,17 +746,17 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
               .and.that.to.haveOwnProperty('contents')
               .and.that.to.haveOwnProperty('fixtures')
               .and.that.to.haveOwnProperty('contents')
-              .and.that.to.not.haveOwnProperty('directory');
+              .and.that.to.haveOwnProperty('directory');
             const fixtures = sut.fixtures as IVerboseHashObject;
             expect(fixtures.hash)
-              .and.to.satisfy((hash: string) =>
+              .to.satisfy((hash: string) =>
                 checker(hash, utils.base64RegexPattern,
-                  'Mxema7+o7uDni/0O3OCjsr+CeG05csSon2FK8yYVJkaM' +
-                  'WbRoh3Grh6OGuA+zwYqwLjef3w8c0ei8svO5AVQPFw==',
+                  'dI656yTlMZ7dYYmsYo4m6P+xxPsNHhMHANEupJhy61i6' +
+                  'PqB5H2EUQVWk/ZwDB/djqvc9E+5WV8di/zl5jihFXw==',
                   'sha512'));
           });
 
-        it('the provided subdirectory (glob pattern)',
+        it('the provided subdirectory (leading glob pattern)',
           async function (): Promise<void> {
             options.exclude = ['**/directory'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
@@ -603,23 +780,27 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
                   'sha512'));
           });
 
-        it('the provided subdirectory contents (glob pattern)',
+        it('the provided subdirectory (leading / trailing glob pattern)',
           async function (): Promise<void> {
             options.exclude = ['**/directory/**'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object');
             expect(sut)
-              .to.haveOwnProperty('fixtures')
+              .and.to.haveOwnProperty('fixtures')
               .and.that.to.haveOwnProperty('contents')
-              .and.that.to.haveOwnProperty('directory')
+              .and.that.to.not.haveOwnProperty('directory');
+            expect(sut)
+              .and.to.haveOwnProperty('fixtures')
               .and.that.to.haveOwnProperty('contents')
-              .and.that.to.be.empty;
+              .and.that.to.haveOwnProperty('fixtures')
+              .and.that.to.haveOwnProperty('contents')
+              .and.that.to.not.haveOwnProperty('directory');
             const fixtures = sut.fixtures as IVerboseHashObject;
             expect(fixtures.hash)
               .and.to.satisfy((hash: string) =>
                 checker(hash, utils.base64RegexPattern,
-                  '0W+w+kRaPwvCI5ykMarvTPG90y/w+g5Qa0hbstaRaOsC' +
-                  'lgXpJ11z38wdsXHkD1KMQ2ofl7nIvGBRoSv7WQcU9Q==',
+                  'Mxema7+o7uDni/0O3OCjsr+CeG05csSon2FK8yYVJkaM' +
+                  'WbRoh3Grh6OGuA+zwYqwLjef3w8c0ei8svO5AVQPFw==',
                   'sha512'));
           });
 
@@ -635,52 +816,14 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
           options.verbose = true;
         });
 
-        it('the provided file (glob pattern)',
+        it('the provided root file (glob pattern)',
           async function (): Promise<void> {
-            options.exclude = ['!**/fixtures', '!**/fileToHash.txt'];
+            options.exclude = ['*', '*/', '!fileToHash.txt'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
-            expect(sut).to.be.an('object');
-            expect(sut)
-              .to.haveOwnProperty('fixtures')
-              .and.that.to.haveOwnProperty('contents')
-              .and.that.to.haveOwnProperty('fixtures')
-              .and.that.to.haveOwnProperty('contents')
-              .and.that.to.haveOwnProperty(fileToHashFilename)
-              .and.to.satisfy((hash: string) =>
-                checker(hash, utils.base64RegexPattern, 't56X7IQ267Hza0qjpSpqb9UPcfE='));
+            expect(sut).to.be.an('object')
+              .and.to.haveOwnProperty('fixtures');
             const fixtures = sut.fixtures as IVerboseHashObject;
-            expect(fixtures.contents)
-              .to.haveOwnProperty(fileToHashFilename)
-              .and.to.satisfy((hash: string) =>
-                checker(hash, utils.base64RegexPattern, 'H58mYNjbMJTkiNvvNfj2YKl3ck0='));
-            const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
-            expect(fcfixtures.hash)
-              .and.to.satisfy((hash: string) =>
-                checker(hash, utils.base64RegexPattern,
-                  'xsFFG6BuNpe8Q9hxyOCgGPY1ZXSnd7uEPG0LfmjSz/g8' +
-                  '8weE01dXScfFEy5ItkDDqYioR75treREV2yMT6dUoQ==',
-                  'sha512'));
-            expect(fixtures.hash)
-              .and.to.satisfy((hash: string) =>
-                checker(hash, utils.base64RegexPattern,
-                  'fdgmzQQJNKpYGOU1tANBRFexht90qgRY+5CEuJ8vdTwM' +
-                  'k1CHI74s0eqqIime7fpH5LkCbi5JmFp8SOjs2kaNlQ==',
-                  'sha512'));
-          });
-
-        it('only the provided root directory file (glob pattern)',
-          async function (): Promise<void> {
-            options.exclude = ['**/fixtures/', '!**/fileToHash.txt'];
-            const sut = await Integrity.createDirHash(fixturesDirPath, options);
-            expect(sut).to.be.an('object');
-            expect(sut)
-              .to.haveOwnProperty('fixtures')
-              .and.that.to.haveOwnProperty('contents');
-            const fixtures = sut.fixtures as IVerboseHashObject;
-            expect(fixtures.contents).not.to.haveOwnProperty('fixtures');
-            expect(fixtures.contents).not.to.haveOwnProperty('directory');
-            expect(fixtures.contents).not.to.haveOwnProperty('directory.1');
-            expect(fixtures.contents).not.to.haveOwnProperty('sameContentWithFileToHash.txt');
+            expect(fixtures).and.that.to.haveOwnProperty('contents');
             expect(fixtures.contents)
               .to.haveOwnProperty(fileToHashFilename)
               .and.to.satisfy((hash: string) =>
@@ -693,9 +836,42 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
                   'sha512'));
           });
 
-        it('only the provided subdirectory file (glob pattern)',
+        it('only the provided subdirectory file (leading glob pattern)',
           async function (): Promise<void> {
-            options.exclude = ['!**/fixtures', '!**/fixtures/fixtures/fileToHash.txt'];
+            options.exclude = ['*', '*/', '!fixtures/fileToHash.txt'];
+            const sut = await Integrity.createDirHash(fixturesDirPath, options);
+            expect(sut).to.be.an('object');
+            expect(sut)
+              .to.haveOwnProperty('fixtures')
+              .and.that.to.haveOwnProperty('contents');
+            const fixtures = sut.fixtures as IVerboseHashObject;
+            expect(fixtures.contents).to.haveOwnProperty('fixtures');
+            expect(fixtures.contents).to.not.haveOwnProperty('directory');
+            expect(fixtures.contents).to.not.haveOwnProperty('directory.1');
+            expect(fixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
+            expect(fixtures.contents).to.not.haveOwnProperty('sameContentWithFileToHash.txt');
+            const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
+            expect(fcfixtures.contents)
+              .to.haveOwnProperty(fileToHashFilename)
+              .and.to.satisfy((hash: string) =>
+                checker(hash, utils.base64RegexPattern, 't56X7IQ267Hza0qjpSpqb9UPcfE='));
+            expect(fcfixtures.hash)
+              .and.to.satisfy((hash: string) =>
+                checker(hash, utils.base64RegexPattern,
+                  'xsFFG6BuNpe8Q9hxyOCgGPY1ZXSnd7uEPG0LfmjSz/g8' +
+                  '8weE01dXScfFEy5ItkDDqYioR75treREV2yMT6dUoQ==',
+                  'sha512'));
+            expect(fixtures.hash)
+              .and.to.satisfy((hash: string) =>
+                checker(hash, utils.base64RegexPattern,
+                  'i066+5P7XKubRVkelKvC9+cNxMe9uPA3cgkre24Tp5+l' +
+                  'CUSdeHGtkgsYi6Obhe30gTiv3wMpXsl1pCCEofVTWw==',
+                  'sha512'));
+          });
+
+        it('only the provided subdirectory file (leading glob pattern)',
+          async function (): Promise<void> {
+            options.exclude = ['*', '*/', '!**/fixtures/fileToHash.txt'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object');
             const fixtures = sut.fixtures as IVerboseHashObject;
@@ -715,7 +891,8 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
             expect(fcfixtures.hash)
               .and.to.satisfy((hash: string) =>
                 checker(hash, utils.base64RegexPattern,
-                  'xsFFG6BuNpe8Q9hxyOCgGPY1ZXSnd7uEPG0LfmjSz/g88weE01dXScfFEy5ItkDDqYioR75treREV2yMT6dUoQ==',
+                  'xsFFG6BuNpe8Q9hxyOCgGPY1ZXSnd7uEPG0LfmjSz/g8' +
+                  '8weE01dXScfFEy5ItkDDqYioR75treREV2yMT6dUoQ==',
                   'sha512'));
             expect(fixtures.hash)
               .and.to.satisfy((hash: string) =>
@@ -727,7 +904,7 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
 
         it('only the provided root directory contents (glob pattern)',
           async function (): Promise<void> {
-            options.exclude = ['!**/fixtures/*.txt'];
+            options.exclude = ['*', '*/', '!*.txt'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object');
             expect(sut)
@@ -755,10 +932,7 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
 
         it('only the provided subdirectory contents (glob pattern)',
           async function (): Promise<void> {
-            options.exclude = ['!**/fixtures',
-              '**/fixtures/fixtures',
-              '!**/fixtures/directory',
-              '!**/fixtures/directory/*.txt'];
+            options.exclude = ['*', '*/', '!directory/*.txt'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object');
             expect(sut)
@@ -777,7 +951,7 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
               .and.to.satisfy((hash: string) =>
                 checker(hash, utils.base64RegexPattern, 'EZ2w0rsSmXBOddIoz2IoOIuxGaQ='));
             expect(fcdirectory.contents)
-              .to.haveOwnProperty('otherFileToHash.txt')
+              .to.haveOwnProperty(otherFileToHashFilename)
               .and.to.satisfy((hash: string) =>
                 checker(hash, utils.base64RegexPattern, 'B8FJ4uKgHESSgMvJUyrj3ix2uG8='));
             expect(fcdirectory.hash)
@@ -794,6 +968,48 @@ describe('Integrity: function \'createDirHash\' tests', function (): void {
                   'sha512'));
           });
 
+        it('only the provided sub-subdirectory contents (glob pattern)',
+          async function (): Promise<void> {
+            options.exclude = ['*', '*/', '!fixtures/directory/*.txt'];
+            const sut = await Integrity.createDirHash(fixturesDirPath, options);
+            expect(sut).to.be.an('object');
+            expect(sut)
+              .to.haveOwnProperty('fixtures')
+              .and.that.to.haveOwnProperty('contents')
+              .and.that.to.haveOwnProperty('fixtures')
+              .and.that.to.haveOwnProperty('contents')
+              .and.that.to.haveOwnProperty('directory')
+              .and.that.to.haveOwnProperty('contents');
+            const fixtures = sut.fixtures as IVerboseHashObject;
+            expect(fixtures.contents).not.to.haveOwnProperty('directory');
+            expect(fixtures.contents).not.to.haveOwnProperty('directory.1');
+            expect(fixtures.contents).not.to.haveOwnProperty(fileToHashFilename);
+            expect(fixtures.contents).not.to.haveOwnProperty('sameContentWithFileToHash.txt');
+            const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
+            const fcfcdirectory = fcfixtures.contents.directory as IVerboseHashObject;
+            expect(fcfcdirectory.contents)
+              .to.haveOwnProperty('anotherFileToHash.txt')
+              .and.to.satisfy((hash: string) =>
+                checker(hash, utils.base64RegexPattern, 'EZ2w0rsSmXBOddIoz2IoOIuxGaQ='));
+            expect(fcfcdirectory.hash)
+              .to.satisfy((hash: string) =>
+                checker(hash, utils.base64RegexPattern,
+                  'a7F1/1x1ZVAWMdcx7X9Dnzd9M4TY9wU21vNCt3ALW0+0' +
+                  'npq85MKn7uhz8yGqjDbSmAUDf14uxgqjk2tMtkjK9w==',
+                  'sha512'));
+            expect(fcfixtures.hash)
+              .to.satisfy((hash: string) =>
+                checker(hash, utils.base64RegexPattern,
+                  '7W3X/cw2xfp4tzXjZnSXMazukk05OUOBiH19fQRzTTh4' +
+                  'He7Iw7j5ixw8NJlE2Z0+Pm689Bma7C1QjGCG2rpzQQ==',
+                  'sha512'));
+            expect(fixtures.hash)
+              .to.satisfy((hash: string) =>
+                checker(hash, utils.base64RegexPattern,
+                  '5mlonOfv9vOYfhLbrc0ftNGl7nySaYSkhjYuQ2tUgj6p' +
+                  'lSzRfkz2+RtSxw6LzMhYJ1HILFTSy5Guc1ruhMsPKQ==',
+                  'sha512'));
+          });
       });
 
     });
