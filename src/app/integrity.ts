@@ -149,6 +149,15 @@ export class Integrity {
     };
   }
 
+  public static async getExclutionsFromIgnoreFile(): Promise<string[]> {
+    const ignoreFileExists = await this._exists(constants.ignoreFile);
+    if (!ignoreFileExists) {
+      return [];
+    }
+    const ignoreRaw: string = await this._readFile(constants.ignoreFile, 'utf8') as string;
+    return utils.normalizeEntries(ignoreRaw.split(/[\n\r]/));
+  }
+
   /** @internal */
   // ['hex', 'base64', 'latin1']
   private static readonly _allowedCryptoEncodings = Object.keys(CryptoEncoding)

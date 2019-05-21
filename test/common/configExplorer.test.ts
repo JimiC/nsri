@@ -2,7 +2,7 @@
 // tslint:disable no-unused-expression
 import { expect } from 'chai';
 import { Config } from 'cosmiconfig';
-import path from 'path';
+import { join, resolve } from 'path';
 import sinon from 'sinon';
 import { ConfigExplorer } from '../../src/common/configExplorer';
 
@@ -18,7 +18,7 @@ describe('ConfigExplorer: tests', function (): void {
     beforeEach(function (): void {
       sandbox = sinon.createSandbox();
       configExplorer = new ConfigExplorer();
-      baseConfigDirPath = path.resolve(__dirname, '../../../test/cosmiconfig/');
+      baseConfigDirPath = resolve(__dirname, '../../../test/cosmiconfig/');
     });
 
     afterEach(function (): void {
@@ -134,7 +134,7 @@ describe('ConfigExplorer: tests', function (): void {
 
           it(`a 'package.json' file`,
             async function (): Promise<void> {
-              const dirPath = path.join(baseConfigDirPath, 'packagejson');
+              const dirPath = join(baseConfigDirPath, 'packagejson');
               const config = await configExplorer.getConfig(dirPath);
               expect(config).to.haveOwnProperty('source');
               expect(config).to.haveOwnProperty('verbose');
@@ -143,7 +143,7 @@ describe('ConfigExplorer: tests', function (): void {
 
           it(`an 'rc' file`,
             async function (): Promise<void> {
-              const dirPath = path.join(baseConfigDirPath, 'rc');
+              const dirPath = join(baseConfigDirPath, 'rc');
               const config = await configExplorer.getConfig(dirPath);
               expect(config).to.haveOwnProperty('source');
               expect(config).to.haveOwnProperty('verbose');
@@ -152,7 +152,7 @@ describe('ConfigExplorer: tests', function (): void {
 
           it(`a '.config.js' file`,
             async function (): Promise<void> {
-              const dirPath = path.join(baseConfigDirPath, 'configjs');
+              const dirPath = join(baseConfigDirPath, 'configjs');
               const config = await configExplorer.getConfig(dirPath);
               expect(config).to.haveOwnProperty('source');
               expect(config).to.haveOwnProperty('verbose');
@@ -161,7 +161,7 @@ describe('ConfigExplorer: tests', function (): void {
 
           it(`a 'json' file`,
             async function (): Promise<void> {
-              const dirPath = path.join(baseConfigDirPath, 'json');
+              const dirPath = join(baseConfigDirPath, 'json');
               const config = await configExplorer.getConfig(dirPath);
               expect(config).to.haveOwnProperty('verbose');
               expect(config).to.haveOwnProperty('exclude');
@@ -169,7 +169,7 @@ describe('ConfigExplorer: tests', function (): void {
 
           it(`a 'js' file`,
             async function (): Promise<void> {
-              const dirPath = path.join(baseConfigDirPath, 'js');
+              const dirPath = join(baseConfigDirPath, 'js');
               const config = await configExplorer.getConfig(dirPath);
               expect(config).to.haveOwnProperty('source');
               expect(config).to.haveOwnProperty('verbose');
@@ -178,7 +178,7 @@ describe('ConfigExplorer: tests', function (): void {
 
           it(`a 'yaml' file`,
             async function (): Promise<void> {
-              const dirPath = path.join(baseConfigDirPath, 'yaml');
+              const dirPath = join(baseConfigDirPath, 'yaml');
               const config = await configExplorer.getConfig(dirPath);
               expect(config).to.haveOwnProperty('source');
               expect(config).to.haveOwnProperty('verbose');
@@ -187,7 +187,7 @@ describe('ConfigExplorer: tests', function (): void {
 
           it(`a 'yml' file`,
             async function (): Promise<void> {
-              const dirPath = path.join(baseConfigDirPath, 'yml');
+              const dirPath = join(baseConfigDirPath, 'yml');
               const config = await configExplorer.getConfig(dirPath);
               expect(config).to.haveOwnProperty('source');
               expect(config).to.haveOwnProperty('verbose');

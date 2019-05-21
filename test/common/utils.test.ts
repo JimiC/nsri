@@ -217,6 +217,34 @@ describe('Utils: tests', function (): void {
 
     });
 
+    context(`function 'normalizeEntries'`, function (): void {
+
+      it('to return the provided entries normalized',
+        function (): void {
+          const entries = [
+            [' *', '#comment', ' # another comment', '*/ ', ' !dist', ' ', ''],
+            ['*', '*/', '!dist'],
+          ];
+          const normalEntries = utils.normalizeEntries(entries[0]);
+          expect(normalEntries).to.eql(entries[1]);
+        });
+
+      context(`function 'unique'`, function (): void {
+
+        it('to return unique entries',
+          function (): void {
+            const entries = [
+              ['one', 'two', 'one'],
+              ['one', 'two'],
+            ];
+
+            const uniqueEntries = utils.unique(entries[0]);
+            expect(uniqueEntries).to.eql(entries[1]);
+          });
+
+      });
+    });
+
   });
 
 });

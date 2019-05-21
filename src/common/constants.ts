@@ -17,6 +17,9 @@ export const defaultDirCryptoAlgorithm = 'sha512';
 export const defaultCryptoEncoding: HexBase64Latin1Encoding = CryptoEncoding.Base64;
 
 /** @internal */
+export const ignoreFile = '.nsriignore';
+
+/** @internal */
 export const defaultExclutions = [
   `**/${integrityFilename}`,
   '**/.git*',

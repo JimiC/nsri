@@ -4,9 +4,10 @@ module.exports = {
     "src/schemas/**/*.json",
     "test/helper.ts",
     { pattern: "test/fixtures/**/*", instrument: false },
-    { pattern: "test/fixtures/**/.integrity.json", instrument: false },
+    { pattern: "test/fixtures/**/.*", instrument: false },
     { pattern: "test/cosmiconfig/**/*", instrument: false },
     { pattern: "test/cosmiconfig/**/.*", instrument: false },
+    { pattern: "test/ignoreFile/.*", instrument: false },
     "package.json"
   ],
   tests: [
@@ -18,9 +19,10 @@ module.exports = {
   preprocessors: {
     "package.json": (file, done) => done(file.rename(`../${file.path}`).content),
     "**/test/fixtures/**/*": (file, done) => done(file.rename(`../${file.path}`).content),
-    "**/test/fixtures/**/.integrity.json": (file, done) => done(file.rename(`../${file.path}`).content),
+    "**/test/fixtures/**/.*": (file, done) => done(file.rename(`../${file.path}`).content),
     "**/test/cosmiconfig/**/*": (file, done) => done(file.rename(`../${file.path}`).content),
     "**/test/cosmiconfig/**/.*": (file, done) => done(file.rename(`../${file.path}`).content),
+    "**/test/ignoreFile/.*": (file, done) => done(file.rename(`../${file.path}`).content),
   },
   hints: {
     ignoreCoverage: /wallaby ignore next/

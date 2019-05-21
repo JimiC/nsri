@@ -82,3 +82,15 @@ export function promisify<T>(func: (...args: any[]) => any): (...args: any[]) =>
 export function getIndentation(text: string): detectIndent.Indent {
   return detectIndent(text);
 }
+
+/** @internal */
+export function normalizeEntries(entries: string[]): string[] {
+  return entries
+    .map((entry: string) => entry.trim())
+    .filter((entry: string) => !!entry && !/^\s*#/.test(entry));
+}
+
+/** @internal */
+export function unique(entries: string[]): string[] {
+  return entries.filter((entry: string, index: number, array: string[]) => array.indexOf(entry) === index);
+}
