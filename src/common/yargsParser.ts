@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import { existsSync, statSync } from 'fs';
+import { dirname } from 'path';
 import y from 'yargs';
 import { IArguments } from '../interfaces/arguments';
 import { IParsedArgs } from '../interfaces/parsedArgs';
@@ -103,8 +103,8 @@ export class YargsParser {
     // Set 'output' dir same as 'source' when not provided
     if (!_pargs.output) {
       const _source = _pargs.source as string;
-      _pargs.output = fs.statSync(_source).isFile()
-        ? path.dirname(_source)
+      _pargs.output = statSync(_source).isFile()
+        ? dirname(_source)
         : _pargs.source;
     }
     return {
@@ -123,7 +123,7 @@ export class YargsParser {
 
   private _validate(argv: y.Arguments<IArguments>): boolean {
     let _errorMsg = '';
-    if (!fs.existsSync(argv.source as string)) {
+    if (!existsSync(argv.source as string)) {
       _errorMsg = `ENOENT: no such file or directory, '${argv.source}'`;
     }
     if (argv._[0] === 'check' && !argv.manifest && !argv.integrity) {

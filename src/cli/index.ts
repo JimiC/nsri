@@ -2,6 +2,7 @@ import { HexBase64Latin1Encoding } from 'crypto';
 import { Integrity } from '../app/integrity';
 import { ConfigExplorer } from '../common/configExplorer';
 import { Logger } from '../common/logger';
+import { normalizeEntries, unique } from '../common/utils';
 import { YargsParser } from '../common/yargsParser';
 import { IntegrityObject } from '../interfaces/integrityObject';
 import { IntegrityOptions } from '../interfaces/integrityOptions';
@@ -19,13 +20,15 @@ export = (async (): Promise<void> => {
   try {
     await new ConfigExplorer().assignArgs();
     const pargs: IParsedArgs = new YargsParser().parse();
+    let exclutions = await Integrity.getExclutionsFromIgnoreFile();
+    exclutions = unique([...exclutions, ...normalizeEntries(pargs.exclude)]);
     const options: IntegrityOptions = {
       cryptoOptions: {
         dirAlgorithm: pargs.dirAlgorithm,
         encoding: pargs.encoding as HexBase64Latin1Encoding,
         fileAlgorithm: pargs.fileAlgorithm,
       },
-      exclude: pargs.exclude,
+      exclude: exclutions,
       verbose: pargs.verbose,
     };
     command = pargs.command;

@@ -93,7 +93,19 @@ More info can be found at the [API](https://github.com/JimiC/nsri/blob/master/do
 
 ### Configuration
 
+#### Config File
+
 `nsri` supports [cosmiconfig](https://github.com/davidtheclark/cosmiconfig) configuration.
+
+Valid config filenames are: `.nsrirc`, `.nsrirc.js`, `.nsrirc.json`, `.nsrirc.yaml`, `.nsrirc.yml`, `.nsrirc.config.js`. In `package.json` the property name MUST be `nsri`.
+
+**NOTE:**  Configurations set via `CLI` are overriding configurations set via `cosmiconfig`. To avoid confusion use one or the other.
+
+#### Ignore File
+
+Exclutions also can be set via an ignore file (`.nsriignore`), which supports the [gitignore](https://git-scm.com/docs/gitignore#_pattern_format) pattern format.
+
+**NOTE:** Exclutions set via `CLI` or `cosmiconfig` are getting merged with those in the ignore file and from those only unique entries are assigned.
 
 ### Integrity object schema
 

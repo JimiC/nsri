@@ -73,7 +73,7 @@
     "@types/detect-indent": "^5.0.0",
     "@types/minimatch": "^3.0.3",
     "@types/mocha": "^5.2.6",
-    "@types/node": "6",
+    "@types/node": "8",
     "@types/sinon": "^7.0.11",
     "@types/yargs": "^13.0.0",
     "chai": "^4.2.0",
