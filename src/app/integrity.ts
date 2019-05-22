@@ -79,7 +79,7 @@ export class Integrity {
 
   public static async createDirHash(dirPath: string, options?: IntegrityOptions)
     : Promise<IHashObject> {
-    this._rootDirPath = dirPath;
+    this._rootDirPath = path.join(dirPath, path.sep);
     const _ls: fs.Stats = await this._lstat(dirPath);
     if (!_ls.isDirectory()) {
       throw new Error(`ENOTDIR: not a directory, '${dirPath}'`);
@@ -537,7 +537,7 @@ export class Integrity {
 
   /** @internal */
   private static _pathFromRoot(directory: string): string {
-    return directory.replace(`${this._rootDirPath}/`, '');
+    return directory.replace(this._rootDirPath, '');
   }
 
   /** @internal */
