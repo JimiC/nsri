@@ -152,7 +152,7 @@ export class Integrity {
     };
   }
 
-  public static async getExclutionsFromIgnoreFile(): Promise<string[]> {
+  public static async getExclusionsFromIgnoreFile(): Promise<string[]> {
     const ignoreFileExists = await pfs.existsAsync(constants.ignoreFile);
     if (!ignoreFileExists) {
       return [];
@@ -314,7 +314,7 @@ export class Integrity {
       const _include = _exclude.filter(excl => negatePattern.test(excl)).map(excl => excl.slice(1));
       _exclude = [
         ..._exclude.filter(excl => !negatePattern.test(excl)),
-        ...constants.defaultExclutions,
+        ...constants.defaultExclusions,
       ];
       return {
         exclude: _exclude,

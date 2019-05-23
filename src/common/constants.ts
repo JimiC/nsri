@@ -20,7 +20,7 @@ export const defaultCryptoEncoding: HexBase64Latin1Encoding = CryptoEncoding.Bas
 export const ignoreFile = '.nsriignore';
 
 /** @internal */
-export const defaultExclutions = [
+export const defaultExclusions = [
   `**/${integrityFilename}`,
   '**/.git*',
   '**/.hg*',

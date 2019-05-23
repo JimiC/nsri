@@ -20,7 +20,7 @@ export = (async (): Promise<void> => {
   try {
     await new ConfigExplorer().assignArgs();
     const pargs: IParsedArgs = new YargsParser().parse();
-    let exclusions = await Integrity.getExclutionsFromIgnoreFile();
+    let exclusions = await Integrity.getExclusionsFromIgnoreFile();
     exclusions = unique([...exclusions, ...normalizeEntries(pargs.exclude)]);
     const options: IntegrityOptions = {
       cryptoOptions: {

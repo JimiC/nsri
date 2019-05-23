@@ -6,7 +6,7 @@ import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import * as constants from '../../src/common/constants';
 
-describe(`Integrity: function 'getExclutionsFromIgnoreFile' tests`, function (): void {
+describe(`Integrity: function 'getExclusionsFromIgnoreFile' tests`, function (): void {
 
   context('expects', function (): void {
 
@@ -24,7 +24,7 @@ describe(`Integrity: function 'getExclutionsFromIgnoreFile' tests`, function ():
 
     it('to return an empty array, when failing to find an ignore file',
       async function (): Promise<void> {
-        const exclusions = await Integrity.getExclutionsFromIgnoreFile();
+        const exclusions = await Integrity.getExclusionsFromIgnoreFile();
         expect(exclusions).to.be.an('array').and.to.be.empty;
       });
 
@@ -32,7 +32,7 @@ describe(`Integrity: function 'getExclutionsFromIgnoreFile' tests`, function ():
       async function (): Promise<void> {
         sandbox.stub(constants, 'ignoreFile').value(baseIgnoreFilePath);
         const expectedEntries = ['*', '*/', '!dist'];
-        const exclusions = await Integrity.getExclutionsFromIgnoreFile();
+        const exclusions = await Integrity.getExclusionsFromIgnoreFile();
         expect(exclusions).to.be.an('array').and.to.eql(expectedEntries);
       });
 
