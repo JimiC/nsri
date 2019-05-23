@@ -27,9 +27,8 @@ describe(`Integrity: function 'getManifestIntegrity' tests`, function (): void {
 
       it('the manifest file is not found',
         async function (): Promise<void> {
-          existsAsyncStub.resolves(false);
           try {
-            await Integrity.getManifestIntegrity();
+            await Integrity.getManifestIntegrity('../');
           } catch (error) {
             expect(existsAsyncStub.calledOnce).to.be.true;
             expect(error).to.match(/Error: 'package\.json' not found/);

@@ -153,7 +153,11 @@ All `API` calls are `static` members of the `Integrity` class.
 
 `Return Type`: `Promise<string>`
 
-`Parameters`: None
+`Parameters`:
+
+|Name|Type|Attribute|Default|Description|
+|:---:|:---:|:---:|:---:|:---:|
+|dirPath|string|optional|`./`|the path of the directory to the manifest file|
 
 `Examples`
 
@@ -174,7 +178,8 @@ All `API` calls are `static` members of the `Integrity` class.
 
 |Name|Type|Attribute|Default|Description|
 |:---:|:---:|:---:|:---:|:---:|
-|intObj|IntegrityObject|||the integrity object|
+|intObj|IntegrityObject|||the integrity object to persist|
+|dirPath|string|optional|`./`|the path of the directory to the manifest file|
 
 `Examples`
 
@@ -208,7 +213,11 @@ All `API` calls are `static` members of the `Integrity` class.
 
 `Return Type`: `Promise<string[]>`
 
-`Parameters`: None
+`Parameters`:
+
+|Name|Type|Attribute|Default|Description|
+|:---:|:---:|:---:|:---:|:---:|
+|dirPath|string|optional|`./`|the path of the directory to the ignore file|
 
 `Examples`
 

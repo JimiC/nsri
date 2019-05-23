@@ -122,17 +122,18 @@ export class Integrity {
     return pfs.writeFileAsync(_filePath, JSON.stringify(intObj, null, 2));
   }
 
-  public static async getManifestIntegrity(): Promise<string> {
-    const _obj = await this._getManifestInfo();
+  public static async getManifestIntegrity(dirPath = './'): Promise<string> {
+    const _obj = await this._getManifestInfo(dirPath);
     const data = JSON.stringify(_obj.manifest.integrity, null, _obj.indentation.indent || _obj.indentation.amount);
     return Promise.resolve(data);
   }
 
-  public static async updateManifestIntegrity(intObj: IntegrityObject): Promise<void> {
-    const _obj = await this._getManifestInfo();
+  public static async updateManifestIntegrity(intObj: IntegrityObject, dirPath = './'): Promise<void> {
+    const _obj = await this._getManifestInfo(dirPath);
     _obj.manifest.integrity = intObj;
     const data = JSON.stringify(_obj.manifest, null, _obj.indentation.indent || _obj.indentation.amount);
-    return pfs.writeFileAsync(constants.manifestFile, data);
+    const manifestFilePath = path.resolve(dirPath, constants.manifestFile);
+    return pfs.writeFileAsync(manifestFilePath, data);
   }
 
   public static async getIntegrityOptionsFromConfig(): Promise<IntegrityOptions> {
@@ -152,12 +153,13 @@ export class Integrity {
     };
   }
 
-  public static async getExclusionsFromIgnoreFile(): Promise<string[]> {
-    const ignoreFileExists = await pfs.existsAsync(constants.ignoreFile);
+  public static async getExclusionsFromIgnoreFile(dirPath = './'): Promise<string[]> {
+    const ignoreFilePath = path.resolve(dirPath, constants.ignoreFile);
+    const ignoreFileExists = await pfs.existsAsync(ignoreFilePath);
     if (!ignoreFileExists) {
       return [];
     }
-    const ignoreRaw: string = await pfs.readFileAsync(constants.ignoreFile, 'utf8') as string;
+    const ignoreRaw: string = await pfs.readFileAsync(ignoreFilePath, 'utf8');
     return utils.normalizeEntries(ignoreRaw.split(/[\n\r]/));
   }
 
@@ -170,12 +172,13 @@ export class Integrity {
   private static _rootDirPath = '';
 
   /** @internal */
-  private static async _getManifestInfo(): Promise<IndexedObject> {
-    if (!(await pfs.existsAsync(constants.manifestFile))) {
-      return Promise.reject(`Error: '${constants.manifestFile}' not found
-  Ensure the process is done on the project's root directory`);
+  private static async _getManifestInfo(dirPath: string): Promise<IndexedObject> {
+    const manifestFilePath = path.resolve(dirPath, constants.manifestFile);
+    if (!(await pfs.existsAsync(manifestFilePath))) {
+      return Promise.reject(`Error: '${constants.manifestFile}' not found.\n` +
+        `    Ensure the process is done on the project's root directory`);
     }
-    const _content = await pfs.readFileAsync(constants.manifestFile, 'utf8') as string;
+    const _content = await pfs.readFileAsync(manifestFilePath, 'utf8');
     const _manifest: IndexedObject | null = utils.parseJSON(_content);
     if (!_manifest) {
       return Promise.reject('Error: Manifest not found');
@@ -539,7 +542,7 @@ export class Integrity {
     if (!(await pfs.existsAsync(_path))) {
       throw new Error(`EINVER: Invalid schema version, 'version: ${data.version}'`);
     }
-    const _schema = await pfs.readFileAsync(_path, 'utf8') as string;
+    const _schema = await pfs.readFileAsync(_path, 'utf8');
     const _validator = new ajv();
     _validator.validate(utils.parseJSON(_schema) as object, data);
     if (_validator.errors) {

@@ -34,7 +34,7 @@ describe(`Integrity: function 'updateManifestIntegrity' tests`, function (): voi
           getManifestStub.resolves({ manifest: {}, indentation: { indent: '  ' } });
           await Integrity.updateManifestIntegrity(integrityTestObject);
           expect(getManifestStub.calledOnce).to.be.true;
-          expect(writeFileAsyncStub.calledOnceWithExactly('package.json',
+          expect(writeFileAsyncStub.calledOnceWithExactly(sinon.match(/package\.json/),
             '{\n  "integrity": {\n    "hashes": {},\n    "version": ""\n  }\n}'))
             .to.be.true;
         });
@@ -44,7 +44,7 @@ describe(`Integrity: function 'updateManifestIntegrity' tests`, function (): voi
           getManifestStub.resolves({ manifest: {}, indentation: { amount: 2 } });
           await Integrity.updateManifestIntegrity(integrityTestObject);
           expect(getManifestStub.calledOnce).to.be.true;
-          expect(writeFileAsyncStub.calledOnceWithExactly('package.json',
+          expect(writeFileAsyncStub.calledOnceWithExactly(sinon.match(/package\.json/),
             '{\n  "integrity": {\n    "hashes": {},\n    "version": ""\n  }\n}'))
             .to.be.true;
         });
@@ -54,7 +54,7 @@ describe(`Integrity: function 'updateManifestIntegrity' tests`, function (): voi
           getManifestStub.resolves({ manifest: { integrity: { hash: '' } }, indentation: { amount: 2 } });
           await Integrity.updateManifestIntegrity(integrityTestObject);
           expect(getManifestStub.calledOnce).to.be.true;
-          expect(writeFileAsyncStub.calledOnceWithExactly('package.json',
+          expect(writeFileAsyncStub.calledOnceWithExactly(sinon.match(/package\.json/),
             '{\n  "integrity": {\n    "hashes": {},\n    "version": ""\n  }\n}'))
             .to.be.true;
         });

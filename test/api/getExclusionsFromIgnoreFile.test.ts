@@ -4,7 +4,6 @@ import { expect } from 'chai';
 import { resolve } from 'path';
 import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
-import * as constants from '../../src/common/constants';
 
 describe(`Integrity: function 'getExclusionsFromIgnoreFile' tests`, function (): void {
 
@@ -15,14 +14,14 @@ describe(`Integrity: function 'getExclusionsFromIgnoreFile' tests`, function ():
 
     beforeEach(function (): void {
       sandbox = sinon.createSandbox();
-      baseIgnoreFilePath = resolve(__dirname, '../../../test/ignoreFile', constants.ignoreFile);
+      baseIgnoreFilePath = resolve(__dirname, '../../../test/ignoreFile');
     });
 
     afterEach(function (): void {
       sandbox.restore();
     });
 
-    it('to return an empty array, when failing to find an ignore file',
+    it('to return an empty array, when failing to find the ignore file',
       async function (): Promise<void> {
         const exclusions = await Integrity.getExclusionsFromIgnoreFile();
         expect(exclusions).to.be.an('array').and.to.be.empty;
@@ -30,9 +29,8 @@ describe(`Integrity: function 'getExclusionsFromIgnoreFile' tests`, function ():
 
     it('to return an array of exclution entries',
       async function (): Promise<void> {
-        sandbox.stub(constants, 'ignoreFile').value(baseIgnoreFilePath);
         const expectedEntries = ['*', '*/', '!dist'];
-        const exclusions = await Integrity.getExclusionsFromIgnoreFile();
+        const exclusions = await Integrity.getExclusionsFromIgnoreFile(baseIgnoreFilePath);
         expect(exclusions).to.be.an('array').and.to.eql(expectedEntries);
       });
 
