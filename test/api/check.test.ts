@@ -245,7 +245,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
         });
 
-        context('and using the directory\'s integrity file', function (): void {
+        context(`and using the directory's integrity file`, function (): void {
 
           let fixturesSubDirPath: string;
 
@@ -518,7 +518,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
         });
 
-        context('and using the directory\'s integrity file', function (): void {
+        context(`and using the directory's integrity file`, function (): void {
 
           let fixturesSubDirPath: string;
 
@@ -911,42 +911,42 @@ describe(`Integrity: function 'check' tests`, function (): void {
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
-          it('\'md5\' algorithm',
+          it(`'md5' algorithm`,
             async function (): Promise<void> {
               const hashObj = '{"version":"1","hashes":{"fixtures":"md5-03a3d76b2c52d62ce63502b85100575f"}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
-          it('\'RSA-SHA1-2\' algorithm',
+          it(`'RSA-SHA1-2' algorithm`,
             async function (): Promise<void> {
               const hashObj = '{"version":"1","hashes":{"fixtures":"RSA-SHA1-2-DIjHOBHMnvpJxM4onkxvXbmcdME="}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
-          it('\'sha1\' algorithm',
+          it(`'sha1' algorithm`,
             async function (): Promise<void> {
               const hashObj = '{"version":"1","hashes":{"fixtures":"sha1-0c88c73811cc9efa49c4ce289e4c6f5db99c74c1"}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
-          it('\'hex\' encoding',
+          it(`'hex' encoding`,
             async function (): Promise<void> {
               const hashObj = '{"version":"1","hashes":{"fixtures":"sha1-0c88c73811cc9efa49c4ce289e4c6f5db99c74c1"}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
-          it('\'base64\' encoding',
+          it(`'base64' encoding`,
             async function (): Promise<void> {
               const hashObj = '{"version":"1","hashes":{"fixtures":"sha1-DIjHOBHMnvpJxM4onkxvXbmcdME="}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
-          it('\'latin1\' encoding',
+          it(`'latin1' encoding`,
             async function (): Promise<void> {
               const hashObj = '{"version":"1","hashes":{"fixtures":"sha1-\\fÇ8\\u0011ÌúIÄÎ(Lo]¹tÁ"}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
@@ -989,28 +989,28 @@ describe(`Integrity: function 'check' tests`, function (): void {
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
-          it('\'md5\' algorithm',
+          it(`md5' algorithm`,
             async function (): Promise<void> {
               const hash = 'md5-03a3d76b2c52d62ce63502b85100575f';
               const sut = await Integrity.check(fixturesDirPath, hash);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
-          it('\'sha1\' algorithm',
+          it(`sha1' algorithm`,
             async function (): Promise<void> {
               const hashObj = 'sha1-0c88c73811cc9efa49c4ce289e4c6f5db99c74c1';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
-          it('\'hex\' encoding',
+          it(`hex' encoding`,
             async function (): Promise<void> {
               const hash = 'sha1-0c88c73811cc9efa49c4ce289e4c6f5db99c74c1';
               const sut = await Integrity.check(fixturesDirPath, hash);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
-          it('\'base64\' encoding',
+          it(`'base64' encoding`,
             async function (): Promise<void> {
               const hash = 'sha512-' +
                 'WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAhrHDdWLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA==';
@@ -1018,7 +1018,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
-          it('\'latin1\' encoding',
+          it(`latin1' encoding`,
             async function (): Promise<void> {
               const hash = 'sha1-\fÇ8\u0011ÌúIÄÎ(Lo]¹tÁ';
               const sut = await Integrity.check(fixturesDirPath, hash);

@@ -35,7 +35,7 @@ export class YargsParser {
     manifest: {
       alias: 'm',
       default: undefined,
-      description: 'The integrity hash gets persisted to, or read from, the project\'s manifest (package.json)',
+      description: `The integrity hash gets persisted to, or read from, the project's manifest (package.json)`,
       type: 'boolean',
     },
     source: {
