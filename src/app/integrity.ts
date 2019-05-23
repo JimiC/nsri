@@ -303,9 +303,9 @@ export class Integrity {
 
   /** @internal */
   private static _normalizeOptions(options?: IntegrityOptions): INormalizedIntegrityOptions {
-    const _getExclutions = (exclutions: string[]): { include: string[], exclude: string[] } => {
+    const _getExclusions = (exclusions: string[]): { include: string[], exclude: string[] } => {
       const commentsPattern = /^\s*#/;
-      let _exclude = exclutions.filter(excl => !!excl && !commentsPattern.test(excl));
+      let _exclude = exclusions.filter(excl => !!excl && !commentsPattern.test(excl));
       const directoryPattern = /(^|\/)[^/]*\*[^/]*$/;
       _exclude = [..._exclude, ..._exclude
         .filter(excl => !directoryPattern.test(excl))
@@ -322,7 +322,7 @@ export class Integrity {
       };
     };
     const _cryptoOptions = this._normalizeCryptoOptions(options && options.cryptoOptions);
-    const { exclude, include } = _getExclutions((options && options.exclude) || []);
+    const { exclude, include } = _getExclusions((options && options.exclude) || []);
     const _verbose = options && options.verbose !== undefined
       ? options.verbose
       : false;

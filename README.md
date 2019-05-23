@@ -103,9 +103,9 @@ Valid config filenames are: `.nsrirc`, `.nsrirc.js`, `.nsrirc.json`, `.nsrirc.ya
 
 #### Ignore File
 
-Exclutions also can be set via an ignore file (`.nsriignore`), which supports the [gitignore](https://git-scm.com/docs/gitignore#_pattern_format) pattern format.
+Exclusions also can be set via an ignore file (`.nsriignore`), which supports the [gitignore](https://git-scm.com/docs/gitignore#_pattern_format) pattern format.
 
-**NOTE:** Exclutions set via `CLI` or `cosmiconfig` are getting merged with those in the ignore file and from those only unique entries are assigned.
+**NOTE:** Exclusions set via `CLI` or `cosmiconfig` are getting merged with those in the ignore file and from those only unique entries are assigned.
 
 ### Integrity object schema
 

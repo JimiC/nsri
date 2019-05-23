@@ -20,15 +20,15 @@ export = (async (): Promise<void> => {
   try {
     await new ConfigExplorer().assignArgs();
     const pargs: IParsedArgs = new YargsParser().parse();
-    let exclutions = await Integrity.getExclutionsFromIgnoreFile();
-    exclutions = unique([...exclutions, ...normalizeEntries(pargs.exclude)]);
+    let exclusions = await Integrity.getExclutionsFromIgnoreFile();
+    exclusions = unique([...exclusions, ...normalizeEntries(pargs.exclude)]);
     const options: IntegrityOptions = {
       cryptoOptions: {
         dirAlgorithm: pargs.dirAlgorithm,
         encoding: pargs.encoding as HexBase64Latin1Encoding,
         fileAlgorithm: pargs.fileAlgorithm,
       },
-      exclude: exclutions,
+      exclude: exclusions,
       verbose: pargs.verbose,
     };
     command = pargs.command;

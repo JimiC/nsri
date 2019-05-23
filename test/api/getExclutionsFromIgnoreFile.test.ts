@@ -24,16 +24,16 @@ describe(`Integrity: function 'getExclutionsFromIgnoreFile' tests`, function ():
 
     it('to return an empty array, when failing to find an ignore file',
       async function (): Promise<void> {
-        const exclutions = await Integrity.getExclutionsFromIgnoreFile();
-        expect(exclutions).to.be.an('array').and.to.be.empty;
+        const exclusions = await Integrity.getExclutionsFromIgnoreFile();
+        expect(exclusions).to.be.an('array').and.to.be.empty;
       });
 
     it('to return an array of exclution entries',
       async function (): Promise<void> {
         sandbox.stub(constants, 'ignoreFile').value(baseIgnoreFilePath);
         const expectedEntries = ['*', '*/', '!dist'];
-        const exclutions = await Integrity.getExclutionsFromIgnoreFile();
-        expect(exclutions).to.be.an('array').and.to.eql(expectedEntries);
+        const exclusions = await Integrity.getExclutionsFromIgnoreFile();
+        expect(exclusions).to.be.an('array').and.to.eql(expectedEntries);
       });
 
   });
