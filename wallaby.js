@@ -31,7 +31,7 @@ module.exports = {
   env: {
     type: "node",
     runner: process.platform === "win32"
-      ? `${process.env.APPDATA}\\nvm\\v8.16.0\node`
+      ? `${process.env.APPDATA}\\nvm\\v8.16.0\\node`
       : `${require('os').homedir()}/.nvm/versions/node/v8.16.0/bin/node`
   },
   delays: {

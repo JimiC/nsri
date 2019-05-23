@@ -15,6 +15,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
 
   context('expects', function (): void {
 
+    let sandbox: sinon.SinonSandbox;
     let otherFileToHashFilename: string;
     let fileToHashFilename: string;
     let fixturesDirPath: string;
@@ -35,6 +36,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
     let options: IntegrityOptions;
 
     beforeEach(function (): void {
+      sandbox = sinon.createSandbox();
       fixturesDirPath = path.resolve(__dirname, '../../../test/fixtures');
       fileToHashFilePath = path.resolve(fixturesDirPath, fileToHashFilename);
       options = {
@@ -42,6 +44,10 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
         exclude: undefined,
         verbose: undefined,
       };
+    });
+
+    afterEach(function (): void {
+      sandbox.restore();
     });
 
     context('to throw an Error when', function (): void {
@@ -83,14 +89,11 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
       it('a file can not be read',
         async function (): Promise<void> {
           options.verbose = false;
-          const createReadStreamStub = sinon.stub(fs, 'createReadStream').returns(new Readable() as fs.ReadStream);
-
+          sandbox.stub(fs, 'createReadStream').returns(new Readable() as fs.ReadStream);
           try {
             await Integrity.createDirHash(fixturesDirPath, options);
           } catch (error) {
             expect(error).to.be.an.instanceof(Error);
-          } finally {
-            createReadStreamStub.restore();
           }
         });
 
