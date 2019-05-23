@@ -4,6 +4,7 @@ import { expect } from 'chai';
 import path from 'path';
 import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
+import * as fsAsync from '../../src/common/fsAsync';
 import * as utils from '../../src/common/utils';
 import { IntegrityOptions } from '../../src/interfaces/integrityOptions';
 
@@ -51,17 +52,14 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
       it('is a file path and filename is invalid',
         async function (): Promise<void> {
-          // @ts-ignore
-          const existsStub = sandbox.stub(Integrity, '_exists')
-            .returns(true);
-          // @ts-ignore
-          const lstatStub = sandbox.stub(Integrity, '_lstat')
-            .returns({ isDirectory: (): boolean => false, isFile: (): boolean => true });
+          const existsAsyncStub = sandbox.stub(fsAsync, 'existsAsync').resolves(true);
+          const lstatAsyncStub = sandbox.stub(fsAsync, 'lstatAsync')
+            .resolves({ isDirectory: (): boolean => false, isFile: (): boolean => true } as any);
           try {
             await Integrity.check(fileToHashFilePath, 'package.json');
           } catch (error) {
-            expect(existsStub.called).to.be.true;
-            expect(lstatStub.called).to.be.true;
+            expect(existsAsyncStub.calledOnce).to.be.true;
+            expect(lstatAsyncStub.calledOnce).to.be.true;
             expect(error).to.be.an.instanceof(Error).and.match(/EINVNAME/);
           }
         });
@@ -81,22 +79,23 @@ describe(`Integrity: function 'check' tests`, function (): void {
         });
 
       it('schema is not valid',
-        function (): void {
+        async function (): Promise<void> {
           const hashObj = '{"version":"1","fileToHash.txt":"7a3d5b475bd07ae9041fab2a133f40c4"}';
-          Integrity.check(fileToHashFilePath, hashObj).catch(err => {
-            expect(err).to.be.an.instanceof(Error).and.match(/EVALER/);
-          });
+          try {
+            await Integrity.check(fileToHashFilePath, hashObj);
+          } catch (error) {
+            expect(error).to.be.an.instanceof(Error).and.match(/EVALER/);
+          }
         });
 
       it('path is other than a file or a directory',
         async function (): Promise<void> {
-          // @ts-ignore
-          const lstatStub = sandbox.stub(Integrity, '_lstat')
-            .returns({ isDirectory: (): boolean => false, isFile: (): boolean => false });
+          const lstatAsyncStub = sandbox.stub(fsAsync, 'lstatAsync')
+            .resolves({ isDirectory: (): boolean => false, isFile: (): boolean => false } as any);
           try {
             await Integrity.check(fileToHashFilePath, integrityTestFilePath);
           } catch (error) {
-            expect(lstatStub.called).to.be.true;
+            expect(lstatAsyncStub.calledOnce).to.be.true;
             expect(error).to.be.an.instanceof(Error).and.match(/ENOSUP/);
           }
         });
@@ -170,27 +169,30 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
       context('integrity file content is', function (): void {
 
+        let readFileAsyncStub: sinon.SinonStub;
+
+        beforeEach(function (): void {
+          readFileAsyncStub = sandbox.stub(fsAsync, 'readFileAsync');
+        });
+
         it('empty',
           async function (): Promise<void> {
-            // @ts-ignore
-            const readFileStub = sandbox.stub(Integrity, '_readFile').returns('');
+            readFileAsyncStub.resolves('');
             try {
               await Integrity.check(fileToHashFilePath, integrityTestFilePath);
             } catch (error) {
-              expect(readFileStub.called).to.be.true;
+              expect(readFileAsyncStub.calledTwice).to.be.true;
               expect(error).to.be.an.instanceof(Error);
             }
           });
 
         it('invalid',
           async function (): Promise<void> {
-            // @ts-ignore
-            const readFileStub = sandbox.stub(Integrity, '_readFile')
-              .returns('invalid integrity object');
+            readFileAsyncStub.resolves('invalid integrity object');
             try {
               await Integrity.check(fileToHashFilePath, integrityTestFilePath);
             } catch (error) {
-              expect(readFileStub.called).to.be.true;
+              expect(readFileAsyncStub.calledTwice).to.be.true;
               expect(error).to.be.an.instanceof(Error);
             }
           });
@@ -348,15 +350,19 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
       context('is a directory', function (): void {
 
+        let readFileAsyncStub: sinon.SinonStub;
+
+        beforeEach(function (): void {
+          readFileAsyncStub = sandbox.stub(fsAsync, 'readFileAsync');
+        });
+
         context('to pass integrity check', function (): void {
 
           it('provided a non-verbosely directory hash',
             async function (): Promise<void> {
               options.verbose = false;
-              // @ts-ignore
-              sandbox.stub(Integrity, '_readFile')
-                .returns('{"version":"1","hashes":{"fixtures":"sha512-' +
-                  'WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAhrHDdWLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="}}');
+              readFileAsyncStub.resolves('{"version":"1","hashes":{"fixtures":"sha512-' +
+                'WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAhrHDdWLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="}}');
               const sut = await Integrity.check(fixturesDirPath, integrityTestFilePath, options);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
@@ -371,8 +377,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
                 '"hash":"sha512-WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAh' +
                 'rHDdWLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="' +
                 '}}}';
-              // @ts-ignore
-              sandbox.stub(Integrity, '_readFile').returns(hash);
+              readFileAsyncStub.resolves(hash);
               const sut = await Integrity.check(directoryDirPath, './', options);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
@@ -389,8 +394,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
                 'Ze62278vNFKc3izakn2FgyvHIZEbnsuqKogaZLA1ihM1zk95RKlz+z7qk1XEysMaoJlpDNqSWx4PoPp2cFNBPw=="},' +
                 '"hash":"sha512-' +
                 'WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAhrHDdWLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="}}}';
-              // @ts-ignore
-              sandbox.stub(Integrity, '_readFile').returns(hash);
+              readFileAsyncStub.resolves(hash);
               const sut = await Integrity.check(directoryDirPath, integrityTestFilePath, options);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
@@ -409,8 +413,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
               const hash = '{"version":"1","hashes":{"fixtures":{' +
                 '"contents":{"directory":""},' +
                 '"hash":"sha1-DIjHOBHMnvpJxM4onkxvXbmcdME="}}}';
-              // @ts-ignore
-              sandbox.stub(Integrity, '_readFile').returns(hash);
+              readFileAsyncStub.resolves(hash);
               const sut = await Integrity.check(directoryDirPath, integrityTestFilePath, options);
               expect(sut).to.be.a('boolean').and.to.be.false;
             });
@@ -424,8 +427,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
                   const hash = '{"version":"1","hashes":{"fixtures":' +
                     '"sha512-WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAhrHDd' +
                     'WLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="}}';
-                  // @ts-ignore
-                  sandbox.stub(Integrity, '_readFile').returns(hash);
+                  readFileAsyncStub.resolves(hash);
                   const sut = await Integrity.check(directoryDirPath, integrityTestFilePath, options);
                   expect(sut).to.be.a('boolean').and.to.be.false;
                 });
@@ -436,8 +438,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
                   const hash = '{"version":"1","hashes":{"fixtures":' +
                     '"sha512-Ze62278vNFKc3izakn2FgyvHIZEbnsuqKogaZLA1' +
                     'ihM1zk95RKlz+z7qk1XEysMaoJlpDNqSWx4PoPp2cFNBPw=="}}';
-                  // @ts-ignore
-                  sandbox.stub(Integrity, '_readFile').returns(hash);
+                  readFileAsyncStub.resolves(hash);
                   const sut = await Integrity.check(directoryDirPath, integrityTestFilePath, options);
                   expect(sut).to.be.a('boolean').and.to.be.false;
                 });
@@ -447,6 +448,10 @@ describe(`Integrity: function 'check' tests`, function (): void {
         });
 
         context('and using root integrity file', function (): void {
+
+          beforeEach(function (): void {
+            readFileAsyncStub.restore();
+          });
 
           context('to pass integrity check', function (): void {
 
@@ -518,6 +523,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
           let fixturesSubDirPath: string;
 
           beforeEach(function (): void {
+            readFileAsyncStub.restore();
             fixturesSubDirPath = path.join(fixturesDirPath, 'fixtures');
             integrityTestFilePath = path.resolve(fixturesSubDirPath, integrityTestFilename);
           });
@@ -593,6 +599,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
           let fixturesSubDirPath: string;
 
           beforeEach(function (): void {
+            readFileAsyncStub.restore();
             fixturesSubDirPath = path.join(fixturesDirPath, 'fixtures');
           });
 

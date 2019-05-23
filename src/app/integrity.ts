@@ -1,12 +1,13 @@
 // tslint:disable unified-signatures
 import ajv from 'ajv';
 import { createHash, getHashes, Hash, HexBase64Latin1Encoding } from 'crypto';
-import fs from 'fs';
+import { createReadStream, Stats } from 'fs';
 import mm from 'minimatch';
 import path from 'path';
 import { ConfigExplorer } from '../common/configExplorer';
 import * as constants from '../common/constants';
 import { CryptoEncoding } from '../common/enums';
+import * as pfs from '../common/fsAsync';
 import * as utils from '../common/utils';
 import { ICryptoOptions } from '../interfaces/cryptoOptions';
 import { IHashObject } from '../interfaces/hashObject';
@@ -42,9 +43,9 @@ export class Integrity {
     const _intObj = await Integrity.create(fileOrDirPath, options);
     let _integrityObj: IntegrityObject;
     // 'integrity' is a file or directory path
-    if (await this._exists(integrity)) {
+    if (await pfs.existsAsync(integrity)) {
       integrity = await this._pathCheck(integrity);
-      const _content = await this._readFile(integrity, 'utf8');
+      const _content = await pfs.readFileAsync(integrity, 'utf8');
       _integrityObj = utils.parseJSON(_content) as IntegrityObject;
       await this._validate(_integrityObj);
       return this._verify(_intObj, _integrityObj, fileOrDirPath);
@@ -65,7 +66,7 @@ export class Integrity {
   }
 
   public static async create(fileOrDirPath: string, options?: IntegrityOptions): Promise<IntegrityObject> {
-    const _ls: fs.Stats = await this._lstat(fileOrDirPath);
+    const _ls: Stats = await pfs.lstatAsync(fileOrDirPath);
     const _obj: IntegrityObject = { version: this.CurrentSchemaVersion, hashes: {} };
     if (_ls.isDirectory()) {
       _obj.hashes = await Integrity.createDirHash(fileOrDirPath, options);
@@ -80,7 +81,7 @@ export class Integrity {
   public static async createDirHash(dirPath: string, options?: IntegrityOptions)
     : Promise<IHashObject> {
     this._rootDirPath = path.join(dirPath, path.sep);
-    const _ls: fs.Stats = await this._lstat(dirPath);
+    const _ls: Stats = await pfs.lstatAsync(dirPath);
     if (!_ls.isDirectory()) {
       throw new Error(`ENOTDIR: not a directory, '${dirPath}'`);
     }
@@ -93,7 +94,7 @@ export class Integrity {
   }
 
   public static async createFileHash(filePath: string, options?: ICryptoOptions): Promise<IHashObject> {
-    const _ls: fs.Stats = await this._lstat(filePath);
+    const _ls: Stats = await pfs.lstatAsync(filePath);
     if (!_ls.isFile()) {
       throw new Error(`ENOTFILE: not a file, '${path.basename(filePath)}'`);
     }
@@ -116,7 +117,7 @@ export class Integrity {
 
   public static persist(intObj: IntegrityObject, dirPath = './'): Promise<void> {
     const _filePath = path.resolve(dirPath, constants.integrityFilename);
-    return this._writeFile(_filePath, JSON.stringify(intObj, null, 2));
+    return pfs.writeFileAsync(_filePath, JSON.stringify(intObj, null, 2));
   }
 
   public static async getManifestIntegrity(): Promise<string> {
@@ -129,7 +130,7 @@ export class Integrity {
     const _obj = await this._getManifestInfo();
     _obj.manifest.integrity = intObj;
     const data = JSON.stringify(_obj.manifest, null, _obj.indentation.indent || _obj.indentation.amount);
-    return this._writeFile(constants.manifestFile, data);
+    return pfs.writeFileAsync(constants.manifestFile, data);
   }
 
   public static async getIntegrityOptionsFromConfig(): Promise<IntegrityOptions> {
@@ -150,11 +151,11 @@ export class Integrity {
   }
 
   public static async getExclutionsFromIgnoreFile(): Promise<string[]> {
-    const ignoreFileExists = await this._exists(constants.ignoreFile);
+    const ignoreFileExists = await pfs.existsAsync(constants.ignoreFile);
     if (!ignoreFileExists) {
       return [];
     }
-    const ignoreRaw: string = await this._readFile(constants.ignoreFile, 'utf8') as string;
+    const ignoreRaw: string = await pfs.readFileAsync(constants.ignoreFile, 'utf8') as string;
     return utils.normalizeEntries(ignoreRaw.split(/[\n\r]/));
   }
 
@@ -167,27 +168,12 @@ export class Integrity {
   private static _rootDirPath = '';
 
   /** @internal */
-  private static _exists = utils.promisify<boolean>(fs.exists);
-
-  /** @internal */
-  private static _lstat = utils.promisify<fs.Stats>(fs.lstat);
-
-  /** @internal */
-  private static _readFile = utils.promisify<string | Buffer>(fs.readFile);
-
-  /** @internal */
-  private static _readdir = utils.promisify<string[]>(fs.readdir);
-
-  /** @internal */
-  private static _writeFile = utils.promisify<void>(fs.writeFile);
-
-  /** @internal */
   private static async _getManifestInfo(): Promise<IndexedObject> {
-    if (!this._exists(constants.manifestFile)) {
+    if (!(await pfs.existsAsync(constants.manifestFile))) {
       return Promise.reject(`Error: '${constants.manifestFile}' not found
   Ensure the process is done on the project's root directory`);
     }
-    const _content = await this._readFile(constants.manifestFile, 'utf8') as string;
+    const _content = await pfs.readFileAsync(constants.manifestFile, 'utf8') as string;
     const _manifest: IndexedObject | null = utils.parseJSON(_content);
     if (!_manifest) {
       return Promise.reject('Error: Manifest not found');
@@ -203,9 +189,9 @@ export class Integrity {
     // get the integrity object
     let _integrityObj: IntegrityObject;
     // 'integrity' is a file or directory path
-    if (await this._exists(integrity)) {
+    if (await pfs.existsAsync(integrity)) {
       integrity = await this._pathCheck(integrity);
-      const _content = await this._readFile(integrity, 'utf8');
+      const _content = await pfs.readFileAsync(integrity, 'utf8');
       _integrityObj = utils.parseJSON(_content) as IntegrityObject;
     } else {
       // 'integrity' is a stringified JSON
@@ -255,7 +241,7 @@ export class Integrity {
     _cryptoOptions.encoding = _encoding;
     // detect dirAlgorithm
     const _cryptoHashes = getHashes();
-    const stat = await this._lstat(inPath);
+    const stat = await pfs.lstatAsync(inPath);
     _cryptoOptions.dirAlgorithm = stat.isDirectory()
       ? _cryptoHashes.find(algorithm => algorithm === _integrityMembers[1])
       : undefined;
@@ -267,10 +253,10 @@ export class Integrity {
       for (const key of Object.keys(content)) {
         const _hash: string | IVerboseHashObject = content[key];
         const _path: string = path.join(pathTo, key);
-        if (!await this._exists(_path)) { continue; }
+        if (!await pfs.existsAsync(_path)) { continue; }
         // it's a directory
         if (typeof _hash !== 'string') {
-          return (await this._lstat(_path)).isDirectory()
+          return (await pfs.lstatAsync(_path)).isDirectory()
             ? findFileAlgorithm(_hash.contents, _path)
             : undefined;
         }
@@ -348,7 +334,7 @@ export class Integrity {
 
   /** @internal */
   private static async _pathCheck(integrityPath: string): Promise<string> {
-    const _ls: fs.Stats = await this._lstat(integrityPath);
+    const _ls: Stats = await pfs.lstatAsync(integrityPath);
     if (_ls.isDirectory()) {
       return path.join(integrityPath, constants.integrityFilename);
     }
@@ -447,7 +433,7 @@ export class Integrity {
         ? `${algorithm}-${hash.digest(encoding)}`
         : '');
       hash.update(path.basename(filePath));
-      fs.createReadStream(filePath)
+      createReadStream(filePath)
         .on('error', (error: any) => rej(error))
         .on('data', (chunk: any) => hash.update(chunk))
         .on('end', _result);
@@ -464,7 +450,7 @@ export class Integrity {
     const _recurse = async (_dirPath: string, _algorithm: string, _hash?: Hash): Promise<Hash | undefined> => {
       const _callback = async (filename: string): Promise<void> => {
         const _curPath = path.join(_dirPath, filename);
-        const _curPathStats: fs.Stats = await this._lstat(_curPath);
+        const _curPathStats: Stats = await pfs.lstatAsync(_curPath);
         if (_curPathStats.isDirectory()) {
           await _recurse(_curPath, _algorithm, _hash);
         }
@@ -476,17 +462,17 @@ export class Integrity {
         }
       };
       const _collectedAllFilePaths = async (_dPath: string): Promise<string[]> => {
-        const _subDirs: string[] = await this._readdir(_dPath);
+        const _subDirs: string[] = await pfs.readdirAsync(_dPath);
         const _iterator = async (subDir: string): Promise<string[]> => {
           const _resolvedPath = path.resolve(_dPath, subDir);
-          const _ls = await this._lstat(_resolvedPath);
+          const _ls = await pfs.lstatAsync(_resolvedPath);
           return _ls.isDirectory()
             ? _collectedAllFilePaths(_resolvedPath)
             : [_resolvedPath];
         };
         const _promises: Array<Promise<string[]>> = _subDirs.map(_iterator);
-        const _files: string[][] = await Promise.all(_promises);
-        return _files.reduce((collection: string[], filePath: string[]) => [...collection, ...filePath], []);
+        const _filePaths: string[][] = await Promise.all(_promises);
+        return _filePaths.reduce((collection: string[], filePath: string[]) => [...collection, ...filePath], []);
       };
       const _allFilePaths = await _collectedAllFilePaths(_dirPath);
       const _includedFilePaths = _allFilePaths
@@ -496,7 +482,7 @@ export class Integrity {
       }
       _hash = _hash || createHash(dirAlgorithm);
       _hash.update(path.basename(_dirPath));
-      await utils.asyncForEach(await this._readdir(_dirPath), _callback);
+      await utils.asyncForEach(await pfs.readdirAsync(_dirPath), _callback);
       return _hash;
     };
     const _finalHash = await _recurse(dirPath || rootDirPath, dirAlgorithm);
@@ -509,7 +495,7 @@ export class Integrity {
     const _recurseVerbosely = async (dirPath: string): Promise<IVerboseHashObject> => {
       const _callback = async (filename: string, contents: IHashObject): Promise<void> => {
         const _curPath = path.join(dirPath, filename);
-        const _curPathStats: fs.Stats = await this._lstat(_curPath);
+        const _curPathStats: Stats = await pfs.lstatAsync(_curPath);
         if (_curPathStats.isDirectory()) {
           const _hashObj = await _recurseVerbosely(_curPath);
           if (!Reflect.ownKeys(_hashObj.contents).length) {
@@ -525,7 +511,7 @@ export class Integrity {
         }
       };
       const _verbHashObj: IVerboseHashObject = { contents: {}, hash: '' };
-      await utils.asyncForEach(await this._readdir(dirPath),
+      await utils.asyncForEach(await pfs.readdirAsync(dirPath),
         (filename: string) => _callback(filename, _verbHashObj.contents));
       if (Reflect.ownKeys(_verbHashObj.contents).length) {
         _verbHashObj.hash = await this._computeHash(options, rootDirPath, dirPath);
@@ -543,10 +529,10 @@ export class Integrity {
   /** @internal */
   private static async _validate(data: IntegrityObject): Promise<void> {
     const _path = path.resolve(__dirname, `../schemas/v${data.version}/schema.json`);
-    if (!(await this._exists(_path))) {
+    if (!(await pfs.existsAsync(_path))) {
       throw new Error(`EINVER: Invalid schema version, 'version: ${data.version}'`);
     }
-    const _schema = await this._readFile(_path, 'utf8') as string;
+    const _schema = await pfs.readFileAsync(_path, 'utf8') as string;
     const _validator = new ajv();
     _validator.validate(utils.parseJSON(_schema) as object, data);
     if (_validator.errors) {

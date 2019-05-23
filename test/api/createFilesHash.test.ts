@@ -41,18 +41,23 @@ describe(`Integrity: function 'createFilesHash' tests`, function (): void {
     context('to throw an Error when', function (): void {
 
       it('the provided algorithm is not supported',
-        function (): void {
+        async function (): Promise<void> {
           const cryptoOptions = { fileAlgorithm: 'md1' };
-          Integrity.createFilesHash([fileToHashFilePath], cryptoOptions)
-            .catch(error => expect(error).to.be.an.instanceof(Error).that.matches(/ENOSUP:/));
+          try {
+            await Integrity.createFilesHash([fileToHashFilePath], cryptoOptions);
+          } catch (error) {
+            expect(error).to.be.an.instanceof(Error).that.matches(/ENOSUP:/);
+          }
         });
 
       it('the provided encoding is not supported',
-        function (): void {
-          const cryptoOptions = { encoding: 'ascii' };
-          // @ts-ignore
-          Integrity.createFilesHash([fileToHashFilePath], cryptoOptions)
-            .catch((error: any) => expect(error).to.be.an.instanceof(Error).that.matches(/ENOSUP:/));
+        async function (): Promise<void> {
+          const cryptoOptions: any = { encoding: 'ascii' };
+          try {
+            await Integrity.createFilesHash([fileToHashFilePath], cryptoOptions);
+          } catch (error) {
+            expect(error).to.be.an.instanceof(Error).that.matches(/ENOSUP:/);
+          }
         });
 
     });

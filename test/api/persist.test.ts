@@ -4,12 +4,15 @@ import { expect } from 'chai';
 import path from 'path';
 import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
+import * as fsAsync from '../../src/common/fsAsync';
 import { IntegrityObject } from '../../src/interfaces/integrityObject';
 
 describe(`Integrity: function 'persist' tests`, function (): void {
 
   context('expects', function (): void {
 
+    let sandbox: sinon.SinonSandbox;
+    let writeFileAsyncStub: sinon.SinonStub<any[] , Promise<any>>;
     let integrityTestFilename: string;
     let integrityTestObject: IntegrityObject;
     let fixturesDirPath: string;
@@ -19,32 +22,32 @@ describe(`Integrity: function 'persist' tests`, function (): void {
     });
 
     beforeEach(function (): void {
+      sandbox = sinon.createSandbox();
+      writeFileAsyncStub = sandbox.stub(fsAsync, 'writeFileAsync');
       fixturesDirPath = path.resolve(__dirname, '../../../test/fixtures');
       integrityTestObject = { hashes: {}, version: '' };
+    });
+
+    afterEach(function (): void {
+      sandbox.restore();
     });
 
     context('to persist the created hash file', function (): void {
 
       it('on the provided path',
         async function (): Promise<void> {
-          // @ts-ignore
-          const writeFileStub = sinon.stub(Integrity, '_writeFile');
           const dirPath = path.resolve(fixturesDirPath, integrityTestFilename);
+          const data = '{\n  "hashes": {},\n  "version": ""\n}';
           await Integrity.persist(integrityTestObject, fixturesDirPath);
-          writeFileStub.restore();
-          expect(writeFileStub.called).to.be.true;
-          expect(writeFileStub.calledWith(dirPath)).to.be.true;
+          expect(writeFileAsyncStub.calledOnceWithExactly(dirPath, data)).to.be.true;
         });
 
       it('on the default path',
         async function (): Promise<void> {
-          // @ts-ignore
-          const writeFileStub = sinon.stub(Integrity, '_writeFile');
-          await Integrity.persist(integrityTestObject);
           const dirPath = path.resolve('./', integrityTestFilename);
-          writeFileStub.restore();
-          expect(writeFileStub.called).to.be.true;
-          expect(writeFileStub.calledWith(dirPath)).to.be.true;
+          const data = '{\n  "hashes": {},\n  "version": ""\n}';
+          await Integrity.persist(integrityTestObject);
+          expect(writeFileAsyncStub.calledOnceWithExactly(dirPath, data)).to.be.true;
         });
 
     });

@@ -13,6 +13,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
 
   context('expects', function (): void {
 
+    let sandbox: sinon.SinonSandbox;
     let fileToHashFilename: string;
     let integrityTestFilename: string;
     let fixturesDirPath: string;
@@ -30,48 +31,64 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
     });
 
     beforeEach(function (): void {
+      sandbox = sinon.createSandbox();
       fixturesDirPath = path.resolve(__dirname, '../../../test/fixtures');
       fileToHashFilePath = path.resolve(fixturesDirPath, fileToHashFilename);
       integrityTestFilePath = path.resolve(fixturesDirPath, integrityTestFilename);
     });
 
+    afterEach(function (): void {
+      sandbox.restore();
+    });
+
     context('to throw an Error when', function (): void {
 
       it('the provided algorithm is not supported',
-        function (): void {
+        async function (): Promise<void> {
           const cryptoOptions = { fileAlgorithm: 'md1' };
-          Integrity.createFileHash(fileToHashFilePath, cryptoOptions)
-            .catch(error => expect(error).to.be.an.instanceof(Error).that.matches(/ENOSUP:/));
+          try {
+            await Integrity.createFileHash(fileToHashFilePath, cryptoOptions);
+          } catch (error) {
+            expect(error).to.be.an.instanceof(Error).that.matches(/ENOSUP:/);
+          }
         });
 
       it('the provided encoding is not supported',
-        function (): void {
-          const cryptoOptions = { encoding: 'ascii' };
-          // @ts-ignore
-          Integrity.createFileHash(fileToHashFilePath, cryptoOptions)
-            .catch((error: any) => expect(error).to.be.an.instanceof(Error).that.matches(/ENOSUP:/));
+        async function (): Promise<void> {
+          const cryptoOptions: any = { encoding: 'ascii' };
+          try {
+            await Integrity.createFileHash(fileToHashFilePath, cryptoOptions);
+          } catch (error) {
+            expect(error).to.be.an.instanceof(Error).that.matches(/ENOSUP:/);
+          }
         });
 
       it('the provided path is not a file',
-        function (): void {
-          Integrity.createFileHash(fixturesDirPath)
-            .catch(error => expect(error).to.be.an.instanceof(Error).that.matches(/ENOTFILE:/));
+        async function (): Promise<void> {
+          try {
+            await Integrity.createFileHash(fixturesDirPath);
+          } catch (error) {
+            expect(error).to.be.an.instanceof(Error).that.matches(/ENOTFILE:/);
+          }
         });
 
       it('the provided path is not allowed',
-        function (): void {
-          Integrity.createFileHash(integrityTestFilePath)
-            .catch(error => expect(error).to.be.an.instanceof(Error).that.matches(/ENOTALW:/));
+        async function (): Promise<void> {
+          try {
+            await Integrity.createFileHash(integrityTestFilePath);
+          } catch (error) {
+            expect(error).to.be.an.instanceof(Error).that.matches(/ENOTALW:/);
+          }
         });
 
       it('the file can not be read',
-        function (): void {
-          const createReadStreamStub = sinon.stub(fs, 'createReadStream').returns(new Readable() as fs.ReadStream);
-          Integrity.createFileHash(fileToHashFilePath)
-            .catch(error => {
-              createReadStreamStub.restore();
-              expect(error).to.be.an.instanceof(Error);
-            });
+        async function (): Promise<void> {
+          sandbox.stub(fs, 'createReadStream').returns(new Readable() as fs.ReadStream);
+          try {
+            await Integrity.createFileHash(fileToHashFilePath);
+          } catch (error) {
+            expect(error).to.be.an.instanceof(Error);
+          }
         });
 
     });

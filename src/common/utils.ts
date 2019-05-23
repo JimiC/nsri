@@ -51,34 +51,6 @@ export async function asyncForEach(array: any[], callback: (...args: any[]) => a
 }
 
 /** @internal */
-export const promisifyArgumentNames = Symbol('__CUSTOM-ARGUMENTS__');
-
-/** @internal */
-export function promisify<T>(func: (...args: any[]) => any): (...args: any[]) => Promise<T> {
-  if (!(typeof func === 'function')) {
-    throw new TypeError('Argument to promisify must be a function');
-  }
-  const _argumentNames = (func as IndexedObject)[typeof promisifyArgumentNames];
-  return (...args: any[]): Promise<T> => {
-    return new Promise((res, rej): void => {
-      const _cb = (err: any, ...values: any[]): void => {
-        if (err instanceof Error) { return rej(err); }
-        if (typeof err === 'boolean') { values = [err, ...values]; }
-        if (values.length === 1 || !_argumentNames) { return res(values[0]); }
-        const obj: IndexedObject = {};
-        values.forEach((value, index) => {
-          const _name = _argumentNames[index];
-          if (_name) { obj[_name] = value; }
-        });
-        res(obj as T);
-      };
-      args.push(_cb);
-      func(...args);
-    });
-  };
-}
-
-/** @internal */
 export function getIndentation(text: string): detectIndent.Indent {
   return detectIndent(text);
 }

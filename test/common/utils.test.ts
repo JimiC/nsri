@@ -3,7 +3,6 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import * as utils from '../../src/common/utils';
-import { IndexedObject } from '../../src/interfaces/indexedObject';
 
 describe('Utils: tests', function (): void {
 
@@ -147,60 +146,6 @@ describe('Utils: tests', function (): void {
           expect(spy.called).to.be.true;
           expect(spy.calledOnce).to.be.true;
           expect(spy.calledWith(1, 0, [1])).to.be.true;
-        });
-
-    });
-
-    context(`function 'promisify'`, function (): void {
-
-      it('to throw a TypeError when passed parameter is not a function',
-        function (): void {
-          expect(utils.promisify.bind(utils, [] as any)).to.throw(TypeError);
-        });
-
-      it('to return a Promise',
-        function (): void {
-          expect(utils.promisify(() => void 0)()).to.be.a('promise');
-        });
-
-      it('to return an Error when the passed function throws one',
-        async function (): Promise<void> {
-          const stub = sinon.stub().callsFake(cb => cb(new Error()));
-          try {
-            await utils.promisify(stub)();
-          } catch (error) {
-            expect(error).to.be.an.instanceof(Error);
-          }
-        });
-
-      it(`to correctly handle a 'true' response`,
-        async function (): Promise<void> {
-          const stub = sinon.stub().callsFake(cb => cb(true));
-          const response = await utils.promisify(stub)();
-          expect(response).to.be.true;
-        });
-
-      it(`to correctly handle a 'false' response`,
-        async function (): Promise<void> {
-          const stub = sinon.stub().callsFake(cb => cb(false));
-          const response = await utils.promisify(stub)();
-          expect(response).to.be.false;
-        });
-
-      it('to return all named arguments of the passed function',
-        async function (): Promise<void> {
-          const stub = sinon.stub().callsFake(cb => cb(null, 1, 2, 3));
-          (stub as IndexedObject)[typeof utils.promisifyArgumentNames] = ['one', 'two', 'three'];
-          const response = await utils.promisify(stub)();
-          expect(response).to.eql({ one: 1, two: 2, three: 3 });
-        });
-
-      it('to return named arguments of the passed function',
-        async function (): Promise<void> {
-          const stub = sinon.stub().callsFake(cb => cb(null, 1, 2, 3));
-          (stub as IndexedObject)[typeof utils.promisifyArgumentNames] = ['one', 'two'];
-          const response = await utils.promisify(stub)();
-          expect(response).to.eql({ one: 1, two: 2 });
         });
 
     });
