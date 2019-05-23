@@ -44,13 +44,6 @@ export function sortObject(obj: IndexedObject): IndexedObject {
 }
 
 /** @internal */
-export async function asyncForEach(array: any[], callback: (...args: any[]) => any): Promise<void> {
-  for (let _index = 0; _index < array.length; _index++) {
-    await callback(array[_index], _index, array);
-  }
-}
-
-/** @internal */
 export function getIndentation(text: string): detectIndent.Indent {
   return detectIndent(text);
 }

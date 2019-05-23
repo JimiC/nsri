@@ -132,24 +132,6 @@ describe('Utils: tests', function (): void {
 
     });
 
-    context(`function 'asyncForEach'`, function (): void {
-
-      it('to return a Promise',
-        function (): void {
-          expect(utils.asyncForEach([1], () => void 0)).to.be.a('promise');
-        });
-
-      it('to call the callback function',
-        function (): void {
-          const spy = sinon.spy();
-          utils.asyncForEach([1], spy);
-          expect(spy.called).to.be.true;
-          expect(spy.calledOnce).to.be.true;
-          expect(spy.calledWith(1, 0, [1])).to.be.true;
-        });
-
-    });
-
     context(`function 'getIndentation'`, function (): void {
 
       it('to return indent info',

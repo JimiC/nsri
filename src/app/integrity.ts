@@ -111,7 +111,9 @@ export class Integrity {
     const _callback = async (file: string, _obj: IHashObject): Promise<void> => {
       Object.assign(_obj, await this.createFileHash(file, options));
     };
-    await utils.asyncForEach(filenames, file => _callback(file, _hashObj));
+    for (const file of filenames) {
+      await _callback(file, _hashObj);
+    }
     return _hashObj;
   }
 
@@ -482,7 +484,10 @@ export class Integrity {
       }
       _hash = _hash || createHash(dirAlgorithm);
       _hash.update(path.basename(_dirPath));
-      await utils.asyncForEach(await pfs.readdirAsync(_dirPath), _callback);
+      const _files = await pfs.readdirAsync(_dirPath);
+      for (const file of _files) {
+        await _callback(file);
+      }
       return _hash;
     };
     const _finalHash = await _recurse(dirPath || rootDirPath, dirAlgorithm);
@@ -511,8 +516,10 @@ export class Integrity {
         }
       };
       const _verbHashObj: IVerboseHashObject = { contents: {}, hash: '' };
-      await utils.asyncForEach(await pfs.readdirAsync(dirPath),
-        (filename: string) => _callback(filename, _verbHashObj.contents));
+      const _files = await pfs.readdirAsync(dirPath);
+      for (const file of _files) {
+        await _callback(file, _verbHashObj.contents);
+      }
       if (Reflect.ownKeys(_verbHashObj.contents).length) {
         _verbHashObj.hash = await this._computeHash(options, rootDirPath, dirPath);
       }
