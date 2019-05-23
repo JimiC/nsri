@@ -85,6 +85,8 @@ and for available `command` options type:
 nsri <command> -h
 ```
 
+More info an be found at the [CLI](https://github.com/JimiC/nsri/blob/master/docs/cli.md) section.
+
 ### API
 
 `nsri` can also be used programatically ([TypeScript](https://www.typescriptlang.org/) types are included).

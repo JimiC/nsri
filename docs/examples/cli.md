@@ -8,6 +8,7 @@
 nsri check -s ./ -i ./.integrity.json
 
 ```
+
 > Check the integrity of the root directory, using the 'integrity' from a manifest file
 
 ```sh
@@ -39,6 +40,7 @@ nsri create -v -s ./
 ```sh
 nsri create -s ./sub -o ./sub
 ```
+
 ---
 
 > Create a non-verbosely integrity file of the root directory and persist it on the manifest file
