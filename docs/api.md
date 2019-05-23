@@ -144,6 +144,7 @@ All `API` calls are `static` members of the `Integrity` class.
 - [ES6+, Typescript](https://github.com/JimiC/nsri/blob/master/docs/examples/persist-js-ts.md)
 
 ---
+
 >## getManifestIntegrity
 
 `Description`: Gets the integrity object from the manifest file.
@@ -160,6 +161,7 @@ All `API` calls are `static` members of the `Integrity` class.
 - [ES6+, Typescript](https://github.com/JimiC/nsri/blob/master/docs/examples/getManifestIntegrity-js-ts.md)
 
 ---
+
 >## updateManifestIntegrity
 
 `Description`: Updates the manifest file (`project.json`) with the integrity object.
@@ -180,6 +182,7 @@ All `API` calls are `static` members of the `Integrity` class.
 - [ES6+, Typescript](https://github.com/JimiC/nsri/blob/master/docs/examples/updateManifestIntegrity-js-ts.md)
 
 ---
+
 >## getIntegrityOptionsFromConfig
 
 `Description`:
@@ -194,6 +197,23 @@ All `API` calls are `static` members of the `Integrity` class.
 
 - [ES5](https://github.com/JimiC/nsri/blob/master/docs/examples/getIntegrityOptionsFromConfig-es5-js.md)
 - [ES6+, Typescript](https://github.com/JimiC/nsri/blob/master/docs/examples/getIntegrityOptionsFromConfig-js-ts.md)
+
+---
+
+>## getExclusionsFromIgnoreFile
+
+`Description`:
+
+`Info`: `getExclusionsFromIgnoreFile` is a function designed to retrieve the exclusions from a `.nsriignore` file.
+
+`Return Type`: `Promise<string[]>`
+
+`Parameters`: None
+
+`Examples`
+
+- [ES5](https://github.com/JimiC/nsri/blob/master/docs/examples/getExclusionsFromIgnoreFile-es5-js.md)
+- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/master/docs/examples/getExclusionsFromIgnoreFile-js-ts.md)
 
 ---
 
