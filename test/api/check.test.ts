@@ -59,7 +59,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
             await Integrity.check(fileToHashFilePath, 'package.json');
           } catch (error) {
             expect(existsAsyncStub.calledOnce).to.be.true;
-            expect(lstatAsyncStub.calledOnce).to.be.true;
+            expect(lstatAsyncStub.calledTwice).to.be.true;
             expect(error).to.be.an.instanceof(Error).and.match(/EINVNAME/);
           }
         });
@@ -75,6 +75,18 @@ describe(`Integrity: function 'check' tests`, function (): void {
             expect(error).to.be.an.instanceof(Error)
               .and.match(/EINVER/)
               .and.match(/Incompatible versions check/);
+          }
+        });
+
+      it('version schema missing',
+        async function (): Promise<void> {
+          const hashObj = '{"version":"2","hashes":{"fileToHash.txt":"7a3d5b475bd07ae9041fab2a133f40c4"}}';
+          try {
+            await Integrity.check(fileToHashFilePath, hashObj);
+          } catch (error) {
+            expect(error).to.be.an.instanceof(Error)
+              .and.match(/EINVER/)
+              .and.match(/Invalid schema version: '2'/);
           }
         });
 
@@ -95,7 +107,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
           try {
             await Integrity.check(fileToHashFilePath, integrityTestFilePath);
           } catch (error) {
-            expect(lstatAsyncStub.calledOnce).to.be.true;
+            expect(lstatAsyncStub.calledTwice).to.be.true;
             expect(error).to.be.an.instanceof(Error).and.match(/ENOSUP/);
           }
         });
@@ -358,73 +370,143 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
         context('to pass integrity check', function (): void {
 
-          it('provided a non-verbosely directory hash',
+          context('provided a verbosely root directory hash', function (): void {
+
+            it('with literal directory name',
+              async function (): Promise<void> {
+                options.verbose = false;
+                const hash = '{"version":"1","hashes":{' +
+                  '"fixtures":{"contents":{"directory":{"contents":{},' +
+                  '"hash":"sha512-Ze62278vNFKc3izakn2FgyvHIZEbnsuqKogaZ' +
+                  'LA1ihM1zk95RKlz+z7qk1XEysMaoJlpDNqSWx4PoPp2cFNBPw=="}},' +
+                  '"hash":"sha512-WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAh' +
+                  'rHDdWLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="' +
+                  '}}}';
+                readFileAsyncStub.resolves(hash);
+
+                const sut = await Integrity.check(fixturesDirPath, integrityTestFilePath, options);
+                expect(sut).to.be.a('boolean').and.to.be.true;
+              });
+
+            it(`with 'dot' directory name`,
+              async function (): Promise<void> {
+                options.verbose = false;
+                const hash = '{"version":"1","hashes":{' +
+                  '".":{"contents":{"directory":{"contents":{},' +
+                  '"hash":"sha512-Ze62278vNFKc3izakn2FgyvHIZEbnsuqKogaZ' +
+                  'LA1ihM1zk95RKlz+z7qk1XEysMaoJlpDNqSWx4PoPp2cFNBPw=="}},' +
+                  '"hash":"sha512-WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAh' +
+                  'rHDdWLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="' +
+                  '}}}';
+                readFileAsyncStub.resolves(hash);
+
+                const sut = await Integrity.check(fixturesDirPath, integrityTestFilePath, options);
+                expect(sut).to.be.a('boolean').and.to.be.true;
+              });
+
+          });
+
+          it('provided a non-verbosely root directory hash',
             async function (): Promise<void> {
               options.verbose = false;
-              readFileAsyncStub.resolves('{"version":"1","hashes":{"fixtures":"sha512-' +
-                'WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAhrHDdWLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="}}');
+              const hash = '{"version":"1","hashes":{' +
+                '".":"sha512-WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAhr' +
+                'HDdWLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="' +
+                '}}';
+              readFileAsyncStub.resolves(hash);
+
               const sut = await Integrity.check(fixturesDirPath, integrityTestFilePath, options);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
-          it('of a subdirectory input directory path, provided a verbosely directory hash',
-            async function (): Promise<void> {
-              options.verbose = false;
-              const hash = '{"version":"1","hashes":{' +
-                '"fixtures":{"contents":{"directory":{"contents":{},' +
-                '"hash":"sha512-Ze62278vNFKc3izakn2FgyvHIZEbnsuqKogaZ' +
-                'LA1ihM1zk95RKlz+z7qk1XEysMaoJlpDNqSWx4PoPp2cFNBPw=="}},' +
-                '"hash":"sha512-WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAh' +
-                'rHDdWLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="' +
-                '}}}';
-              readFileAsyncStub.resolves(hash);
-              const sut = await Integrity.check(directoryDirPath, './', options);
-              expect(sut).to.be.a('boolean').and.to.be.true;
-            });
+          context('of a subdirectory input directory path', function (): void {
 
-          it('of a subdirectory input directory path, provided a semi-verbosely directory hash',
-            async function (): Promise<void> {
-              // This is a scenario that can not happen when using the 'create' function,
-              // because hash creation is either verbosely or non-verbosely on all nodes.
-              // We cover this scenario, in case the user provides a self-created integrity file.
+            it('provided a non-verbosely directory hash',
+              async function (): Promise<void> {
+                options.verbose = false;
+                const hash = '{"version":"1","hashes":{' +
+                  '".":"sha512-Ze62278vNFKc3izakn2FgyvHIZEbnsuqKogaZ' +
+                  'LA1ihM1zk95RKlz+z7qk1XEysMaoJlpDNqSWx4PoPp2cFNBPw=="' +
+                  '}}';
+                readFileAsyncStub.resolves(hash);
+                const sut = await Integrity.check(directoryDirPath, integrityTestFilePath, options);
+                expect(sut).to.be.a('boolean').and.to.be.true;
+              });
 
-              options.verbose = true;
-              const hash = '{"version":"1","hashes":{"fixtures":{' +
-                '"contents":{"directory":"sha512-' +
-                'Ze62278vNFKc3izakn2FgyvHIZEbnsuqKogaZLA1ihM1zk95RKlz+z7qk1XEysMaoJlpDNqSWx4PoPp2cFNBPw=="},' +
-                '"hash":"sha512-' +
-                'WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAhrHDdWLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="}}}';
-              readFileAsyncStub.resolves(hash);
-              const sut = await Integrity.check(directoryDirPath, integrityTestFilePath, options);
-              expect(sut).to.be.a('boolean').and.to.be.true;
-            });
+            it('provided a verbosely directory hash',
+              async function (): Promise<void> {
+                options.verbose = false;
+                const hash = '{"version":"1","hashes":{' +
+                  '".":{"contents":{"directory":{"contents":{},' +
+                  '"hash":"sha512-Ze62278vNFKc3izakn2FgyvHIZEbnsuqKogaZ' +
+                  'LA1ihM1zk95RKlz+z7qk1XEysMaoJlpDNqSWx4PoPp2cFNBPw=="}},' +
+                  '"hash":"sha512-WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAh' +
+                  'rHDdWLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="' +
+                  '}}}';
+                readFileAsyncStub.resolves(hash);
+                const sut = await Integrity.check(directoryDirPath, fixturesDirPath, options);
+                expect(sut).to.be.a('boolean').and.to.be.true;
+              });
+
+            it('provided a semi-verbosely directory hash',
+              async function (): Promise<void> {
+                // This is a scenario that can not happen when using the 'create' function,
+                // because hash creation is either verbosely or non-verbosely on all nodes.
+                // We cover this scenario, in case the user provides a self-created integrity file.
+
+                options.verbose = true;
+                const hash = '{"version":"1","hashes":{".":{' +
+                  '"contents":{"directory":"sha512-' +
+                  'Ze62278vNFKc3izakn2FgyvHIZEbnsuqKogaZLA1ihM1zk95RKlz+z7qk1XEysMaoJlpDNqSWx4PoPp2cFNBPw=="},' +
+                  '"hash":"sha512-' +
+                  'WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAhrHDdWLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="}}}';
+                readFileAsyncStub.resolves(hash);
+                const sut = await Integrity.check(directoryDirPath, integrityTestFilePath, options);
+                expect(sut).to.be.a('boolean').and.to.be.true;
+              });
+
+          });
 
         });
 
         context('to fail integrity check of a subdirectory input directory path', function (): void {
 
-          it('provided a semi-verbosely directory hash and subdirectory hash is empty',
-            async function (): Promise<void> {
-              // This is a scenario that can not happen when using the 'create' function,
-              // because hash creation is either verbosely or non-verbosely on all nodes.
-              // We cover this scenario, in case the user provides a self-created integrity file.
+          context('using a parent directory integrity file', function (): void {
 
-              options.verbose = true;
-              const hash = '{"version":"1","hashes":{"fixtures":{' +
-                '"contents":{"directory":""},' +
-                '"hash":"sha1-DIjHOBHMnvpJxM4onkxvXbmcdME="}}}';
-              readFileAsyncStub.resolves(hash);
-              const sut = await Integrity.check(directoryDirPath, integrityTestFilePath, options);
-              expect(sut).to.be.a('boolean').and.to.be.false;
-            });
+            it('provided a verbosely directory hash with non-existing directory',
+              async function (): Promise<void> {
+                options.verbose = false;
+                const hash = '{"version":"1","hashes":{".":{' +
+                  '"contents":{"directiry":"sha512-Ze62278vNFKc3izakn2FgyvHIZEbns' +
+                  'uqKogaZLA1ihM1zk95RKlz+z7qk1XEysMaoJlpDNqSWx4PoPp2cFNBPw=="},' +
+                  '"hash":"sha512-WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAhrHDdWLBI' +
+                  'kkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="}}}';
+                readFileAsyncStub.resolves(hash);
+                const sut = await Integrity.check(directoryDirPath, integrityTestFilePath, options);
+                expect(sut).to.be.a('boolean').and.to.be.false;
+              });
 
-          context('using a parent directory integrity file, ' +
-            'provided a non-verbosely directory hash', function (): void {
+            it('provided a semi-verbosely directory hash and subdirectory hash is empty',
+              async function (): Promise<void> {
+                // This is a scenario that can not happen when using the 'create' function,
+                // because hash creation is either verbosely or non-verbosely on all nodes.
+                // We cover this scenario, in case the user provides a self-created integrity file.
+
+                options.verbose = true;
+                const hash = '{"version":"1","hashes":{".":{' +
+                  '"contents":{"directory":""},' +
+                  '"hash":"sha1-DIjHOBHMnvpJxM4onkxvXbmcdME="}}}';
+                readFileAsyncStub.resolves(hash);
+                const sut = await Integrity.check(directoryDirPath, integrityTestFilePath, options);
+                expect(sut).to.be.a('boolean').and.to.be.false;
+              });
+
+            context('provided a non-verbosely directory hash', function (): void {
 
               it('that is valid',
                 async function (): Promise<void> {
                   options.verbose = false;
-                  const hash = '{"version":"1","hashes":{"fixtures":' +
+                  const hash = '{"version":"1","hashes":{".":' +
                     '"sha512-WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAhrHDd' +
                     'WLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="}}';
                   readFileAsyncStub.resolves(hash);
@@ -435,8 +517,8 @@ describe(`Integrity: function 'check' tests`, function (): void {
               it('that is invalid',
                 async function (): Promise<void> {
                   options.verbose = false;
-                  const hash = '{"version":"1","hashes":{"fixtures":' +
-                    '"sha512-Ze62278vNFKc3izakn2FgyvHIZEbnsuqKogaZLA1' +
+                  const hash = '{"version":"1","hashes":{".":' +
+                    '"sha384-Ze62278vNFKc3izakn2FgyvHIZEbnsuqKogaZLA1' +
                     'ihM1zk95RKlz+z7qk1XEysMaoJlpDNqSWx4PoPp2cFNBPw=="}}';
                   readFileAsyncStub.resolves(hash);
                   const sut = await Integrity.check(directoryDirPath, integrityTestFilePath, options);
@@ -444,6 +526,8 @@ describe(`Integrity: function 'check' tests`, function (): void {
                 });
 
             });
+
+          });
 
         });
 
@@ -477,7 +561,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
             it('provided a non-verbosely hash object (JSON)',
               async function (): Promise<void> {
                 options.verbose = false;
-                const hashObj = '{"version":"1","hashes":{"fixtures":"sha512-' +
+                const hashObj = '{"version":"1","hashes":{".":"sha512-' +
                   'WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAhrHDdWLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="}}';
                 const sut = await Integrity.check(fixturesDirPath, hashObj, options);
                 expect(sut).to.be.a('boolean').and.to.be.true;
@@ -499,7 +583,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
             it('provided a non-verbosely hash object (JSON), against a verbosely created hash',
               async function (): Promise<void> {
                 options.verbose = true;
-                const hashObj = '{"version":"1","hashes":{"fixtures":"sha512-' +
+                const hashObj = '{"version":"1","hashes":{".":"sha512-' +
                   'WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAhrHDdWLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="}}';
                 const sut = await Integrity.check(fixturesDirPath, hashObj, options);
                 expect(sut).to.be.a('boolean').and.to.be.false;
@@ -553,7 +637,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
             it('provided a non-verbosely hash object (JSON)',
               async function (): Promise<void> {
                 options.verbose = false;
-                const hashObj = '{"version":"1","hashes":{"fixtures":"sha512-' +
+                const hashObj = '{"version":"1","hashes":{".":"sha512-' +
                   'rDNKFYBCOuaCzpomiZEGyRLAmc3+IU/HoNj7NiKXqLG90rNko74LwpZ1DYKx+/aJptGTKCr/9mP8ggnl4QVNNw=="}}';
                 const sut = await Integrity.check(fixturesSubDirPath, hashObj, options);
                 expect(sut).to.be.a('boolean').and.to.be.true;
@@ -575,7 +659,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
             it('provided a non-verbosely hash object (JSON), against a verbosely created hash',
               async function (): Promise<void> {
                 options.verbose = true;
-                const hashObj = '{"version":"1","hashes":{"fixtures":"sha512-' +
+                const hashObj = '{"version":"1","hashes":{".":"sha512-' +
                   'rDNKFYBCOuaCzpomiZEGyRLAmc3+IU/HoNj7NiKXqLG90rNko74LwpZ1DYKx+/aJptGTKCr/9mP8ggnl4QVNNw=="}}';
                 const sut = await Integrity.check(fixturesSubDirPath, hashObj, options);
                 expect(sut).to.be.a('boolean').and.to.be.false;
@@ -629,7 +713,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
             it('provided a non-verbosely hash object (JSON)',
               async function (): Promise<void> {
                 options.verbose = false;
-                const hashObj = '{"version":"1","hashes":{"fixtures":"sha512-' +
+                const hashObj = '{"version":"1","hashes":{".":"sha512-' +
                   'rDNKFYBCOuaCzpomiZEGyRLAmc3+IU/HoNj7NiKXqLG90rNko74LwpZ1DYKx+/aJptGTKCr/9mP8ggnl4QVNNw=="}}';
                 const sut = await Integrity.check(fixturesSubDirPath, hashObj, options);
                 expect(sut).to.be.a('boolean').and.to.be.true;
@@ -651,7 +735,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
             it('provided a non-verbosely hash object (JSON), against a verbosely created hash',
               async function (): Promise<void> {
                 options.verbose = true;
-                const hashObj = '{"version":"1","hashes":{"fixtures":"074e46454b567069ab80df4302605df2"}}';
+                const hashObj = '{"version":"1","hashes":{".":"074e46454b567069ab80df4302605df2"}}';
                 const sut = await Integrity.check(fixturesSubDirPath, hashObj, options);
                 expect(sut).to.be.a('boolean').and.to.be.false;
               });
@@ -720,10 +804,21 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
         it(`no 'fileAlgorithm'`,
           async function (): Promise<void> {
-            const hashObj = '{"version":"1","hashes":{"fixtures":{' +
+            const hashObj = '{"version":"1","hashes":{".":{' +
               '"contents":{"directory":{' +
               '"contents":{"directory":"md5-123456"},' +
               '"hash":"sha1-123456"},' +
+              '"hash":"sha1-123456"},' +
+              '"hash":"sha1-123456"}}}';
+            const sut = await Integrity.check(fixturesDirPath, hashObj);
+            expect(sut).to.be.a('boolean').and.to.be.false;
+          });
+
+        it(`a 'fileAlgorithm'`,
+          async function (): Promise<void> {
+            const hashObj = '{"version":"1","hashes":{".":{' +
+              '"contents":{"directory":{' +
+              '"contents":{"anotherFileToHash.txt":"md5-123456"},"hash":"sha1-123456"},' +
               '"hash":"sha1-123456"},' +
               '"hash":"sha1-123456"}}}';
             const sut = await Integrity.check(fixturesDirPath, hashObj);
@@ -740,7 +835,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
             // because hash creation produces a hash string for files.
             // We cover this scenario, in case the user provides a self-created integrity file.
 
-            const hashObj = '{"version":"1","hashes":{"fixtures":{' +
+            const hashObj = '{"version":"1","hashes":{".":{' +
               '"contents":{"fileToHash.txt":{' +
               '"contents":{"anotherFileToHash.txt":"md5123456"},"hash":"sha1-123456"},' +
               '"hash":"sha1-123456"},' +
@@ -763,7 +858,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
         it('it is a file with invalid hash',
           async function (): Promise<void> {
-            const hashObj = '{"version":"1","hashes":{"fixtures":{' +
+            const hashObj = '{"version":"1","hashes":{".":{' +
               '"contents":{"directory":{' +
               '"contents":{"anotherFileToHash.txt":"md5123456"},"hash":"sha1-123456"},' +
               '"hash":"sha1-123456"},' +
@@ -774,7 +869,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
         it('the integrity object has no hash',
           async function (): Promise<void> {
-            const hashObj = '{"version":"1","hashes":{"fixtures":{"contents":{},"hash":""}}}';
+            const hashObj = '{"version":"1","hashes":{".":{"contents":{},"hash":""}}}';
             const sut = await Integrity.check(fixturesDirPath, hashObj);
             expect(sut).to.be.a('boolean').and.to.be.false;
           });
@@ -788,7 +883,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
           it('throws an error',
             async function (): Promise<void> {
               const createStub = sandbox.stub(Integrity, 'create').throws();
-              const hashObj = '{"version":"1","hashes":{"fixtures":"sha1-\\fÇ8\\u0011ÌúIÄÎ(Lo]¹tÁ"}}';
+              const hashObj = '{"version":"1","hashes":{".":"sha1-\\fÇ8\\u0011ÌúIÄÎ(Lo]¹tÁ"}}';
 
               try {
                 await Integrity.check(fixturesDirPath, hashObj);
@@ -801,7 +896,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
           it('returns nothing',
             async function (): Promise<void> {
               const createStub = sandbox.stub(Integrity, 'create').resolves(undefined);
-              const hashObj = '{"version":"1","hashes":{"fixtures":"sha1-\\fÇ8\\u0011ÌúIÄÎ(Lo]¹tÁ"}}';
+              const hashObj = '{"version":"1","hashes":{".":"sha1-\\fÇ8\\u0011ÌúIÄÎ(Lo]¹tÁ"}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(createStub.called).to.be.true;
               expect(sut).to.be.a('boolean').and.to.be.false;
@@ -817,35 +912,35 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
           it('unknown encoding',
             async function (): Promise<void> {
-              const hashObj = '{"version":"1","hashes":{"fixtures":"sha1-\\u010A,F\\u0032«+{@/="}}';
+              const hashObj = '{"version":"1","hashes":{".":"sha1-\\u010A,F\\u0032«+{@/="}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(sut).to.be.a('boolean').and.to.be.false;
             });
 
           it('no encoding',
             async function (): Promise<void> {
-              const hashObj = '{"version":"1","hashes":{"fixtures":"sha1"}}';
+              const hashObj = '{"version":"1","hashes":{".":"sha1"}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(sut).to.be.a('boolean').and.to.be.false;
             });
 
           it('unknown algorithm',
             async function (): Promise<void> {
-              const hashObj = '{"version":"1","hashes":{"fixtures":"ddt-12A468C211G95"}}';
+              const hashObj = '{"version":"1","hashes":{".":"ddt-12A468C211G95"}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(sut).to.be.a('boolean').and.to.be.false;
             });
 
           it('no algorithm',
             async function (): Promise<void> {
-              const hashObj = '{"version":"1","hashes":{"fixtures":"DIjHOBHMnvpJxM4onkxvXbmcdME="}}';
+              const hashObj = '{"version":"1","hashes":{".":"DIjHOBHMnvpJxM4onkxvXbmcdME="}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(sut).to.be.a('boolean').and.to.be.false;
             });
 
           it('invalid type',
             async function (): Promise<void> {
-              const hashObj = '{"version":"1","hashes":{"fixtures":function(){}}';
+              const hashObj = '{"version":"1","hashes":{".":function(){}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(sut).to.be.a('boolean').and.to.be.false;
             });
@@ -859,7 +954,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
           it(`invalid 'array' type`,
             async function (): Promise<void> {
-              const hashObj = '{"version":"1","hashes":{"fixtures":[]}}';
+              const hashObj = '{"version":"1","hashes":{".":[]}}';
               try {
                 await Integrity.check(fixturesDirPath, hashObj);
               } catch (error) {
@@ -869,7 +964,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
           it(`invalid 'number' type`,
             async function (): Promise<void> {
-              const hashObj = '{"version":"1","hashes":{"fixtures":0}}';
+              const hashObj = '{"version":"1","hashes":{".":0}}';
               try {
                 await Integrity.check(fixturesDirPath, hashObj);
               } catch (error) {
@@ -879,7 +974,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
           it(`invalid 'boolean' type`,
             async function (): Promise<void> {
-              const hashObj = '{"version":"1","hashes":{"fixtures":true}}';
+              const hashObj = '{"version":"1","hashes":{".":true}}';
               try {
                 await Integrity.check(fixturesDirPath, hashObj);
               } catch (error) {
@@ -889,7 +984,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
           it(`invalid 'null' type`,
             async function (): Promise<void> {
-              const hashObj = '{"version":"1","hashes":{"fixtures":null}}';
+              const hashObj = '{"version":"1","hashes":{".":null}}';
               try {
                 await Integrity.check(fixturesDirPath, hashObj);
               } catch (error) {
@@ -899,7 +994,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
           it('non-verbose creation',
             async function (): Promise<void> {
-              const hashObj = '{"version":"1","hashes":{"fixtures":"sha512-' +
+              const hashObj = '{"version":"1","hashes":{".":"sha512-' +
                 'WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAhrHDdWLBIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA=="}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(sut).to.be.a('boolean').and.to.be.true;
@@ -913,42 +1008,42 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
           it(`'md5' algorithm`,
             async function (): Promise<void> {
-              const hashObj = '{"version":"1","hashes":{"fixtures":"md5-03a3d76b2c52d62ce63502b85100575f"}}';
+              const hashObj = '{"version":"1","hashes":{".":"md5-03a3d76b2c52d62ce63502b85100575f"}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
           it(`'RSA-SHA1-2' algorithm`,
             async function (): Promise<void> {
-              const hashObj = '{"version":"1","hashes":{"fixtures":"RSA-SHA1-2-DIjHOBHMnvpJxM4onkxvXbmcdME="}}';
+              const hashObj = '{"version":"1","hashes":{".":"RSA-SHA1-2-DIjHOBHMnvpJxM4onkxvXbmcdME="}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
           it(`'sha1' algorithm`,
             async function (): Promise<void> {
-              const hashObj = '{"version":"1","hashes":{"fixtures":"sha1-0c88c73811cc9efa49c4ce289e4c6f5db99c74c1"}}';
+              const hashObj = '{"version":"1","hashes":{".":"sha1-0c88c73811cc9efa49c4ce289e4c6f5db99c74c1"}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
           it(`'hex' encoding`,
             async function (): Promise<void> {
-              const hashObj = '{"version":"1","hashes":{"fixtures":"sha1-0c88c73811cc9efa49c4ce289e4c6f5db99c74c1"}}';
+              const hashObj = '{"version":"1","hashes":{".":"sha1-0c88c73811cc9efa49c4ce289e4c6f5db99c74c1"}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
           it(`'base64' encoding`,
             async function (): Promise<void> {
-              const hashObj = '{"version":"1","hashes":{"fixtures":"sha1-DIjHOBHMnvpJxM4onkxvXbmcdME="}}';
+              const hashObj = '{"version":"1","hashes":{".":"sha1-DIjHOBHMnvpJxM4onkxvXbmcdME="}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
           it(`'latin1' encoding`,
             async function (): Promise<void> {
-              const hashObj = '{"version":"1","hashes":{"fixtures":"sha1-\\fÇ8\\u0011ÌúIÄÎ(Lo]¹tÁ"}}';
+              const hashObj = '{"version":"1","hashes":{".":"sha1-\\fÇ8\\u0011ÌúIÄÎ(Lo]¹tÁ"}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });

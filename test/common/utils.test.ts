@@ -1,99 +1,11 @@
 // tslint:disable only-arrow-functions
 // tslint:disable no-unused-expression
 import { expect } from 'chai';
-import sinon from 'sinon';
 import * as utils from '../../src/common/utils';
 
 describe('Utils: tests', function (): void {
 
   context('expects', function (): void {
-
-    context(`function 'getAbsolutePath'`, function (): void {
-
-      let platformStub: sinon.SinonStub;
-
-      beforeEach(function (): void {
-        platformStub = sinon.stub(process, 'platform');
-      });
-
-      afterEach(function (): void {
-        platformStub.restore();
-      });
-
-      context('to return an absolute path', function (): void {
-
-        context('when provided array elements', function (): void {
-
-          context('do not include the root path', function (): void {
-
-            context('and the platform is', function (): void {
-
-              it('*nix',
-                function (): void {
-                  platformStub.value('free-bsd');
-                  const array = ['path', 'to'];
-                  expect(utils.getAbsolutePath(array, array.length - 1)).to.equal('/path/to');
-                });
-
-              it('linux',
-                function (): void {
-                  platformStub.value('linux');
-                  const array = ['path', 'to'];
-                  expect(utils.getAbsolutePath(array, array.length - 1)).to.equal('/path/to');
-                });
-
-              it('darwin (macos)',
-                function (): void {
-                  platformStub.value('darwin');
-                  const array = ['path', 'to'];
-                  expect(utils.getAbsolutePath(array, array.length - 1)).to.equal('/path/to');
-                });
-
-            });
-
-          });
-
-          context('include the root path', function (): void {
-
-            context('and the platform is', function (): void {
-
-              it('win32',
-                function (): void {
-                  platformStub.value('win32');
-                  const array = ['d:', 'path', 'to'];
-                  expect(utils.getAbsolutePath(array, array.length - 1)).to.equal('d:/path/to');
-                });
-
-              it('*nix',
-                function (): void {
-                  platformStub.value('free-bsd');
-                  const array = ['/', 'path', 'to'];
-                  expect(utils.getAbsolutePath(array, array.length - 1)).to.equal('/path/to');
-                });
-
-              it('linux',
-                function (): void {
-                  platformStub.value('linux');
-                  const array = ['/', 'path', 'to'];
-                  expect(utils.getAbsolutePath(array, array.length - 1)).to.equal('/path/to');
-                });
-
-              it('darwin (macos)',
-                function (): void {
-                  platformStub.value('darwin');
-                  const array = ['/', 'path', 'to'];
-                  expect(utils.getAbsolutePath(array, array.length - 1)).to.equal('/path/to');
-                });
-
-            });
-
-          });
-
-        });
-
-      });
-
-    });
 
     context(`function 'parseJSON'`, function (): void {
 

@@ -72,19 +72,19 @@
     "@types/chai": "^4.1.7",
     "@types/detect-indent": "^5.0.0",
     "@types/minimatch": "^3.0.3",
-    "@types/mocha": "^5.2.6",
+    "@types/mocha": "^5.2.7",
     "@types/node": "8",
-    "@types/sinon": "^7.0.11",
+    "@types/sinon": "^7.0.13",
     "@types/yargs": "^13.0.0",
     "chai": "^4.2.0",
     "cpy-cli": "^2.0.0",
-    "husky": "^2.3.0",
-    "lint-staged": "^8.1.7",
+    "husky": "^2.4.1",
+    "lint-staged": "^8.2.1",
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",
     "rimraf": "^2.6.3",
     "sinon": "^7.3.2",
-    "tslint": "^5.16.0",
-    "typescript": "^3.4.5"
+    "tslint": "^5.17.0",
+    "typescript": "^3.5.2"
   }
 }

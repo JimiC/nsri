@@ -61,12 +61,16 @@ export class Logger extends BaseLogger {
   public spinnerLogStop(spinner: ISpinner, message: string, groupId?: string): void {
     clearInterval(spinner.timer);
     this.updateLog(message, this._countLines - spinner.line, groupId);
-    if (!process.stdout.isTTY) { return; }
+    if (!process.stdout.isTTY) {
+      return;
+    }
     this._cursorShow();
   }
 
   public handleForcedExit(hasInfoLogging: boolean): void {
-    if (!process.stdout.isTTY) { return process.exit(); }
+    if (!process.stdout.isTTY) {
+      return process.exit();
+    }
     const moveAndClear = (): void => {
       this.moveCursorTo(-1);
       readline.clearLine(process.stdout, 0);
@@ -83,13 +87,17 @@ export class Logger extends BaseLogger {
   }
 
   public moveCursorTo(line: number): void {
-    if (!process.stdout.isTTY) { return; }
+    if (!process.stdout.isTTY) {
+      return;
+    }
     readline.cursorTo(process.stdout, 0);
     readline.moveCursor(process.stdout, 0, line);
   }
 
   private _spin(message: string, groupId: string | undefined, line: number): NodeJS.Timer {
-    if (!process.stdout.isTTY) { return setImmediate(() => void 0); }
+    if (!process.stdout.isTTY) {
+      return setImmediate(() => void 0);
+    }
     let _index = 0;
     this._cursorHide();
     const iteration = (): void => {

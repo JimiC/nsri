@@ -18,11 +18,19 @@ module.exports = {
   ],
   preprocessors: {
     "package.json": (file, done) => done(file.rename(`../${file.path}`).content),
-    "**/test/fixtures/**/*": (file, done) => done(file.rename(`../${file.path}`).content),
-    "**/test/fixtures/**/.*": (file, done) => done(file.rename(`../${file.path}`).content),
-    "**/test/cosmiconfig/**/*": (file, done) => done(file.rename(`../${file.path}`).content),
-    "**/test/cosmiconfig/**/.*": (file, done) => done(file.rename(`../${file.path}`).content),
-    "**/test/ignoreFile/.*": (file, done) => done(file.rename(`../${file.path}`).content),
+  },
+  postprocessor: async (wallaby) => {
+    const regexp = /^test[\/|\\](fixtures|cosmiconfig|ignoreFile)[\/|\\]/
+    const fixturesFiles = wallaby.allFiles.filter(file => regexp.test(file.path));
+    for (const file of fixturesFiles) {
+      await wallaby.createFile({
+        path: `../${file.path}`,
+        load: file.load,
+        order: file.order,
+        ts: file.ts,
+        content: file.getContentSync()
+      });
+    }
   },
   hints: {
     ignoreCoverage: /wallaby ignore next/
