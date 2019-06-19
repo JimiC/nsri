@@ -1,6 +1,6 @@
 {
   "name": "nsri",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "Node.js utility tool for creating and checking subresource integrity",
   "license": "MIT",
   "author": {
