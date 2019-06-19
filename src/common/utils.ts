@@ -1,6 +1,5 @@
 import { getHashes } from 'crypto';
 import detectIndent = require('detect-indent');
-import { posix } from 'path';
 import { IndexedObject } from '../interfaces/indexedObject';
 
 /** @internal */
@@ -15,12 +14,6 @@ export const latin1RegexPattern = /^(?:[\x00-\xFF])+$/;
 /** @internal */
 export function isSupportedHash(algorithm: string): boolean {
   return getHashes().some(hash => hash.toUpperCase() === algorithm.toUpperCase());
-}
-
-/** @internal */
-export function getAbsolutePath(array: string[], index: number): string {
-  const _root = process.platform !== 'win32' && array[0] !== '/' ? '/' : '';
-  return posix.join(_root, ...array.slice(0, index + 1));
 }
 
 /** @internal */

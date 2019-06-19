@@ -45,7 +45,7 @@ describe('Integrity: behavior tests', function (): void {
           const sutDirPath = path.resolve(fixturesDirPath, './fixtures/directory.1');
           const hash = await Integrity.create(sutDirPath);
           const sut = await Integrity.check(directoryOneDirPath, JSON.stringify(hash));
-          expect(hash.hashes).to.haveOwnProperty('directory.1');
+          expect(hash.hashes).to.haveOwnProperty('.');
           expect(sut).to.be.a('boolean').and.to.be.true;
         });
 
@@ -76,7 +76,7 @@ describe('Integrity: behavior tests', function (): void {
           const sutDirPath = path.resolve(fixturesDirPath, './fixtures/directory');
           const hash = await Integrity.create(sutDirPath);
           const sut = await Integrity.check(directoryDirPath, JSON.stringify(hash));
-          expect(hash.hashes).to.haveOwnProperty('directory');
+          expect(hash.hashes).to.haveOwnProperty('.');
           expect(sut).to.be.a('boolean').and.to.be.false;
         });
 
@@ -85,7 +85,7 @@ describe('Integrity: behavior tests', function (): void {
           const sutDirPath = path.resolve(fixturesDirPath, './directory.1');
           const hash = await Integrity.create(sutDirPath);
           const sut = await Integrity.check(directoryDirPath, JSON.stringify(hash));
-          expect(hash.hashes).to.haveOwnProperty('directory.1');
+          expect(hash.hashes).to.haveOwnProperty('.');
           expect(sut).to.be.a('boolean').and.to.be.false;
         });
 

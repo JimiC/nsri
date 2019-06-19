@@ -140,6 +140,16 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
             checker(hash, utils.base64RegexPattern, '7a3d5b475bd07ae9041fab2a133f40c4', 'md5', md5Length));
       });
 
+    it(`to support relative paths`,
+      async function (): Promise<void> {
+        const sut = await Integrity.createFileHash('test/fixtures/fileToHash.txt');
+
+        expect(sut).to.be.an('object')
+          .and.to.haveOwnProperty(fileToHashFilename)
+          .and.to.satisfy((hash: string) =>
+            checker(hash, utils.base64RegexPattern, 'H58mYNjbMJTkiNvvNfj2YKl3ck0='));
+      });
+
   });
 
 });
