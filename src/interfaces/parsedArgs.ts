@@ -9,5 +9,6 @@ export interface IParsedArgs {
   integrity: string;
   manifest: boolean;
   outPath: string;
+  pretty: boolean;
   verbose: boolean;
 }

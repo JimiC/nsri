@@ -121,9 +121,9 @@ export class Integrity {
     return _hashObj;
   }
 
-  public static persist(intObj: IntegrityObject, dirPath = './'): Promise<void> {
+  public static persist(intObj: IntegrityObject, dirPath = './', prettify = false): Promise<void> {
     const _filePath = path.resolve(dirPath, constants.integrityFilename);
-    return pfs.writeFileAsync(_filePath, JSON.stringify(intObj, null, 2));
+    return pfs.writeFileAsync(_filePath, JSON.stringify(intObj, null, prettify ? 2 : 0));
   }
 
   public static async getManifestIntegrity(dirPath = './'): Promise<string> {

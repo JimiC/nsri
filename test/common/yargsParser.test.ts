@@ -31,7 +31,7 @@ describe('YargsParser: tests', function (): void {
         argv.value([...args]);
         const sut = parser.parse();
         const props = ['dirAlgorithm', 'fileAlgorithm', 'command', 'encoding',
-          'exclude', 'inPath', 'integrity', 'manifest', 'outPath', 'verbose'];
+          'exclude', 'inPath', 'integrity', 'manifest', 'outPath', 'pretty', 'verbose'];
         expect(sut).to.be.an('object');
         props.forEach(prop => expect(sut).to.be.haveOwnProperty(prop));
         expect(Object.keys(sut)).with.length(props.length);
@@ -98,6 +98,13 @@ describe('YargsParser: tests', function (): void {
         args = [...args, '-o', './out'];
         argv.value(args);
         expect(parser.parse()).to.be.have.property('outPath', args[6]);
+      });
+
+    it(`that the 'pretty' option gets parsed correctly`,
+      function (): void {
+        args = [...args, '-p', 'true'];
+        argv.value(args);
+        expect(parser.parse()).to.be.have.property('pretty', true);
       });
 
     it(`that the 'verbose' option gets parsed correctly`,

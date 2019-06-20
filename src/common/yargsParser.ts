@@ -59,6 +59,12 @@ export class YargsParser {
         ` (ignored when 'manifest' option specified)`,
       type: 'string',
     },
+    pretty: {
+      alias: 'p',
+      default: false,
+      description: 'Prettify the integrity object',
+      type: 'boolean',
+    },
   };
 
   private readonly _checkOptions: { [key: string]: y.Options } = {
@@ -117,6 +123,7 @@ export class YargsParser {
       integrity: _pargs.integrity as string,
       manifest: _pargs.manifest as boolean,
       outPath: _pargs.output as string,
+      pretty: _pargs.pretty as boolean,
       verbose: _pargs.verbose as boolean,
     };
   }

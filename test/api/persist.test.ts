@@ -12,7 +12,7 @@ describe(`Integrity: function 'persist' tests`, function (): void {
   context('expects', function (): void {
 
     let sandbox: sinon.SinonSandbox;
-    let writeFileAsyncStub: sinon.SinonStub<any[] , Promise<any>>;
+    let writeFileAsyncStub: sinon.SinonStub<any[], Promise<any>>;
     let integrityTestFilename: string;
     let integrityTestObject: IntegrityObject;
     let fixturesDirPath: string;
@@ -38,7 +38,7 @@ describe(`Integrity: function 'persist' tests`, function (): void {
         async function (): Promise<void> {
           const dirPath = path.resolve(fixturesDirPath, integrityTestFilename);
           const data = '{\n  "hashes": {},\n  "version": ""\n}';
-          await Integrity.persist(integrityTestObject, fixturesDirPath);
+          await Integrity.persist(integrityTestObject, fixturesDirPath, true);
           expect(writeFileAsyncStub.calledOnceWithExactly(dirPath, data)).to.be.true;
         });
 
@@ -46,10 +46,17 @@ describe(`Integrity: function 'persist' tests`, function (): void {
         async function (): Promise<void> {
           const dirPath = path.resolve('./', integrityTestFilename);
           const data = '{\n  "hashes": {},\n  "version": ""\n}';
-          await Integrity.persist(integrityTestObject);
+          await Integrity.persist(integrityTestObject, undefined, true);
           expect(writeFileAsyncStub.calledOnceWithExactly(dirPath, data)).to.be.true;
         });
 
+      it('without prettifying the integrity object',
+        async function (): Promise<void> {
+          const dirPath = path.resolve(fixturesDirPath, integrityTestFilename);
+          const data = '{"hashes":{},"version":""}';
+          await Integrity.persist(integrityTestObject, fixturesDirPath);
+          expect(writeFileAsyncStub.calledOnceWithExactly(dirPath, data)).to.be.true;
+        });
     });
 
   });
