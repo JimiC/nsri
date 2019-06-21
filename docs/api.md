@@ -233,7 +233,8 @@ All `API` calls are `static` members of the `Integrity` class.
 |Name|Type|Attribute|Default|Description|
 |:---:|:---:|:---:|:---:|:---:|
 |cryptoOptions|ICryptoOptions|optional|see `ICryptoOptions` |the `crypto` options to use|
-|verbose|boolean|optional|true|whether the computed hashes are returned in a verbosely or non-verbosely structure|
+|strict|boolean|optional|false|whether the computed hashes are strictly using the directory name|
+|verbose|boolean|optional|false|whether the computed hashes are returned in a verbosely or non-verbosely structure|
 |exclude|string[]|optional|[]|the paths to be excluded, supports also `glob` expressions (positive & negative)|
 
 ### ICryptoOptions

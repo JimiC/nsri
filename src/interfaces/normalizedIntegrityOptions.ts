@@ -4,6 +4,7 @@ import { ICryptoOptions } from './cryptoOptions';
 export interface INormalizedIntegrityOptions {
   cryptoOptions: ICryptoOptions;
   verbose: boolean;
+  strict: boolean;
   exclude: string[];
   include: string[];
 }

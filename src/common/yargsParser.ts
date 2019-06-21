@@ -44,6 +44,12 @@ export class YargsParser {
       description: 'The path to the file or directory to hash',
       type: 'string',
     },
+    strict: {
+      alias: 'st',
+      default: false,
+      description: 'Use directory name in root hash',
+      type: 'boolean',
+    },
     verbose: {
       alias: 'v',
       default: false,
@@ -124,6 +130,7 @@ export class YargsParser {
       manifest: _pargs.manifest as boolean,
       outPath: _pargs.output as string,
       pretty: _pargs.pretty as boolean,
+      strict: _pargs.strict as boolean,
       verbose: _pargs.verbose as boolean,
     };
   }

@@ -13,11 +13,10 @@
         "create",
         "-s",
         ".",
-        "-v",
         "-x",
         "*",
         "*/",
-        "!test"
+        "!test/fixtures"
       ],
       "preLaunchTask": "npm: build - dev",
       "stopOnEntry": false,

@@ -35,6 +35,7 @@ describe('CLI: tests', function (): void {
       manifest: false,
       outPath: './',
       pretty: false,
+      strict: false,
       verbose: false,
     };
     sandbox = sinon.createSandbox();

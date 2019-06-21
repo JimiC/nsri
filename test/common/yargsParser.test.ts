@@ -31,7 +31,8 @@ describe('YargsParser: tests', function (): void {
         argv.value([...args]);
         const sut = parser.parse();
         const props = ['dirAlgorithm', 'fileAlgorithm', 'command', 'encoding',
-          'exclude', 'inPath', 'integrity', 'manifest', 'outPath', 'pretty', 'verbose'];
+          'exclude', 'inPath', 'integrity', 'manifest', 'outPath', 'pretty',
+          'strict', 'verbose'];
         expect(sut).to.be.an('object');
         props.forEach(prop => expect(sut).to.be.haveOwnProperty(prop));
         expect(Object.keys(sut)).with.length(props.length);

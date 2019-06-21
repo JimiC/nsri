@@ -29,6 +29,7 @@ export = (async (): Promise<void> => {
         fileAlgorithm: pargs.fileAlgorithm,
       },
       exclude: exclusions,
+      strict: pargs.strict,
       verbose: pargs.verbose,
     };
     command = pargs.command;
