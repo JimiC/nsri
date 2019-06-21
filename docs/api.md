@@ -137,6 +137,7 @@ All `API` calls are `static` members of the `Integrity` class.
 |:---:|:---:|:---:|:---:|:---:|
 |intObj|IntegrityObject|||the integrity object to persist|
 |dirPath|string|optional|`./`|the path of the directory to persist the data to|
+|pretty|boolean|optional|false|data are formatted with indentation|
 
 `Examples`
 
