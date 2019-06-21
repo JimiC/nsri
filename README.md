@@ -56,11 +56,12 @@ Contents: The file names (and their data contents) and subdirectories names (wit
 
 **Hashes are the same when:**
 
-- Directory names and contents are the same
+- Directory names and contents are the same `(strict: true)`
+- Only root directory names are different and subdirectory names and all contents are the same `(strict: false)`
 
 **Hashes are different when:**
 
-- Directory names are different and contents are the same
+- Directory names are different and contents are the same `(strict: true)`
 - Directory contents are different and names are the same
 
 ## Usage

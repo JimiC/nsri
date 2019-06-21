@@ -49,6 +49,15 @@ describe('Integrity: behavior tests', function (): void {
           expect(sut).to.be.a('boolean').and.to.be.true;
         });
 
+      it('directories have the same content but different names',
+        async function (): Promise<void> {
+          const sutDirPath = path.resolve(fixturesDirPath, './directory.1');
+          const hash = await Integrity.create(sutDirPath, { strict: false });
+          const sut = await Integrity.check(directoryDirPath, JSON.stringify(hash));
+          expect(hash.hashes).to.haveOwnProperty('.');
+          expect(sut).to.be.a('boolean').and.to.be.true;
+        });
+
     });
 
     context('to fail integrity check when', function (): void {
@@ -80,12 +89,12 @@ describe('Integrity: behavior tests', function (): void {
           expect(sut).to.be.a('boolean').and.to.be.false;
         });
 
-      it('directories have the same content but different names',
+      it(`directories have the same content but different names in 'strict' mode`,
         async function (): Promise<void> {
           const sutDirPath = path.resolve(fixturesDirPath, './directory.1');
-          const hash = await Integrity.create(sutDirPath);
+          const hash = await Integrity.create(sutDirPath, { strict: true });
           const sut = await Integrity.check(directoryDirPath, JSON.stringify(hash));
-          expect(hash.hashes).to.haveOwnProperty('.');
+          expect(hash.hashes).to.haveOwnProperty('directory.1');
           expect(sut).to.be.a('boolean').and.to.be.false;
         });
 

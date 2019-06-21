@@ -31,13 +31,15 @@ export class Integrity {
     }
     const exclude = options ? options.exclude : undefined;
     const verbose = options ? options.verbose : undefined;
+    const strict = options ? options.strict : undefined;
     if (!options || !options.cryptoOptions ||
       !options.cryptoOptions.fileAlgorithm ||
       !options.cryptoOptions.dirAlgorithm ||
       !options.cryptoOptions.encoding
     ) {
-      options = await this._detectOptions(fileOrDirPath, integrity);
+      options = await this._detectOptions(fileOrDirPath, integrity, strict);
       options.exclude = exclude;
+      options.strict = strict || options.strict;
       options.verbose = verbose || options.verbose;
     }
     const _intObj = await Integrity.create(fileOrDirPath, options);
@@ -55,7 +57,7 @@ export class Integrity {
     // 'integrity' is a hash
     if (!_integrityObj) {
       const _ls = await pfs.lstatAsync(fileOrDirPath);
-      const _basename = _ls.isFile() ? path.basename(fileOrDirPath) : '.';
+      const _basename = _ls.isFile() || options.strict ? path.basename(fileOrDirPath) : '.';
       _integrityObj = {
         hashes: {
           [_basename]: integrity,
@@ -93,7 +95,8 @@ export class Integrity {
       ? await this._computeHashVerbosely(_options, dirPath)
       : await this._computeHash(_options, dirPath);
     const _hasHashes = typeof _hashes === 'string' ? !!_hashes : !!_hashes.hash;
-    return _hasHashes ? { ['.']: _hashes } : {};
+    const _dirName = options && options.strict ? path.basename(dirPath) : '.';
+    return _hasHashes ? { [_dirName]: _hashes } : {};
   }
 
   public static async createFileHash(filePath: string, options?: ICryptoOptions): Promise<IHashObject> {
@@ -193,11 +196,15 @@ export class Integrity {
   }
 
   /** @internal */
-  private static async _detectOptions(inPath: string, integrity: string): Promise<IntegrityOptions> {
+  private static async _detectOptions(
+    inPath: string,
+    integrity: string,
+    strict: boolean | undefined,
+  ): Promise<IntegrityOptions> {
     const _ls = await pfs.lstatAsync(inPath);
-    const _basename = _ls.isFile() ? path.basename(inPath) : '.';
     // get the integrity object
     let _integrityObj: IntegrityObject;
+    const _basename = _ls.isFile() || strict ? path.basename(inPath) : '.';
     // 'integrity' is a file or directory path
     if (await pfs.existsAsync(integrity)) {
       integrity = await this._pathCheck(integrity);
@@ -225,6 +232,8 @@ export class Integrity {
     if (!_first) {
       return _options;
     }
+    // detect strict
+    _options.strict = _basename !== '.';
     // detect verbosity
     _options.verbose = typeof _first !== 'string';
     // detect options
@@ -348,10 +357,14 @@ export class Integrity {
     const _verbose = options && options.verbose !== undefined
       ? options.verbose
       : false;
+    const _strict = options && options.strict !== undefined
+      ? options.strict
+      : false;
     return {
       cryptoOptions: _cryptoOptions,
       exclude,
       include,
+      strict: _strict,
       verbose: _verbose,
     };
   }
@@ -391,8 +404,8 @@ export class Integrity {
       if (!sourceDirPath || !integrityDirPath) {
         return false;
       }
-      const _getNodeOrDefault = (_obj: IHashObject, l: string): string | IVerboseHashObject =>
-        _obj[l] || _obj[Object.keys(_obj)[0]] || '';
+      const _getNodeOrDefault = (_obj: IHashObject, el: string): string | IVerboseHashObject =>
+        _obj[el] || _obj[Object.keys(_obj)[0]] || '';
       const _findHash = (_array: string[], _hashObj: IHashObject): boolean => {
         if (_array.length === 1) {
           const _integrityHash: string | IVerboseHashObject = _getNodeOrDefault(_hashObj, _array[0]);
@@ -494,7 +507,8 @@ export class Integrity {
         return;
       }
       _hash = _hash || createHash(dirAlgorithm);
-      _hash.update(path.basename(_dirPath));
+      const _dirName = options.strict || this._rootDirPath !== _dirPath ? path.basename(_dirPath) : '.';
+      _hash.update(_dirName);
       const _files = await pfs.readdirAsync(_dirPath);
       for (const file of _files) {
         await _callback(file);

@@ -10,5 +10,6 @@ export interface IParsedArgs {
   manifest: boolean;
   outPath: string;
   pretty: boolean;
+  strict: boolean;
   verbose: boolean;
 }
