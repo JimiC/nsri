@@ -1,4 +1,4 @@
-# nsri (Node Subresource Integrity)
+ # nsri (Node Subresource Integrity) <img src="https://raw.githubusercontent.com/jimic/nsri/master/media/nsri-logo.png" width="50" align="left">
 
 [![Build Status](https://travis-ci.com/JimiC/nsri.svg?branch=master)](https://travis-ci.com/JimiC/nsri)
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/JimiC/nsri?branch=master&svg=true)](https://ci.appveyor.com/project/JimiC/nsri)
@@ -14,7 +14,7 @@
 
 ---
 
-A [Node.js](https://nodejs.org) utility tool that creates an integrity object containing the hash checksums of a file or a directory structure, that can be saved to an `.integrity.json` file, or put inside the project's manifest file (`project.json`).
+A [Node.js](https://nodejs.org) utility tool that creates an integrity object containing the hash checksums of a file or a directory structure, that can be saved to an `.integrity.json` file [<img src="https://raw.githubusercontent.com/jimic/nsri/master/media/integrity_file.png" width="16" />], or put inside the project's manifest file (`project.json`).
 
 The hashes are computed using, by default, the `sha1` algorithm for files and `sha512` algorithm for directories, with `base64` encoding, complying to [Subresource Integrity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity) spec, but other [Node.js crypto](https://nodejs.org/api/crypto.html) supported [algorithms](https://nodejs.org/api/crypto.html#crypto_crypto_gethashes) and [encodings](https://nodejs.org/api/crypto.html#crypto_hash_digest_encoding) can be used.
 
