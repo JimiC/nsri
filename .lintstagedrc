@@ -1,8 +1,6 @@
 {
-  "linters": {
-    "*.ts": [
-      "tslint",
-      "git add"
-    ]
-  }
+  "*.ts": [
+    "tslint",
+    "git add"
+  ]
 }
