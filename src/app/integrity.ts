@@ -509,7 +509,7 @@ export class Integrity {
       _hash = _hash || createHash(dirAlgorithm);
       const _dirName = options.strict || this._rootDirPath !== _dirPath ? path.basename(_dirPath) : '.';
       _hash.update(_dirName);
-      const _files = await pfs.readdirAsync(_dirPath);
+      const _files: string[] = (await pfs.readdirAsync(_dirPath)).sort();
       for (const file of _files) {
         await _callback(file);
       }
@@ -541,7 +541,7 @@ export class Integrity {
         }
       };
       const _verbHashObj: IVerboseHashObject = { contents: {}, hash: '' };
-      const _files = await pfs.readdirAsync(dirPath);
+      const _files: string[] = (await pfs.readdirAsync(dirPath)).sort();
       for (const file of _files) {
         await _callback(file, _verbHashObj.contents);
       }
