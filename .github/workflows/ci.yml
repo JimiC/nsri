@@ -43,4 +43,4 @@ jobs:
 
       - name: Test coverage report
         if: (success() && matrix.os == 'ubuntu-latest' && matrix.node_js == 8)
-        run: ./cc-test-reporter after-build
+        run: ./cc-test-reporter after-build -r ${{ secrets.CC_TEST_REPORTER_ID }}
