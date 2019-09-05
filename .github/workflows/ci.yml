@@ -10,11 +10,14 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        os:
+          - ubuntu-latest
+          # - macOS-latest
+          # - windows-latest
         node_js:
-          - 12 # latest
-          - 10
-          - 8 # minimum
+          - '' # latest
+          # - 10
+          # - 8 # minimum
 
     steps:
       - name: Cloning repository
