@@ -15,7 +15,7 @@ jobs:
           # - macOS-latest
           # - windows-latest
         node_js:
-          - current # latest
+          - node # latest
           # - 10
           # - 8 # minimum
 
