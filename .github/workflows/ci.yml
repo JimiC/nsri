@@ -1,0 +1,46 @@
+name: GitHub CI
+
+on: push
+
+jobs:
+  test:
+    name: Test
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+        node_js:
+          - 12 # latest
+          - 10
+          - 8 # minimum
+
+    steps:
+      - name: Cloning repository
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 5
+
+      - name: "Setting up Node.js: ${{ matrix.node_js }}"
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node_js }}
+
+      - name: Setting up coverage reporter
+        if: (matrix.os == 'ubuntu-latest' && matrix.node_js == 8)
+        run: |
+          curl -sL "https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64" > cc-test-reporter
+          chmod +x cc-test-reporter
+          ./cc-test-reporter before-build
+
+      - name: Installing dependencies
+        run: npm install
+
+      - name: Running tests
+        continue-on-error: ${{ matrix.node_js == 12 }}
+        run: npm test
+
+      - name: Test coverage report
+        if: (success() && matrix.os == 'ubuntu-latest' && matrix.node_js == 8)
+        run: ./cc-test-reporter after-build --exit-code 0
