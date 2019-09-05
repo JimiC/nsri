@@ -17,7 +17,7 @@ jobs:
         node_js:
           - 12 # latest
           # - 10
-          # - 8 # minimum
+          - 8 # minimum
 
     steps:
       - name: Cloning repository
