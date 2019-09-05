@@ -43,4 +43,4 @@ jobs:
 
       - name: Test coverage report
         if: (success() && matrix.os == 'ubuntu-latest' && matrix.node_js == 8)
-        run: ./cc-test-reporter after-build --exit-code 0
+        run: ./cc-test-reporter after-build
