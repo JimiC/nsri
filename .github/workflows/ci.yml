@@ -29,6 +29,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node_js }}
+
+      - name: Info
         run: |
           node --version
           npm --version
