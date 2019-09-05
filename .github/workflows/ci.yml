@@ -1,4 +1,4 @@
-name: GitHub CI
+name: Node CI
 
 on: push
 
@@ -12,11 +12,11 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          # - macOS-latest
-          # - windows-latest
+          - macOS-latest
+          - windows-latest
         node_js:
           - 12 # latest
-          # - 10
+          - 10
           - 8 # minimum
 
     steps:
@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: ${{ matrix.node_js }}
 
-      - name: Info
+      - name: Build info
         run: |
           node --version
           npm --version
