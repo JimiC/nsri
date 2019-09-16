@@ -65,25 +65,25 @@
     "cosmiconfig": "^5.2.1",
     "detect-indent": "^6.0.0",
     "minimatch": "^3.0.4",
-    "yargs": "^13.3.0"
+    "yargs": "^14.0.0"
   },
   "devDependencies": {
     "@types/cosmiconfig": "^5.0.3",
-    "@types/chai": "^4.1.7",
+    "@types/chai": "^4.2.2",
     "@types/minimatch": "^3.0.3",
     "@types/mocha": "^5.2.7",
     "@types/node": "8",
     "@types/sinon": "^7.0.13",
-    "@types/yargs": "^13.0.0",
+    "@types/yargs": "^13.0.2",
     "chai": "^4.2.0",
     "cpy-cli": "^2.0.0",
-    "husky": "^3.0.1",
-    "lint-staged": "^9.2.1",
+    "husky": "^3.0.5",
+    "lint-staged": "^9.2.5",
     "mocha": "^6.2.0",
     "nyc": "^14.1.1",
-    "rimraf": "^2.6.3",
-    "sinon": "^7.3.2",
-    "tslint": "^5.18.0",
-    "typescript": "^3.5.3"
+    "rimraf": "^3.0.0",
+    "sinon": "^7.4.2",
+    "tslint": "^5.20.0",
+    "typescript": "^3.6.3"
   }
 }
