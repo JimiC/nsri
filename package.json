@@ -65,7 +65,7 @@
     "cosmiconfig": "^5.2.1",
     "detect-indent": "^6.0.0",
     "minimatch": "^3.0.4",
-    "yargs": "^14.0.0"
+    "yargs": "^15.0.1"
   },
   "devDependencies": {
     "@types/cosmiconfig": "^5.0.3",
