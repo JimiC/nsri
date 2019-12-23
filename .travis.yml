@@ -4,6 +4,7 @@ os:
   - osx
 node_js:
   - node # latest node
+  - 12
   - 10
   - 8 # minimum
 git:

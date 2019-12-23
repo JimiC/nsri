@@ -5,6 +5,7 @@ environment:
   # Define versions of Node.js
   matrix:
     - node_js: '' # latest node
+    - node_js: 12
     - node_js: 10
     - node_js: 8 # minimum
 clone_depth: 5
