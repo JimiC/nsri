@@ -1,6 +1,7 @@
 // tslint:disable only-arrow-functions
 // tslint:disable no-unused-expression
 import { expect } from 'chai';
+import { PathLike } from 'fs';
 import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import * as fsAsync from '../../src/common/fsAsync';
@@ -10,10 +11,14 @@ describe(`Integrity: function 'updateManifestIntegrity' tests`, function (): voi
 
   context('expects', function (): void {
 
+    type WriteFileType = [PathLike | number, any,
+      (string | { encoding?: string | null | undefined; mode?: string | number | undefined; floag?: string | undefined }
+        | null | undefined)?];
+
     context('to update the manifest with the integrity object', function (): void {
 
       let sandbox: sinon.SinonSandbox;
-      let writeFileAsyncStub: sinon.SinonStub<any[], Promise<any>>;
+      let writeFileAsyncStub: sinon.SinonStub<WriteFileType, Promise<void>>;
       let getManifestStub: sinon.SinonStub;
       let integrityTestObject: IntegrityObject;
 

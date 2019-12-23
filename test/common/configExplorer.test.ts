@@ -1,7 +1,6 @@
 // tslint:disable only-arrow-functions
 // tslint:disable no-unused-expression
 import { expect } from 'chai';
-import { Config } from 'cosmiconfig';
 import { join, resolve } from 'path';
 import sinon from 'sinon';
 import { ConfigExplorer } from '../../src/common/configExplorer';
@@ -12,7 +11,7 @@ describe('ConfigExplorer: tests', function (): void {
 
     let sandbox: sinon.SinonSandbox;
     let configExplorer: ConfigExplorer;
-    let getConfigStub: sinon.SinonStub<[(string | undefined)?], Promise<Config>>;
+    let getConfigStub: sinon.SinonStub<[(string | undefined)?], Promise<any>>;
     let baseConfigDirPath: string;
 
     beforeEach(function (): void {

@@ -1,6 +1,7 @@
 // tslint:disable only-arrow-functions
 // tslint:disable no-unused-expression
 import { expect } from 'chai';
+import { PathLike } from 'fs';
 import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import * as fsAsync from '../../src/common/fsAsync';
@@ -9,9 +10,12 @@ describe(`Integrity: function 'getManifestIntegrity' tests`, function (): void {
 
   context('expects', function (): void {
 
+    type ReadFileType = [PathLike | number,
+      (string | { encoding?: string | null | undefined; flag?: string | undefined; } | null | undefined)?];
+
     let sandbox: sinon.SinonSandbox;
-    let existsAsyncStub: sinon.SinonStub<any[], Promise<any>>;
-    let readFileAsyncStub: sinon.SinonStub<any[], Promise<any>>;
+    let existsAsyncStub: sinon.SinonStub<[PathLike], Promise<boolean>>;
+    let readFileAsyncStub: sinon.SinonStub<ReadFileType, Promise<string | Buffer>>;
 
     beforeEach(function (): void {
       sandbox = sinon.createSandbox();

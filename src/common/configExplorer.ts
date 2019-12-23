@@ -1,10 +1,13 @@
-import cc from 'cosmiconfig';
+import { cosmiconfig } from 'cosmiconfig';
+
+/** @internal */
+type Explorer = ReturnType<typeof cosmiconfig>;
 
 /** @internal */
 export class ConfigExplorer {
-  private readonly _explorer: cc.Explorer;
+  private _explorer: Explorer;
   constructor() {
-    this._explorer = cc('nsri');
+    this._explorer = cosmiconfig('nsri');
   }
 
   public async assignArgs(): Promise<void> {
@@ -41,7 +44,7 @@ export class ConfigExplorer {
     }
   }
 
-  public async getConfig(fromPath?: string): Promise<cc.Config> {
+  public async getConfig(fromPath?: string): Promise<any> {
     if (!this._explorer) {
       return Promise.reject(new Error('CosmiConfig not initialized'));
     }

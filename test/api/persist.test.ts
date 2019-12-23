@@ -1,6 +1,7 @@
 // tslint:disable only-arrow-functions
 // tslint:disable no-unused-expression
 import { expect } from 'chai';
+import { PathLike } from 'fs';
 import path from 'path';
 import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
@@ -11,8 +12,12 @@ describe(`Integrity: function 'persist' tests`, function (): void {
 
   context('expects', function (): void {
 
+    type WriteFileType = [PathLike | number, any,
+      (string | { encoding?: string | null | undefined; mode?: string | number | undefined; floag?: string | undefined }
+        | null | undefined)?];
+
     let sandbox: sinon.SinonSandbox;
-    let writeFileAsyncStub: sinon.SinonStub<any[], Promise<any>>;
+    let writeFileAsyncStub: sinon.SinonStub<WriteFileType, Promise<void>>;
     let integrityTestFilename: string;
     let integrityTestObject: IntegrityObject;
     let fixturesDirPath: string;
