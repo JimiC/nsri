@@ -5,8 +5,7 @@ os:
 node_js:
   - node # latest node
   - 12
-  - 10
-  - 8 # minimum
+  - 10 # minimum
 git:
   depth: 5
 matrix:
@@ -28,9 +27,9 @@ jobs:
       if: repo =~ ^JimiC AND tag IS present AND type = push
       os: linux
       node_js: 8
-      before_script:
+      before_script: false
       script: npm run prepublishOnly
-      after_success:
+      after_success: false
       deploy:
         skip_cleanup: true
         provider: npm

@@ -54,6 +54,7 @@ export class ConfigExplorer {
   }
 
   private _existsArg(args: string[]): boolean {
-    return args.some(arg => process.argv.some(argv => argv === arg));
+    return args.some((arg: string): boolean =>
+      process.argv.some((argv: string): boolean => argv === arg));
   }
 }

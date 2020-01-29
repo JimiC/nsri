@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/JimiC/nsri#readme",
   "engines": {
-    "node": "8.* || >= 10.*"
+    "node": ">= 10.*"
   },
   "keywords": [
     "node",
@@ -61,28 +61,28 @@
     "prepublishOnly": "npm run build && npm run copy-dist"
   },
   "dependencies": {
-    "ajv": "^6.10.2",
+    "ajv": "^6.11.0",
     "cosmiconfig": "^6.0.0",
     "detect-indent": "^6.0.0",
     "minimatch": "^3.0.4",
-    "yargs": "^15.0.2"
+    "yargs": "^15.1.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.7",
     "@types/minimatch": "^3.0.3",
     "@types/mocha": "^5.2.7",
-    "@types/node": "8",
+    "@types/node": "10",
     "@types/sinon": "^7.5.1",
-    "@types/yargs": "^13.0.3",
+    "@types/yargs": "^15.0.2",
     "chai": "^4.2.0",
     "cpy-cli": "^3.0.0",
-    "husky": "^3.1.0",
-    "lint-staged": "^9.5.0",
-    "mocha": "^6.2.2",
+    "husky": "^4.2.1",
+    "lint-staged": "^10.0.4",
+    "mocha": "^7.0.1",
     "nyc": "^15.0.0",
-    "rimraf": "^3.0.0",
-    "sinon": "^8.0.1",
-    "tslint": "^5.20.1",
-    "typescript": "^3.7.4"
+    "rimraf": "^3.0.1",
+    "sinon": "^8.1.1",
+    "tslint": "^6.0.0",
+    "typescript": "^3.7.5"
   }
 }

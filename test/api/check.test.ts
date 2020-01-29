@@ -130,28 +130,28 @@ describe(`Integrity: function 'check' tests`, function (): void {
       it('input path is other than a file path or a directory path',
         function (): void {
           // @ts-ignore
-          Integrity.check({}, integrityTestFilePath).then(sut =>
+          Integrity.check({}, integrityTestFilePath).then((sut: boolean): Chai.Assertion =>
             expect(sut).to.be.a('boolean').and.to.be.false);
           // @ts-ignore
-          Integrity.check(0, integrityTestFilePath).then(sut =>
+          Integrity.check(0, integrityTestFilePath).then((sut: boolean): Chai.Assertion =>
             expect(sut).to.be.a('boolean').and.to.be.false);
           // @ts-ignore
-          Integrity.check(true, integrityTestFilePath).then(sut =>
+          Integrity.check(true, integrityTestFilePath).then((sut: boolean): Chai.Assertion =>
             expect(sut).to.be.a('boolean').and.to.be.false);
           // @ts-ignore
-          Integrity.check(null, integrityTestFilePath).then(sut =>
+          Integrity.check(null, integrityTestFilePath).then((sut: boolean): Chai.Assertion =>
             expect(sut).to.be.a('boolean').and.to.be.false);
           // @ts-ignore
-          Integrity.check(undefined, integrityTestFilePath).then(sut =>
+          Integrity.check(undefined, integrityTestFilePath).then((sut: boolean): Chai.Assertion =>
             expect(sut).to.be.a('boolean').and.to.be.false);
           // @ts-ignore
-          Integrity.check(Symbol(), integrityTestFilePath).then(sut =>
+          Integrity.check(Symbol(), integrityTestFilePath).then((sut: boolean): Chai.Assertion =>
             expect(sut).to.be.a('boolean').and.to.be.false);
         });
 
       it('integrity JSON is empty',
         function (): void {
-          Integrity.check(fileToHashFilePath, '{}').catch(err => {
+          Integrity.check(fileToHashFilePath, '{}').catch((err: Error): void => {
             expect(err).to.be.an.instanceof(Error);
           });
         });
@@ -165,22 +165,22 @@ describe(`Integrity: function 'check' tests`, function (): void {
       it('integrity is other than a file path, a directory path, a JSON or a hash string',
         function (): void {
           // @ts-ignore
-          Integrity.check(fileToHashFilePath, {}).then(sut =>
+          Integrity.check(fileToHashFilePath, {}).then((sut: boolean): Chai.Assertion =>
             expect(sut).to.be.a('boolean').and.to.be.false);
           // @ts-ignore
-          Integrity.check(fileToHashFilePath, 0).then(sut =>
+          Integrity.check(fileToHashFilePath, 0).then((sut: boolean): Chai.Assertion =>
             expect(sut).to.be.a('boolean').and.to.be.false);
           // @ts-ignore
-          Integrity.check(fileToHashFilePath, true).then(sut =>
+          Integrity.check(fileToHashFilePath, true).then((sut: boolean): Chai.Assertion =>
             expect(sut).to.be.a('boolean').and.to.be.false);
           // @ts-ignore
-          Integrity.check(fileToHashFilePath, null).then(sut =>
+          Integrity.check(fileToHashFilePath, null).then((sut: boolean): Chai.Assertion =>
             expect(sut).to.be.a('boolean').and.to.be.false);
           // @ts-ignore
-          Integrity.check(fileToHashFilePath, undefined).then(sut =>
+          Integrity.check(fileToHashFilePath, undefined).then((sut: boolean): Chai.Assertion =>
             expect(sut).to.be.a('boolean').and.to.be.false);
           // @ts-ignore
-          Integrity.check(fileToHashFilePath, Symbol()).then(sut =>
+          Integrity.check(fileToHashFilePath, Symbol()).then((sut: boolean): Chai.Assertion =>
             expect(sut).to.be.a('boolean').and.to.be.false);
         });
 

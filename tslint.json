@@ -51,6 +51,10 @@
       "call-signature",
       "arrow-call-signature"
     ],
-    "interface-name": false
+    "interface-name": false,
+    "array-type": [
+      true,
+      "array-simple"
+    ]
   }
 }

@@ -34,7 +34,7 @@ describe('YargsParser: tests', function (): void {
           'exclude', 'inPath', 'integrity', 'manifest', 'outPath', 'pretty',
           'strict', 'verbose'];
         expect(sut).to.be.an('object');
-        props.forEach(prop => expect(sut).to.be.haveOwnProperty(prop));
+        props.forEach((prop: string): Chai.Assertion => expect(sut).to.be.haveOwnProperty(prop));
         expect(Object.keys(sut)).with.length(props.length);
       });
 

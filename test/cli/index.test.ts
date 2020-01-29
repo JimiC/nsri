@@ -281,7 +281,7 @@ describe('CLI: tests', function (): void {
           const handleForcedExitStub = sandbox.stub(Logger.prototype, 'handleForcedExit');
           const emitter = new EventEmitter();
           sandbox.stub(readline, 'createInterface').returns(emitter as ReadLine);
-          const promise = nsri().then(() => {
+          const promise = nsri().then((): void => {
             consoleLogStub.restore();
             stdoutStub.restore();
             exitStub.restore();

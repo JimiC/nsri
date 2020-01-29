@@ -173,7 +173,7 @@ export class Integrity {
   /** @internal */
   // ['hex', 'base64', 'latin1']
   private static readonly _allowedCryptoEncodings = Object.keys(CryptoEncoding)
-    .map<string>(k => CryptoEncoding[k as keyof typeof CryptoEncoding]);
+    .map<string>((k: string): string => CryptoEncoding[k as keyof typeof CryptoEncoding]);
 
   /** @internal */
   private static _rootDirPath = '';
@@ -270,7 +270,7 @@ export class Integrity {
     const _cryptoHashes = getHashes();
     const stat = await pfs.lstatAsync(inPath);
     _cryptoOptions.dirAlgorithm = stat.isDirectory()
-      ? _cryptoHashes.find(algorithm => algorithm === _integrityMembers[1])
+      ? _cryptoHashes.find((algorithm: string): boolean => algorithm === _integrityMembers[1])
       : undefined;
     // detect fileAlgorithm
     const findFileAlgorithm = async (
@@ -299,7 +299,7 @@ export class Integrity {
       return undefined;
     };
     _cryptoOptions.fileAlgorithm = stat.isFile() || typeof _first === 'string'
-      ? _cryptoHashes.find(algorithm => algorithm === _integrityMembers[1])
+      ? _cryptoHashes.find((algorithm: string): boolean => algorithm === _integrityMembers[1])
       : await findFileAlgorithm(_first.contents, inPath);
     return _cryptoOptions;
   }
@@ -336,15 +336,17 @@ export class Integrity {
   private static _normalizeOptions(options?: IntegrityOptions): INormalizedIntegrityOptions {
     const _getExclusions = (exclusions: string[]): { include: string[], exclude: string[] } => {
       const commentsPattern = /^\s*#/;
-      let _exclude = exclusions.filter(excl => !!excl && !commentsPattern.test(excl));
+      let _exclude = exclusions.filter((excl: string): boolean => !!excl && !commentsPattern.test(excl));
       const directoryPattern = /(^|\/)[^/]*\*[^/]*$/;
       _exclude = [..._exclude, ..._exclude
-        .filter(excl => !directoryPattern.test(excl))
-        .map(excl => /\/$/.test(excl) ? `${excl}**` : `${excl}/**`)];
+        .filter((excl: string): boolean => !directoryPattern.test(excl))
+        .map((excl: string): string => /\/$/.test(excl) ? `${excl}**` : `${excl}/**`)];
       const negatePattern = /^\s*!/;
-      const _include = _exclude.filter(excl => negatePattern.test(excl)).map(excl => excl.slice(1));
+      const _include = _exclude
+        .filter((excl: string): boolean => negatePattern.test(excl))
+        .map((excl: string): string => excl.slice(1));
       _exclude = [
-        ..._exclude.filter(excl => !negatePattern.test(excl)),
+        ..._exclude.filter((excl: string): boolean => !negatePattern.test(excl)),
         ...constants.defaultExclusions,
       ];
       return {
@@ -424,13 +426,13 @@ export class Integrity {
           return _rootHash === _getNodeOrDefault(intObj.hashes, _array[0]);
         }
         // verbosely directory hash
-        const _subDir: string | undefined = Object.keys(_rootHash.contents).find(key => key === _array[1]);
+        const _subDir: string | undefined = Object.keys(_rootHash.contents).find((key: string): boolean => key === _array[1]);
         _array = _subDir ? _array.splice(1) : [];
         return _array.length ? _findHash(_array, _rootHash.contents) : false;
       };
       const _dirNameList = `.${path.sep}${path.relative(integrityDirPath, sourceDirPath)}`
         .split(path.sep)
-        .filter(dir => dir);
+        .filter((dir: string): string => dir);
       return _findHash(_dirNameList, _hashes);
     };
     const _isEqual: boolean = _equals(intObj, integrity);
@@ -444,9 +446,9 @@ export class Integrity {
 
   /** @internal */
   private static _excludePath(curPath: string, options: INormalizedIntegrityOptions): boolean {
-    const exclude = options.exclude.some(excl => this._match(curPath, excl));
-    const include = options.include.some(incl => this._match(curPath, incl));
-    const defaultExclude = constants.defaultExclusions.some(excl => this._match(curPath, excl));
+    const exclude = options.exclude.some((excl: string): boolean  => this._match(curPath, excl));
+    const include = options.include.some((incl: string): boolean  => this._match(curPath, incl));
+    const defaultExclude = constants.defaultExclusions.some((excl: string): boolean  => this._match(curPath, excl));
     const result = exclude && (!include || defaultExclude);
     return result;
   }
@@ -460,8 +462,8 @@ export class Integrity {
         : '');
       hash.update(path.basename(filePath));
       createReadStream(filePath)
-        .on('error', (error: any) => rej(error))
-        .on('data', (chunk: any) => hash.update(chunk))
+        .on('error', (error: any): void => rej(error))
+        .on('data', (chunk: any): Hash => hash.update(chunk))
         .on('end', _result);
     });
   }
@@ -498,11 +500,11 @@ export class Integrity {
         };
         const _promises: Array<Promise<string[]>> = _subDirs.map(_iterator);
         const _filePaths: string[][] = await Promise.all(_promises);
-        return _filePaths.reduce((collection: string[], filePath: string[]) => [...collection, ...filePath], []);
+        return _filePaths.reduce((collection: string[], filePath: string[]): string[] => [...collection, ...filePath], []);
       };
       const _allFilePaths = await _collectedAllFilePaths(_dirPath);
       const _includedFilePaths = _allFilePaths
-        .filter((fPath: string) => !this._excludePath(this._pathFromRoot(fPath), options));
+        .filter((fPath: string): boolean => !this._excludePath(this._pathFromRoot(fPath), options));
       if (!_includedFilePaths.length) {
         return;
       }

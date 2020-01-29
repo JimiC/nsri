@@ -106,7 +106,7 @@ export class YargsParser {
           global: false,
         },
       })
-      .check((argv: y.Arguments<IArguments>) => this._validate(argv))
+      .check((argv: y.Arguments<IArguments>): boolean => this._validate(argv))
       .strict();
   }
 

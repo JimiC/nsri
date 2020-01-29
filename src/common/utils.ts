@@ -13,7 +13,7 @@ export const latin1RegexPattern = /^(?:[\x00-\xFF])+$/;
 
 /** @internal */
 export function isSupportedHash(algorithm: string): boolean {
-  return getHashes().some(hash => hash.toUpperCase() === algorithm.toUpperCase());
+  return getHashes().some((hash: string): boolean => hash.toUpperCase() === algorithm.toUpperCase());
 }
 
 /** @internal */
@@ -30,7 +30,7 @@ export function parseJSON(data: string | Buffer): IndexedObject | null {
 export function sortObject(obj: IndexedObject): IndexedObject {
   return Object.keys(obj)
     .sort()
-    .reduce((p: IndexedObject, c: string) => {
+    .reduce((p: IndexedObject, c: string): IndexedObject => {
       p[c] = obj[c];
       return p;
     }, {});
@@ -44,11 +44,12 @@ export function getIndentation(text: string): detectIndent.Indent {
 /** @internal */
 export function normalizeEntries(entries: string[]): string[] {
   return entries
-    .map((entry: string) => entry.trim())
-    .filter((entry: string) => !!entry && !/^\s*#/.test(entry));
+    .map((entry: string): string => entry.trim())
+    .filter((entry: string): boolean => !!entry && !/^\s*#/.test(entry));
 }
 
 /** @internal */
 export function unique(entries: string[]): string[] {
-  return entries.filter((entry: string, index: number, array: string[]) => array.indexOf(entry) === index);
+  return entries.filter((entry: string, index: number, array: string[]): boolean =>
+    array.indexOf(entry) === index);
 }
