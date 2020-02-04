@@ -98,7 +98,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
         const sut = await Integrity.createFileHash(fileToHashFilePath);
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty(fileToHashFilename)
-          .and.to.satisfy((hash: string) =>
+          .and.to.satisfy((hash: string): boolean =>
             checker(hash, utils.base64RegexPattern, 'H58mYNjbMJTkiNvvNfj2YKl3ck0='));
       });
 
@@ -107,7 +107,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
         const sut = await Integrity.createFileHash(fileToHashFilePath, { encoding: 'hex' });
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty(fileToHashFilename)
-          .and.to.satisfy((hash: string) =>
+          .and.to.satisfy((hash: string): boolean =>
             checker(hash, utils.hexRegexPattern, '1f9f2660d8db3094e488dbef35f8f660a977724d', 'sha1', sha1Length));
       });
 
@@ -116,7 +116,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
         const sut = await Integrity.createFileHash(fileToHashFilePath, { encoding: 'latin1' });
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty(fileToHashFilename)
-          .and.to.satisfy((hash: string) =>
+          .and.to.satisfy((hash: string): boolean =>
             checker(hash, utils.latin1RegexPattern, '\u001f&`ØÛ0äÛï5øö`©wrM'));
       });
 
@@ -125,7 +125,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
         const sut = await Integrity.createFileHash(fileToHashFilePath, { fileAlgorithm: 'md5' });
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty(fileToHashFilename)
-          .and.to.satisfy((hash: string) =>
+          .and.to.satisfy((hash: string): boolean =>
             checker(hash, utils.base64RegexPattern, 'ej1bR1vQeukEH6sqEz9AxA==', 'md5'));
       });
 
@@ -136,7 +136,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
           { fileAlgorithm: 'md5', encoding: 'hex' });
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty(fileToHashFilename)
-          .and.to.satisfy((hash: string) =>
+          .and.to.satisfy((hash: string): boolean =>
             checker(hash, utils.base64RegexPattern, '7a3d5b475bd07ae9041fab2a133f40c4', 'md5', md5Length));
       });
 
@@ -146,7 +146,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
 
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty(fileToHashFilename)
-          .and.to.satisfy((hash: string) =>
+          .and.to.satisfy((hash: string): boolean =>
             checker(hash, utils.base64RegexPattern, 'H58mYNjbMJTkiNvvNfj2YKl3ck0='));
       });
 

@@ -1,4 +1,7 @@
 {
+  "editor.codeActionsOnSave": {
+    "source.fixAll.tslint": true
+  },
   "files.associations": {
     ".huskyrc": "json",
     ".lintstagedrc": "json",

@@ -13,8 +13,8 @@ import { ISpinner } from '../interfaces/spinner';
 export = (async (): Promise<void> => {
   const id = 'nsri';
   const logger = new Logger();
-  logger.eventEmitter.on('SIGINT', () => logger.handleForcedExit(!!logger));
-  let spinner: ISpinner = { timer: setImmediate(() => void 0), line: 1 };
+  logger.eventEmitter.on('SIGINT', (): void => logger.handleForcedExit(!!logger));
+  let spinner: ISpinner = { timer: setImmediate((): void => void 0), line: 1 };
   let command;
   let message = '';
   try {

@@ -106,7 +106,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
         const sut = await Integrity.createDirHash(fixturesDirPath, options);
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty('fixtures')
-          .and.to.satisfy((hash: string) =>
+          .and.to.satisfy((hash: string): boolean =>
             checker(hash, utils.base64RegexPattern,
               'WlFP+kAPdHyGd9E8SgkFfxuGvz9l/cqjt8gAhrHDdWLB' +
               'IkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA==',
@@ -120,7 +120,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
         const sut = await Integrity.createDirHash(fixturesDirPath, options);
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty('fixtures')
-          .and.to.satisfy((hash: string) =>
+          .and.to.satisfy((hash: string): boolean =>
             checker(hash, utils.hexRegexPattern,
               '5a514ffa400f747c8677d13c4a09057f1b86bf3f65fdcaa3b7c80086b1c37562' +
               'c12249191b1831c60a5666e0112d50fb0020b1abcad578d6f034becd2b2796b0',
@@ -134,7 +134,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
         const sut = await Integrity.createDirHash(fixturesDirPath, options);
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty('fixtures')
-          .and.to.satisfy((hash: string) =>
+          .and.to.satisfy((hash: string): boolean =>
             checker(hash, utils.latin1RegexPattern,
               // tslint:disable-next-line:max-line-length
               'ZQOú@\u000ft|wÑ<J\t\u0005\u001b¿?eýÊ£·È\u0000±ÃubÁ"I' +
@@ -149,7 +149,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
         const sut = await Integrity.createDirHash(fixturesDirPath, options);
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty('fixtures')
-          .and.to.satisfy((hash: string) =>
+          .and.to.satisfy((hash: string): boolean =>
             checker(hash, utils.base64RegexPattern,
               'A6PXayxS1izmNQK4UQBXXw==',
               'md5'));
@@ -162,7 +162,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
         const sut = await Integrity.createDirHash(fixturesDirPath, options);
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty('fixtures')
-          .and.to.satisfy((hash: string) =>
+          .and.to.satisfy((hash: string): boolean =>
             checker(hash, utils.hexRegexPattern,
               '03a3d76b2c52d62ce63502b85100575f',
               'md5', md5Length));
@@ -181,7 +181,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             .and.to.haveOwnProperty('fixtures')
             .and.that.to.haveOwnProperty('contents')
             .and.that.to.haveOwnProperty(fileToHashFilename)
-            .and.to.satisfy((hash: string) =>
+            .and.to.satisfy((hash: string): boolean =>
               checker(hash, utils.base64RegexPattern, 'H58mYNjbMJTkiNvvNfj2YKl3ck0='));
         });
 
@@ -194,7 +194,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             .and.to.haveOwnProperty('contents');
           const fixtures = sut.fixtures as IVerboseHashObject;
           expect(fixtures.contents).to.haveOwnProperty(fileToHashFilename)
-            .and.to.satisfy((hash: string) =>
+            .and.to.satisfy((hash: string): boolean =>
               checker(hash, utils.hexRegexPattern,
                 '1f9f2660d8db3094e488dbef35f8f660a977724d',
                 'sha1', sha1Length));
@@ -209,7 +209,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             .and.to.haveOwnProperty('contents');
           const fixtures = sut.fixtures as IVerboseHashObject;
           expect(fixtures.contents).to.haveOwnProperty(fileToHashFilename)
-            .and.to.satisfy((hash: string) =>
+            .and.to.satisfy((hash: string): boolean =>
               checker(hash, utils.latin1RegexPattern, '\u001f&`ØÛ0äÛï5øö`©wrM'));
         });
 
@@ -222,7 +222,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
           const fixtures = sut.fixtures as IVerboseHashObject;
           expect(fixtures).to.haveOwnProperty('contents');
           expect(fixtures.contents).to.haveOwnProperty(fileToHashFilename)
-            .and.to.satisfy((hash: string) =>
+            .and.to.satisfy((hash: string): boolean =>
               checker(hash, utils.base64RegexPattern,
                 'ej1bR1vQeukEH6sqEz9AxA==',
                 'md5'));
@@ -237,7 +237,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
           expect(sut.fixtures)
             .to.haveOwnProperty('contents')
             .and.that.to.haveOwnProperty(fileToHashFilename)
-            .and.to.satisfy((hash: string) =>
+            .and.to.satisfy((hash: string): boolean =>
               checker(hash, utils.hexRegexPattern,
                 '7a3d5b475bd07ae9041fab2a133f40c4',
                 'md5', md5Length));
@@ -256,7 +256,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures')
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'yTngky0kneOY4JOKvrbfRDk3VNWhDs90Gp7rlNpbQPy0' +
                   'Gfw9Qo7dBFT+yqZieA5HYeOKULyPBOUQrMng/pfzkw==',
@@ -270,7 +270,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures')
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'Sh3ed4hhzI8eSodzoJphpTle3D9uimG+srSpn0g8OLqW' +
                   '5F2GTp2az4L5iE/haYpFRCv1pHqP4LoFXJc+0dtgaQ==',
@@ -284,7 +284,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures')
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'Wk6BW5uO0UZfXTgY7wLqoY9bNzA+PyyE9j6n63QpXu9J' +
                   'hZW01gpxczrAqOXWaSf137c5VUYhQSbviRtDRAGOeg==',
@@ -298,7 +298,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures')
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'D5JDvAmGPhnjGqzANq7d1PyuAcamcOUeZnTW8ziOQ8YI' +
                   'KT27zUArHQfkI0sro+62AQPr/GzVa5MBqDh0GiabrQ==',
@@ -312,7 +312,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures')
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'VegLTUIJV6ET06h8wMXtf+VF2BDVEHd8n2NngoubqzhR' +
                   'i5LLGhJ8bljcSstaEV6CcH2qqz7G4IOJAlOXSqca4A==',
@@ -334,7 +334,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures')
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'VegLTUIJV6ET06h8wMXtf+VF2BDVEHd8n2NngoubqzhR' +
                   'i5LLGhJ8bljcSstaEV6CcH2qqz7G4IOJAlOXSqca4A==',
@@ -348,7 +348,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures')
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'YO+lMzZetbscCuJcmQ+Gvawbkm2qb4AXPxYXge62cSZB' +
                   'fVUuC8FDZ96VvqDB/SSIQO0tPDhGzxa1ueshcpy/bw==',
@@ -394,7 +394,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures')
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'l+RFq7YS2sKbzyhXAzmpiKF3YdDLkORqI3YQiFZzcPN8' +
                   'Qi7QGADl3AvE53yS4vPJGaEGVOTwx/hPkei+Ttr7jQ==',
@@ -408,7 +408,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures')
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'l+RFq7YS2sKbzyhXAzmpiKF3YdDLkORqI3YQiFZzcPN8' +
                   'Qi7QGADl3AvE53yS4vPJGaEGVOTwx/hPkei+Ttr7jQ==',
@@ -422,7 +422,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures')
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'l+RFq7YS2sKbzyhXAzmpiKF3YdDLkORqI3YQiFZzcPN8' +
                   'Qi7QGADl3AvE53yS4vPJGaEGVOTwx/hPkei+Ttr7jQ==',
@@ -436,7 +436,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures')
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'l+RFq7YS2sKbzyhXAzmpiKF3YdDLkORqI3YQiFZzcPN8' +
                   'Qi7QGADl3AvE53yS4vPJGaEGVOTwx/hPkei+Ttr7jQ==',
@@ -450,7 +450,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures')
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'l+RFq7YS2sKbzyhXAzmpiKF3YdDLkORqI3YQiFZzcPN8' +
                   'Qi7QGADl3AvE53yS4vPJGaEGVOTwx/hPkei+Ttr7jQ==',
@@ -464,7 +464,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures')
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'dI656yTlMZ7dYYmsYo4m6P+xxPsNHhMHANEupJhy61i6' +
                   'PqB5H2EUQVWk/ZwDB/djqvc9E+5WV8di/zl5jihFXw==',
@@ -478,7 +478,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures')
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'Mxema7+o7uDni/0O3OCjsr+CeG05csSon2FK8yYVJkaM' +
                   'WbRoh3Grh6OGuA+zwYqwLjef3w8c0ei8svO5AVQPFw==',
@@ -492,7 +492,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures')
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'Mxema7+o7uDni/0O3OCjsr+CeG05csSon2FK8yYVJkaM' +
                   'WbRoh3Grh6OGuA+zwYqwLjef3w8c0ei8svO5AVQPFw==',
@@ -515,7 +515,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
           expect(sut).to.be.an('object')
             .and.to.haveOwnProperty('test');
           const root = sut.test as IVerboseHashObject;
-          expect(root.hash).to.satisfy((hash: string) =>
+          expect(root.hash).to.satisfy((hash: string): boolean =>
             checker(hash, utils.base64RegexPattern,
               'sH3FNHzynm2mQIN1RxoJ1RdKgJvZhyEjJ9amF4sO24mh' +
               'Siye/zr0DbLwEL+XN/BS7gbI3YlqWx60Q2pTQzW75g==',
@@ -532,7 +532,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
             expect(fcfixtures.contents).to.haveOwnProperty(fileToHashFilename);
             expect(fixtures.hash)
-              .to.satisfy((hash: string) =>
+              .to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'yTngky0kneOY4JOKvrbfRDk3VNWhDs90Gp7rlNpbQPy0' +
                   'Gfw9Qo7dBFT+yqZieA5HYeOKULyPBOUQrMng/pfzkw==',
@@ -549,7 +549,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
             expect(fcfixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
             expect(fixtures.hash)
-              .to.satisfy((hash: string) =>
+              .to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'Sh3ed4hhzI8eSodzoJphpTle3D9uimG+srSpn0g8OLqW' +
                   '5F2GTp2az4L5iE/haYpFRCv1pHqP4LoFXJc+0dtgaQ==',
@@ -574,7 +574,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const fcfcdirectory = fcfixtures.contents.directory as IVerboseHashObject;
             expect(fcfcdirectory.contents).to.not.haveOwnProperty(otherFileToHashFilename);
             expect(fixtures.hash)
-              .to.satisfy((hash: string) =>
+              .to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'Wk6BW5uO0UZfXTgY7wLqoY9bNzA+PyyE9j6n63QpXu9J' +
                   'hZW01gpxczrAqOXWaSf137c5VUYhQSbviRtDRAGOeg==',
@@ -591,7 +591,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
             expect(fcfixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
             expect(fixtures.hash)
-              .to.satisfy((hash: string) =>
+              .to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'D5JDvAmGPhnjGqzANq7d1PyuAcamcOUeZnTW8ziOQ8YI' +
                   'KT27zUArHQfkI0sro+62AQPr/GzVa5MBqDh0GiabrQ==',
@@ -609,7 +609,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
             expect(fcfixtures.contents).to.haveOwnProperty(fileToHashFilename);
             expect(fixtures.hash)
-              .to.satisfy((hash: string) =>
+              .to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'VegLTUIJV6ET06h8wMXtf+VF2BDVEHd8n2NngoubqzhR' +
                   'i5LLGhJ8bljcSstaEV6CcH2qqz7G4IOJAlOXSqca4A==',
@@ -636,7 +636,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             expect(fixtures.contents).to.haveOwnProperty('directory');
             expect(fixtures.contents).to.haveOwnProperty('fixtures');
             expect(fixtures.hash)
-              .to.satisfy((hash: string) =>
+              .to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'VegLTUIJV6ET06h8wMXtf+VF2BDVEHd8n2NngoubqzhR' +
                   'i5LLGhJ8bljcSstaEV6CcH2qqz7G4IOJAlOXSqca4A==',
@@ -658,7 +658,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const ffixtures = fixtures.contents.fixtures as IVerboseHashObject;
             expect(ffixtures.contents).to.haveOwnProperty('directory.1');
             expect(fixtures.hash)
-              .to.satisfy((hash: string) =>
+              .to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'YO+lMzZetbscCuJcmQ+Gvawbkm2qb4AXPxYXge62cSZB' +
                   'fVUuC8FDZ96VvqDB/SSIQO0tPDhGzxa1ueshcpy/bw==',
@@ -706,7 +706,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             expect(fixtures.contents).to.haveOwnProperty('directory.1');
             expect(fixtures.contents).to.not.haveOwnProperty('fixtures');
             expect(fixtures.hash)
-              .to.satisfy((hash: string) =>
+              .to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'l+RFq7YS2sKbzyhXAzmpiKF3YdDLkORqI3YQiFZzcPN8' +
                   'Qi7QGADl3AvE53yS4vPJGaEGVOTwx/hPkei+Ttr7jQ==',
@@ -726,7 +726,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             expect(fixtures.contents).to.haveOwnProperty('directory.1');
             expect(fixtures.contents).to.not.haveOwnProperty('fixtures');
             expect(fixtures.hash)
-              .to.satisfy((hash: string) =>
+              .to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'l+RFq7YS2sKbzyhXAzmpiKF3YdDLkORqI3YQiFZzcPN8' +
                   'Qi7QGADl3AvE53yS4vPJGaEGVOTwx/hPkei+Ttr7jQ==',
@@ -746,7 +746,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             expect(fixtures.contents).to.haveOwnProperty('directory.1');
             expect(fixtures.contents).to.not.haveOwnProperty('fixtures');
             expect(fixtures.hash)
-              .to.satisfy((hash: string) =>
+              .to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'l+RFq7YS2sKbzyhXAzmpiKF3YdDLkORqI3YQiFZzcPN8' +
                   'Qi7QGADl3AvE53yS4vPJGaEGVOTwx/hPkei+Ttr7jQ==',
@@ -766,7 +766,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             expect(fixtures.contents).to.haveOwnProperty('directory.1');
             expect(fixtures.contents).to.not.haveOwnProperty('fixtures');
             expect(fixtures.hash)
-              .to.satisfy((hash: string) =>
+              .to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'l+RFq7YS2sKbzyhXAzmpiKF3YdDLkORqI3YQiFZzcPN8' +
                   'Qi7QGADl3AvE53yS4vPJGaEGVOTwx/hPkei+Ttr7jQ==',
@@ -790,7 +790,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
               .and.that.to.haveOwnProperty('directory');
             const fixtures = sut.fixtures as IVerboseHashObject;
             expect(fixtures.hash)
-              .to.satisfy((hash: string) =>
+              .to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'dI656yTlMZ7dYYmsYo4m6P+xxPsNHhMHANEupJhy61i6' +
                   'PqB5H2EUQVWk/ZwDB/djqvc9E+5WV8di/zl5jihFXw==',
@@ -814,7 +814,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
               .and.that.to.not.haveOwnProperty('directory');
             const fixtures = sut.fixtures as IVerboseHashObject;
             expect(fixtures.hash)
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'Mxema7+o7uDni/0O3OCjsr+CeG05csSon2FK8yYVJkaM' +
                   'WbRoh3Grh6OGuA+zwYqwLjef3w8c0ei8svO5AVQPFw==',
@@ -838,7 +838,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
               .and.that.to.not.haveOwnProperty('directory');
             const fixtures = sut.fixtures as IVerboseHashObject;
             expect(fixtures.hash)
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'Mxema7+o7uDni/0O3OCjsr+CeG05csSon2FK8yYVJkaM' +
                   'WbRoh3Grh6OGuA+zwYqwLjef3w8c0ei8svO5AVQPFw==',
@@ -867,10 +867,10 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             expect(fixtures).and.that.to.haveOwnProperty('contents');
             expect(fixtures.contents)
               .to.haveOwnProperty(fileToHashFilename)
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern, 'H58mYNjbMJTkiNvvNfj2YKl3ck0='));
             expect(fixtures.hash)
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'jU0ENm52s6vv8Qk4naKzQ+ldqOTpVnpla7bHLN7gkrlB' +
                   'Qn58ORW+wjpFQmrxnqsDjqlvIFjTuNrq8UzKYRT4SQ==',
@@ -894,16 +894,16 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
             expect(fcfixtures.contents)
               .to.haveOwnProperty(fileToHashFilename)
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern, 't56X7IQ267Hza0qjpSpqb9UPcfE='));
             expect(fcfixtures.hash)
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'xsFFG6BuNpe8Q9hxyOCgGPY1ZXSnd7uEPG0LfmjSz/g8' +
                   '8weE01dXScfFEy5ItkDDqYioR75treREV2yMT6dUoQ==',
                   'sha512'));
             expect(fixtures.hash)
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'i066+5P7XKubRVkelKvC9+cNxMe9uPA3cgkre24Tp5+l' +
                   'CUSdeHGtkgsYi6Obhe30gTiv3wMpXsl1pCCEofVTWw==',
@@ -926,17 +926,17 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
               .and.that.to.haveOwnProperty('fixtures')
               .and.that.to.haveOwnProperty('contents')
               .and.that.to.haveOwnProperty(fileToHashFilename)
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern, 't56X7IQ267Hza0qjpSpqb9UPcfE='));
             const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
             expect(fcfixtures.hash)
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'xsFFG6BuNpe8Q9hxyOCgGPY1ZXSnd7uEPG0LfmjSz/g8' +
                   '8weE01dXScfFEy5ItkDDqYioR75treREV2yMT6dUoQ==',
                   'sha512'));
             expect(fixtures.hash)
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'i066+5P7XKubRVkelKvC9+cNxMe9uPA3cgkre24Tp5+l' +
                   'CUSdeHGtkgsYi6Obhe30gTiv3wMpXsl1pCCEofVTWw==',
@@ -957,14 +957,14 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             expect(fixtures.contents).not.to.haveOwnProperty('directory.1');
             expect(fixtures.contents)
               .to.haveOwnProperty('sameContentWithFileToHash.txt')
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern, 'l5sOr3meWkHyZWPi2Ln4GM7/lrg='));
             expect(fixtures.contents)
               .to.haveOwnProperty(fileToHashFilename)
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern, 'H58mYNjbMJTkiNvvNfj2YKl3ck0='));
             expect(fixtures.hash)
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'SUoveyMtTFO5zEKmSjLk9nFOGBezDdqpD5DJiNYasQ17' +
                   'E4fV58BuSRM0jbQhw6iG6Iq4rnZ53Aaw3vzFWaLHWA==',
@@ -989,20 +989,20 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const fcdirectory = fixtures.contents.directory as IVerboseHashObject;
             expect(fcdirectory.contents)
               .to.haveOwnProperty('anotherFileToHash.txt')
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern, 'EZ2w0rsSmXBOddIoz2IoOIuxGaQ='));
             expect(fcdirectory.contents)
               .to.haveOwnProperty(otherFileToHashFilename)
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern, 'B8FJ4uKgHESSgMvJUyrj3ix2uG8='));
             expect(fcdirectory.hash)
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'Ze62278vNFKc3izakn2FgyvHIZEbnsuqKogaZLA1ihM1' +
                   'zk95RKlz+z7qk1XEysMaoJlpDNqSWx4PoPp2cFNBPw==',
                   'sha512'));
             expect(fixtures.hash)
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'wfY0H0xgB1h2jlkg11q56mX6EgiGEpEpGFxpspUGjG+G' +
                   'WZlgdfY26wFIdZh7+XP0lD82aZQ+femT4DL7yb82vQ==',
@@ -1030,22 +1030,22 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const fcfcdirectory = fcfixtures.contents.directory as IVerboseHashObject;
             expect(fcfcdirectory.contents)
               .to.haveOwnProperty('anotherFileToHash.txt')
-              .and.to.satisfy((hash: string) =>
+              .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern, 'EZ2w0rsSmXBOddIoz2IoOIuxGaQ='));
             expect(fcfcdirectory.hash)
-              .to.satisfy((hash: string) =>
+              .to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   'a7F1/1x1ZVAWMdcx7X9Dnzd9M4TY9wU21vNCt3ALW0+0' +
                   'npq85MKn7uhz8yGqjDbSmAUDf14uxgqjk2tMtkjK9w==',
                   'sha512'));
             expect(fcfixtures.hash)
-              .to.satisfy((hash: string) =>
+              .to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   '7W3X/cw2xfp4tzXjZnSXMazukk05OUOBiH19fQRzTTh4' +
                   'He7Iw7j5ixw8NJlE2Z0+Pm689Bma7C1QjGCG2rpzQQ==',
                   'sha512'));
             expect(fixtures.hash)
-              .to.satisfy((hash: string) =>
+              .to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
                   '5mlonOfv9vOYfhLbrc0ftNGl7nySaYSkhjYuQ2tUgj6p' +
                   'lSzRfkz2+RtSxw6LzMhYJ1HILFTSy5Guc1ruhMsPKQ==',
