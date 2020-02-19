@@ -1,6 +1,5 @@
 {
   "ignore": [
-    "@types/node",
-    "tslint"
+    "@types/node"
   ]
 }
