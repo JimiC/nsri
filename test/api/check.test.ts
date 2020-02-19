@@ -1,5 +1,5 @@
-// tslint:disable only-arrow-functions
-// tslint:disable no-unused-expression
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import { PathLike } from 'fs';
 import path from 'path';
@@ -14,7 +14,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
   context('expects', function (): void {
 
     type ReadFileType = [PathLike | number,
-      (string | { encoding?: string | null | undefined; flag?: string | undefined; } | null | undefined)?];
+      (string | { encoding?: string | null | undefined; flag?: string | undefined } | null | undefined)?];
 
     let anotherFileToHashFilename: string;
     let fileToHashFilename: string;

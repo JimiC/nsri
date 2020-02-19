@@ -6,7 +6,7 @@ type Explorer = ReturnType<typeof cosmiconfig>;
 /** @internal */
 export class ConfigExplorer {
   private _explorer: Explorer;
-  constructor() {
+  public constructor() {
     this._explorer = cosmiconfig('nsri');
   }
 

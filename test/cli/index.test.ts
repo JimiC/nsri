@@ -1,5 +1,5 @@
-// tslint:disable only-arrow-functions
-// tslint:disable no-unused-expression
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import { EventEmitter } from 'events';
 import readline, { ReadLine } from 'readline';
@@ -217,17 +217,17 @@ describe('CLI: tests', function (): void {
     context('to call', function (): void {
 
       it(`the ConfigExplorer 'assignArgs' function`,
-      async function (): Promise<void> {
-        pargs.command = 'check';
-        const exitStub = sandbox.stub(process, 'exit');
-        const consoleLogStub = sandbox.stub(console, 'log');
-        const stdoutStub = sandbox.stub(process.stdout, 'write');
-        await nsri();
-        stdoutStub.restore();
-        consoleLogStub.restore();
-        exitStub.restore();
-        expect(configExplorerStub.calledOnce).to.be.true;
-      });
+        async function (): Promise<void> {
+          pargs.command = 'check';
+          const exitStub = sandbox.stub(process, 'exit');
+          const consoleLogStub = sandbox.stub(console, 'log');
+          const stdoutStub = sandbox.stub(process.stdout, 'write');
+          await nsri();
+          stdoutStub.restore();
+          consoleLogStub.restore();
+          exitStub.restore();
+          expect(configExplorerStub.calledOnce).to.be.true;
+        });
 
       it(`the YargsParser 'parse' function`,
         async function (): Promise<void> {

@@ -83,7 +83,7 @@ export class YargsParser {
     },
   };
 
-  constructor() {
+  public constructor() {
     y
       .usage('Usage: $0 {command} [options]')
       .command('create [options]',

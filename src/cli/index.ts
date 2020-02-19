@@ -10,7 +10,7 @@ import { IParsedArgs } from '../interfaces/parsedArgs';
 import { ISpinner } from '../interfaces/spinner';
 
 /** @internal */
-export = (async (): Promise<void> => {
+export default (async (): Promise<void> => {
   const id = 'nsri';
   const logger = new Logger();
   logger.eventEmitter.on('SIGINT', (): void => logger.handleForcedExit(!!logger));

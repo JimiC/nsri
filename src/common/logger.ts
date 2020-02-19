@@ -12,7 +12,7 @@ export class Logger extends BaseLogger {
 
   private _countLines: number;
 
-  constructor() {
+  public constructor() {
     super();
     this.eventEmitter = readline.createInterface(process.stdin, process.stdout);
     this.frames = ['- ', '\\ ', '| ', '/ '];

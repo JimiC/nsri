@@ -1,5 +1,5 @@
-// tslint:disable only-arrow-functions
-// tslint:disable no-unused-expression
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import { PathLike } from 'fs';
 import sinon from 'sinon';
@@ -11,7 +11,7 @@ describe(`Integrity: function 'getManifestIntegrity' tests`, function (): void {
   context('expects', function (): void {
 
     type ReadFileType = [PathLike | number,
-      (string | { encoding?: string | null | undefined; flag?: string | undefined; } | null | undefined)?];
+      (string | { encoding?: string | null | undefined; flag?: string | undefined } | null | undefined)?];
 
     let sandbox: sinon.SinonSandbox;
     let existsAsyncStub: sinon.SinonStub<[PathLike], Promise<boolean>>;
