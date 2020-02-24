@@ -3,7 +3,7 @@
     "source.fixAll.eslint": true
   },
   "files.associations": {
-    ".huskyrc": "shellscript",
+    ".huskyrc": "json",
     ".lintstagedrc": "json",
     ".nycrc": "json"
   },
