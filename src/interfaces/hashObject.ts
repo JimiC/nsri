@@ -1,5 +1,5 @@
-import { IVerboseHashObject } from './verboseHashObject';
+import { VerboseHashObject } from './verboseHashObject';
 
-export interface IHashObject {
-  [key: string]: string | IVerboseHashObject;
+export interface HashObject {
+  [key: string]: string | VerboseHashObject;
 }

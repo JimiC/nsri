@@ -10,15 +10,15 @@ import nsri from '../../src/cli/index';
 import { ConfigExplorer } from '../../src/common/configExplorer';
 import { Logger } from '../../src/common/logger';
 import { YargsParser } from '../../src/common/yargsParser';
-import { IParsedArgs } from '../../src/interfaces//parsedArgs';
+import { ParsedArgs } from '../../src/interfaces//parsedArgs';
 import { IntegrityObject } from '../../src/interfaces/integrityObject';
 
 describe('CLI: tests', function (): void {
 
   let sandbox: sinon.SinonSandbox;
-  let pargs: IParsedArgs;
+  let pargs: ParsedArgs;
   let configExplorerStub: sinon.SinonStub<[], Promise<void>>;
-  let ypParseStub: sinon.SinonStub<[], IParsedArgs>;
+  let ypParseStub: sinon.SinonStub<[], ParsedArgs>;
   let icCreateStub: sinon.SinonStub<[string, (IntegrityOptions | undefined)?], Promise<IntegrityObject>>;
   let icCheckStub: sinon.SinonStub<[string, string, IntegrityOptions], Promise<boolean>>;
   let isTTY: true | undefined;

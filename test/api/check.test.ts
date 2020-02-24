@@ -73,7 +73,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
         async function (): Promise<void> {
           const hashObj = '{"version":"2","hashes":{"fileToHash.txt":"7a3d5b475bd07ae9041fab2a133f40c4"}}';
           // @ts-ignore
-          sandbox.stub(Integrity, '_validate').resolves();
+          sandbox.stub(Integrity, 'validate').resolves();
           try {
             await Integrity.check(fileToHashFilePath, hashObj);
           } catch (error) {

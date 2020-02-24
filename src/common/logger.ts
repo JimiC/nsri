@@ -1,6 +1,6 @@
 import readline, { ReadLine } from 'readline';
 import { BaseLogger } from '../abstractions/baseLogger';
-import { ISpinner } from '../interfaces/spinner';
+import { Spinner } from '../interfaces/spinner';
 
 /** @internal */
 export class Logger extends BaseLogger {
@@ -10,7 +10,7 @@ export class Logger extends BaseLogger {
   public showSpinnerInFront: boolean;
   public spinnerInterval: number;
 
-  private _countLines: number;
+  private countLines: number;
 
   public constructor() {
     super();
@@ -18,17 +18,17 @@ export class Logger extends BaseLogger {
     this.frames = ['- ', '\\ ', '| ', '/ '];
     this.showSpinnerInFront = true;
     this.spinnerInterval = 80;
-    this._countLines = 1;
+    this.countLines = 1;
   }
 
   public log(message: string, groupId?: string): void {
-    process.stdout.write(`${this._getHeader(groupId)}${message}\n`);
-    this._countLines++;
+    process.stdout.write(`${this.getHeader(groupId)}${message}\n`);
+    this.countLines++;
   }
 
   public error(message: string, groupId?: string): void {
-    process.stderr.write(`${this._getHeader(groupId)}${message}\n`);
-    this._countLines++;
+    process.stderr.write(`${this.getHeader(groupId)}${message}\n`);
+    this.countLines++;
   }
 
   public updateLog(message: string, groupId?: string): void;
@@ -39,32 +39,32 @@ export class Logger extends BaseLogger {
       : groupId;
 
     if (!process.stdout.isTTY) {
-      process.stdout.write(`${this._getHeader(groupId)}${message}\n`);
+      process.stdout.write(`${this.getHeader(groupId)}${message}\n`);
       return;
     }
 
-    const _line = (typeof lineOrGroupId === 'number' && !Number.isNaN(lineOrGroupId))
+    const line = (typeof lineOrGroupId === 'number' && !Number.isNaN(lineOrGroupId))
       ? lineOrGroupId as number
       : 1;
-    this.moveCursorTo(-_line);
+    this.moveCursorTo(-line);
     readline.clearLine(process.stdout, 0);
-    process.stdout.write(`${this._getHeader(groupId)}${message}`);
-    this.moveCursorTo(_line);
+    process.stdout.write(`${this.getHeader(groupId)}${message}`);
+    this.moveCursorTo(line);
   }
 
-  public spinnerLogStart(message: string, groupId?: string): ISpinner {
-    const _line = this._countLines;
+  public spinnerLogStart(message: string, groupId?: string): Spinner {
+    const line = this.countLines;
     this.log(message, groupId);
-    return { timer: this._spin(message, groupId, _line), line: _line };
+    return { timer: this.spin(message, groupId, line), line };
   }
 
-  public spinnerLogStop(spinner: ISpinner, message: string, groupId?: string): void {
+  public spinnerLogStop(spinner: Spinner, message: string, groupId?: string): void {
     clearInterval(spinner.timer);
-    this.updateLog(message, this._countLines - spinner.line, groupId);
+    this.updateLog(message, this.countLines - spinner.line, groupId);
     if (!process.stdout.isTTY) {
       return;
     }
-    this._cursorShow();
+    this.cursorShow();
   }
 
   public handleForcedExit(hasInfoLogging: boolean): void {
@@ -82,7 +82,7 @@ export class Logger extends BaseLogger {
       moveAndClear();
     }
     moveAndClear();
-    this._cursorShow();
+    this.cursorShow();
     process.exit();
   }
 
@@ -94,32 +94,32 @@ export class Logger extends BaseLogger {
     readline.moveCursor(process.stdout, 0, line);
   }
 
-  private _spin(message: string, groupId: string | undefined, line: number): NodeJS.Timer {
+  private spin(message: string, groupId: string | undefined, line: number): NodeJS.Timer {
     if (!process.stdout.isTTY) {
       return setImmediate((): void => void 0);
     }
-    let _index = 0;
-    this._cursorHide();
+    let index = 0;
+    this.cursorHide();
     const iteration = (): void => {
-      const _frame = this.frames[_index = ++_index % this.frames.length];
-      const _msg = this.showSpinnerInFront
-        ? `${this._getHeader(groupId)}${_frame}${message}`
-        : `${this._getHeader(groupId)}${message}${_frame}`;
-      this.updateLog(_msg, this._countLines - line);
+      const frame = this.frames[index = ++index % this.frames.length];
+      const msg = this.showSpinnerInFront
+        ? `${this.getHeader(groupId)}${frame}${message}`
+        : `${this.getHeader(groupId)}${message}${frame}`;
+      this.updateLog(msg, this.countLines - line);
     };
     iteration();
     return setInterval(iteration, this.spinnerInterval);
   }
 
-  private _cursorShow(): void {
+  private cursorShow(): void {
     process.stdout.write('\u001B[?25h');
   }
 
-  private _cursorHide(): void {
+  private cursorHide(): void {
     process.stdout.write('\u001B[?25l');
   }
 
-  private _getHeader(groupId?: string): string {
+  private getHeader(groupId?: string): string {
     return groupId ? `[${groupId}]: ` : '';
   }
 }

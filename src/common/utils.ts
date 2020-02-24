@@ -19,8 +19,8 @@ export function isSupportedHash(algorithm: string): boolean {
 /** @internal */
 export function parseJSON(data: string | Buffer): IndexedObject | null {
   try {
-    const _text = Buffer.isBuffer(data) ? data.toString() : data as string;
-    return JSON.parse(_text);
+    const text = Buffer.isBuffer(data) ? data.toString() : data as string;
+    return JSON.parse(text);
   } catch (err) {
     return null;
   }

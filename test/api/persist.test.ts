@@ -13,8 +13,11 @@ describe(`Integrity: function 'persist' tests`, function (): void {
   context('expects', function (): void {
 
     type WriteFileType = [PathLike | number, any,
-      (string | { encoding?: string | null | undefined; mode?: string | number | undefined; floag?: string | undefined }
-        | null | undefined)?];
+      (string | {
+        encoding?: string | null | undefined;
+        mode?: string | number | undefined;
+        floag?: string | undefined;
+      } | null | undefined)?];
 
     let sandbox: sinon.SinonSandbox;
     let writeFileAsyncStub: sinon.SinonStub<WriteFileType, Promise<void>>;

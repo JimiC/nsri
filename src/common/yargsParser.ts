@@ -1,13 +1,13 @@
 import { existsSync, statSync } from 'fs';
 import { dirname } from 'path';
 import y from 'yargs';
-import { IArguments } from '../interfaces/arguments';
-import { IParsedArgs } from '../interfaces/parsedArgs';
+import { Arguments } from '../interfaces/arguments';
+import { ParsedArgs } from '../interfaces/parsedArgs';
 import { sortObject } from './utils';
 
 /** @internal */
 export class YargsParser {
-  private readonly _commonOptions: { [key: string]: y.Options } = {
+  private readonly commonOptions: { [key: string]: y.Options } = {
     diralgorithm: {
       alias: 'da',
       default: 'sha512',
@@ -58,7 +58,7 @@ export class YargsParser {
     },
   };
 
-  private readonly _createOptions: { [key: string]: y.Options } = {
+  private readonly createOptions: { [key: string]: y.Options } = {
     output: {
       alias: 'o',
       description: 'The directory path where to persist the created integrity file' +
@@ -73,7 +73,7 @@ export class YargsParser {
     },
   };
 
-  private readonly _checkOptions: { [key: string]: y.Options } = {
+  private readonly checkOptions: { [key: string]: y.Options } = {
     integrity: {
       alias: 'i',
       conflicts: 'manifest',
@@ -88,10 +88,10 @@ export class YargsParser {
       .usage('Usage: $0 {command} [options]')
       .command('create [options]',
         `Creates integrity hash from the provided source (use '--help' for [options] details)`,
-        sortObject({ ...this._createOptions, ...this._commonOptions }))
+        sortObject({ ...this.createOptions, ...this.commonOptions }))
       .command('check [options]',
         `Checks integrity hash against the provided source (use '--help' for [options] details)`,
-        sortObject({ ...this._checkOptions, ...this._commonOptions }))
+        sortObject({ ...this.checkOptions, ...this.commonOptions }))
       .demandCommand(1, 'Missing command')
       .recommendCommands()
       .options({
@@ -106,45 +106,45 @@ export class YargsParser {
           global: false,
         },
       })
-      .check((argv: y.Arguments<IArguments>): boolean => this._validate(argv))
+      .check((argv: y.Arguments<Arguments>): boolean => this.validate(argv))
       .strict();
   }
 
-  public parse(): IParsedArgs {
-    const _pargs = y.parse(process.argv.slice(2));
+  public parse(): ParsedArgs {
+    const pargs = y.parse(process.argv.slice(2));
     // Set 'output' dir same as 'source' when not provided
-    if (!_pargs.output) {
-      const _source = _pargs.source as string;
-      _pargs.output = statSync(_source).isFile()
-        ? dirname(_source)
-        : _pargs.source;
+    if (!pargs.output) {
+      const source = pargs.source as string;
+      pargs.output = statSync(source).isFile()
+        ? dirname(source)
+        : pargs.source;
     }
     return {
-      command: _pargs._[0],
-      dirAlgorithm: _pargs.diralgorithm as string,
-      encoding: _pargs.encoding as string,
-      exclude: _pargs.exclude as string[],
-      fileAlgorithm: _pargs.filealgorithm as string,
-      inPath: _pargs.source as string,
-      integrity: _pargs.integrity as string,
-      manifest: _pargs.manifest as boolean,
-      outPath: _pargs.output as string,
-      pretty: _pargs.pretty as boolean,
-      strict: _pargs.strict as boolean,
-      verbose: _pargs.verbose as boolean,
+      command: pargs._[0],
+      dirAlgorithm: pargs.diralgorithm as string,
+      encoding: pargs.encoding as string,
+      exclude: pargs.exclude as string[],
+      fileAlgorithm: pargs.filealgorithm as string,
+      inPath: pargs.source as string,
+      integrity: pargs.integrity as string,
+      manifest: pargs.manifest as boolean,
+      outPath: pargs.output as string,
+      pretty: pargs.pretty as boolean,
+      strict: pargs.strict as boolean,
+      verbose: pargs.verbose as boolean,
     };
   }
 
-  private _validate(argv: y.Arguments<IArguments>): boolean {
-    let _errorMsg = '';
+  private validate(argv: y.Arguments<Arguments>): boolean {
+    let errorMsg = '';
     if (!existsSync(argv.source as string)) {
-      _errorMsg = `ENOENT: no such file or directory, '${argv.source}'`;
+      errorMsg = `ENOENT: no such file or directory, '${argv.source}'`;
     }
     if (argv._[0] === 'check' && !argv.manifest && !argv.integrity) {
-      _errorMsg = 'Missing required argument: integrity';
+      errorMsg = 'Missing required argument: integrity';
     }
-    if (_errorMsg) {
-      throw new Error(_errorMsg);
+    if (errorMsg) {
+      throw new Error(errorMsg);
     }
     return true;
   }

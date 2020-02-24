@@ -113,7 +113,7 @@ describe('ConfigExplorer: tests', function (): void {
         it(`to throw an Error when 'explorer' is not initialized`,
           async function (): Promise<void> {
             // @ts-ignore
-            sandbox.stub(configExplorer, '_explorer').value(undefined);
+            sandbox.stub(configExplorer, 'explorer').value(undefined);
             try {
               await configExplorer.getConfig();
             } catch (error) {
@@ -124,7 +124,7 @@ describe('ConfigExplorer: tests', function (): void {
         it(`to return an empty object when 'explorer' returns 'null'`,
           async function (): Promise<void> {
             // @ts-ignore
-            sandbox.stub(configExplorer._explorer, 'search').resolves(null);
+            sandbox.stub(configExplorer.explorer, 'search').resolves(null);
             const config = await configExplorer.getConfig();
             expect(config).to.be.an('object').that.is.empty;
           });

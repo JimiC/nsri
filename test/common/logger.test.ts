@@ -38,9 +38,9 @@ describe('Logger: tests', function (): void {
         expect(logger).to.haveOwnProperty('frames');
       });
 
-    it(`to have own '_countLines' property`,
+    it(`to have own 'countLines' property`,
       function (): void {
-        expect(logger).to.haveOwnProperty('_countLines');
+        expect(logger).to.haveOwnProperty('countLines');
       });
 
     context('when calling', function (): void {
@@ -71,11 +71,11 @@ describe('Logger: tests', function (): void {
 
         it('the lines count to increase by one',
           function (): void {
-            expect(logger).to.have.property('_countLines', 1);
+            expect(logger).to.have.property('countLines', 1);
             const stub = sandbox.stub(process.stdout, 'write');
             logger.log('test');
             stub.restore();
-            expect(logger).to.have.property('_countLines', 2);
+            expect(logger).to.have.property('countLines', 2);
             expect(stub.calledWith('test\n')).to.be.true;
           });
 
@@ -102,11 +102,11 @@ describe('Logger: tests', function (): void {
 
         it('the lines count to increase by one',
           function (): void {
-            expect(logger).to.have.property('_countLines', 1);
+            expect(logger).to.have.property('countLines', 1);
             const stub = sandbox.stub(process.stderr, 'write');
             logger.error('test');
             stub.restore();
-            expect(logger).to.have.property('_countLines', 2);
+            expect(logger).to.have.property('countLines', 2);
             expect(stub.calledWith('test\n')).to.be.true;
           });
 

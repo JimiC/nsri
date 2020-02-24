@@ -8,7 +8,7 @@ import { Readable } from 'stream';
 import { Integrity } from '../../src/app/integrity';
 import * as utils from '../../src/common/utils';
 import { IntegrityOptions } from '../../src/interfaces/integrityOptions';
-import { IVerboseHashObject } from '../../src/interfaces/verboseHashObject';
+import { VerboseHashObject } from '../../src/interfaces/verboseHashObject';
 import { checker } from '../helper';
 
 describe(`Integrity: function 'createDirHash' tests`, function (): void {
@@ -192,7 +192,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
           expect(sut).to.be.an('object')
             .to.haveOwnProperty('fixtures')
             .and.to.haveOwnProperty('contents');
-          const fixtures = sut.fixtures as IVerboseHashObject;
+          const fixtures = sut.fixtures as VerboseHashObject;
           expect(fixtures.contents).to.haveOwnProperty(fileToHashFilename)
             .and.to.satisfy((hash: string): boolean =>
               checker(hash, utils.hexRegexPattern,
@@ -207,7 +207,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
           expect(sut).to.be.an('object')
             .to.haveOwnProperty('fixtures')
             .and.to.haveOwnProperty('contents');
-          const fixtures = sut.fixtures as IVerboseHashObject;
+          const fixtures = sut.fixtures as VerboseHashObject;
           expect(fixtures.contents).to.haveOwnProperty(fileToHashFilename)
             .and.to.satisfy((hash: string): boolean =>
               checker(hash, utils.latin1RegexPattern, '\u001f&`ØÛ0äÛï5øö`©wrM'));
@@ -219,7 +219,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
           const sut = await Integrity.createDirHash(fixturesDirPath, options);
           expect(sut).to.be.an('object')
             .and.to.haveOwnProperty('fixtures');
-          const fixtures = sut.fixtures as IVerboseHashObject;
+          const fixtures = sut.fixtures as VerboseHashObject;
           expect(fixtures).to.haveOwnProperty('contents');
           expect(fixtures.contents).to.haveOwnProperty(fileToHashFilename)
             .and.to.satisfy((hash: string): boolean =>
@@ -514,7 +514,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
 
           expect(sut).to.be.an('object')
             .and.to.haveOwnProperty('test');
-          const root = sut.test as IVerboseHashObject;
+          const root = sut.test as VerboseHashObject;
           expect(root.hash).to.satisfy((hash: string): boolean =>
             checker(hash, utils.base64RegexPattern,
               'sH3FNHzynm2mQIN1RxoJ1RdKgJvZhyEjJ9amF4sO24mh' +
@@ -527,9 +527,9 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             options.exclude = [fileToHashFilename];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
-            const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
+            const fcfixtures = fixtures.contents.fixtures as VerboseHashObject;
             expect(fcfixtures.contents).to.haveOwnProperty(fileToHashFilename);
             expect(fixtures.hash)
               .to.satisfy((hash: string): boolean =>
@@ -544,9 +544,9 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             options.exclude = [`**/${fileToHashFilename}`];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
-            const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
+            const fcfixtures = fixtures.contents.fixtures as VerboseHashObject;
             expect(fcfixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
             expect(fixtures.hash)
               .to.satisfy((hash: string): boolean =>
@@ -561,17 +561,17 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             options.exclude = [fileToHashFilename, `**/${otherFileToHashFilename}`];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
-            const fcdirectorydot1 = fixtures.contents['directory.1'] as IVerboseHashObject;
+            const fcdirectorydot1 = fixtures.contents['directory.1'] as VerboseHashObject;
             expect(fcdirectorydot1.contents).to.not.haveOwnProperty(otherFileToHashFilename);
-            const fcdirectory = fixtures.contents.directory as IVerboseHashObject;
+            const fcdirectory = fixtures.contents.directory as VerboseHashObject;
             expect(fcdirectory.contents).to.not.haveOwnProperty(otherFileToHashFilename);
-            const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
+            const fcfixtures = fixtures.contents.fixtures as VerboseHashObject;
             expect(fcfixtures.contents).to.haveOwnProperty(fileToHashFilename);
-            const fcfcdirectorydot1 = fcfixtures.contents['directory.1'] as IVerboseHashObject;
+            const fcfcdirectorydot1 = fcfixtures.contents['directory.1'] as VerboseHashObject;
             expect(fcfcdirectorydot1.contents).to.not.haveOwnProperty(otherFileToHashFilename);
-            const fcfcdirectory = fcfixtures.contents.directory as IVerboseHashObject;
+            const fcfcdirectory = fcfixtures.contents.directory as VerboseHashObject;
             expect(fcfcdirectory.contents).to.not.haveOwnProperty(otherFileToHashFilename);
             expect(fixtures.hash)
               .to.satisfy((hash: string): boolean =>
@@ -586,9 +586,9 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             options.exclude = [`**/${fileToHashFilename}`, `**/${otherFileToHashFilename}`];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
-            const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
+            const fcfixtures = fixtures.contents.fixtures as VerboseHashObject;
             expect(fcfixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
             expect(fixtures.hash)
               .to.satisfy((hash: string): boolean =>
@@ -603,10 +603,10 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             options.exclude = ['*.txt'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
             expect(fixtures.contents).to.not.haveOwnProperty('sameContentWithFileToHash.txt');
-            const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
+            const fcfixtures = fixtures.contents.fixtures as VerboseHashObject;
             expect(fcfixtures.contents).to.haveOwnProperty(fileToHashFilename);
             expect(fixtures.hash)
               .to.satisfy((hash: string): boolean =>
@@ -629,7 +629,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
             expect(fixtures.contents).to.not.haveOwnProperty('sameContentWithFileToHash.txt');
             expect(fixtures.contents).to.haveOwnProperty('directory.1');
@@ -649,13 +649,13 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.contents).to.haveOwnProperty(fileToHashFilename);
             expect(fixtures.contents).to.haveOwnProperty('sameContentWithFileToHash.txt');
             expect(fixtures.contents).to.not.haveOwnProperty('directory.1');
             expect(fixtures.contents).to.haveOwnProperty('directory');
             expect(fixtures.contents).to.haveOwnProperty('fixtures');
-            const ffixtures = fixtures.contents.fixtures as IVerboseHashObject;
+            const ffixtures = fixtures.contents.fixtures as VerboseHashObject;
             expect(ffixtures.contents).to.haveOwnProperty('directory.1');
             expect(fixtures.hash)
               .to.satisfy((hash: string): boolean =>
@@ -699,7 +699,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.contents).to.haveOwnProperty(fileToHashFilename);
             expect(fixtures.contents).to.haveOwnProperty('sameContentWithFileToHash.txt');
             expect(fixtures.contents).to.haveOwnProperty('directory');
@@ -719,7 +719,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.contents).to.haveOwnProperty(fileToHashFilename);
             expect(fixtures.contents).to.haveOwnProperty('sameContentWithFileToHash.txt');
             expect(fixtures.contents).to.haveOwnProperty('directory');
@@ -739,7 +739,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.contents).to.haveOwnProperty(fileToHashFilename);
             expect(fixtures.contents).to.haveOwnProperty('sameContentWithFileToHash.txt');
             expect(fixtures.contents).to.haveOwnProperty('directory');
@@ -759,7 +759,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.contents).to.haveOwnProperty(fileToHashFilename);
             expect(fixtures.contents).to.haveOwnProperty('sameContentWithFileToHash.txt');
             expect(fixtures.contents).to.haveOwnProperty('directory');
@@ -788,7 +788,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
               .and.that.to.haveOwnProperty('fixtures')
               .and.that.to.haveOwnProperty('contents')
               .and.that.to.haveOwnProperty('directory');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.hash)
               .to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
@@ -812,7 +812,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
               .and.that.to.haveOwnProperty('fixtures')
               .and.that.to.haveOwnProperty('contents')
               .and.that.to.not.haveOwnProperty('directory');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.hash)
               .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
@@ -836,7 +836,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
               .and.that.to.haveOwnProperty('fixtures')
               .and.that.to.haveOwnProperty('contents')
               .and.that.to.not.haveOwnProperty('directory');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.hash)
               .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
@@ -863,7 +863,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object')
               .and.to.haveOwnProperty('fixtures');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures).and.that.to.haveOwnProperty('contents');
             expect(fixtures.contents)
               .to.haveOwnProperty(fileToHashFilename)
@@ -885,13 +885,13 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             expect(sut)
               .to.haveOwnProperty('fixtures')
               .and.that.to.haveOwnProperty('contents');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.contents).to.haveOwnProperty('fixtures');
             expect(fixtures.contents).to.not.haveOwnProperty('directory');
             expect(fixtures.contents).to.not.haveOwnProperty('directory.1');
             expect(fixtures.contents).to.not.haveOwnProperty(fileToHashFilename);
             expect(fixtures.contents).to.not.haveOwnProperty('sameContentWithFileToHash.txt');
-            const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
+            const fcfixtures = fixtures.contents.fixtures as VerboseHashObject;
             expect(fcfixtures.contents)
               .to.haveOwnProperty(fileToHashFilename)
               .and.to.satisfy((hash: string): boolean =>
@@ -915,7 +915,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             options.exclude = ['*', '*/', '!**/fixtures/fileToHash.txt'];
             const sut = await Integrity.createDirHash(fixturesDirPath, options);
             expect(sut).to.be.an('object').and.to.haveOwnProperty('fixtures');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.contents).not.to.haveOwnProperty('directory');
             expect(fixtures.contents).not.to.haveOwnProperty('directory.1');
             expect(fixtures.contents).not.to.haveOwnProperty(fileToHashFilename);
@@ -928,7 +928,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
               .and.that.to.haveOwnProperty(fileToHashFilename)
               .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern, 't56X7IQ267Hza0qjpSpqb9UPcfE='));
-            const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
+            const fcfixtures = fixtures.contents.fixtures as VerboseHashObject;
             expect(fcfixtures.hash)
               .and.to.satisfy((hash: string): boolean =>
                 checker(hash, utils.base64RegexPattern,
@@ -951,7 +951,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
             expect(sut)
               .to.haveOwnProperty('fixtures')
               .and.that.to.haveOwnProperty('contents');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.contents).not.to.haveOwnProperty('fixtures');
             expect(fixtures.contents).not.to.haveOwnProperty('directory');
             expect(fixtures.contents).not.to.haveOwnProperty('directory.1');
@@ -981,12 +981,12 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
               .and.that.to.haveOwnProperty('contents')
               .and.that.to.haveOwnProperty('directory')
               .and.that.to.haveOwnProperty('contents');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.contents).not.to.haveOwnProperty('fixtures');
             expect(fixtures.contents).not.to.haveOwnProperty('directory.1');
             expect(fixtures.contents).not.to.haveOwnProperty(fileToHashFilename);
             expect(fixtures.contents).not.to.haveOwnProperty('sameContentWithFileToHash.txt');
-            const fcdirectory = fixtures.contents.directory as IVerboseHashObject;
+            const fcdirectory = fixtures.contents.directory as VerboseHashObject;
             expect(fcdirectory.contents)
               .to.haveOwnProperty('anotherFileToHash.txt')
               .and.to.satisfy((hash: string): boolean =>
@@ -1021,13 +1021,13 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
               .and.that.to.haveOwnProperty('contents')
               .and.that.to.haveOwnProperty('directory')
               .and.that.to.haveOwnProperty('contents');
-            const fixtures = sut.fixtures as IVerboseHashObject;
+            const fixtures = sut.fixtures as VerboseHashObject;
             expect(fixtures.contents).not.to.haveOwnProperty('directory');
             expect(fixtures.contents).not.to.haveOwnProperty('directory.1');
             expect(fixtures.contents).not.to.haveOwnProperty(fileToHashFilename);
             expect(fixtures.contents).not.to.haveOwnProperty('sameContentWithFileToHash.txt');
-            const fcfixtures = fixtures.contents.fixtures as IVerboseHashObject;
-            const fcfcdirectory = fcfixtures.contents.directory as IVerboseHashObject;
+            const fcfixtures = fixtures.contents.fixtures as VerboseHashObject;
+            const fcfcdirectory = fcfixtures.contents.directory as VerboseHashObject;
             expect(fcfcdirectory.contents)
               .to.haveOwnProperty('anotherFileToHash.txt')
               .and.to.satisfy((hash: string): boolean =>

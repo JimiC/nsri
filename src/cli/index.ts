@@ -6,20 +6,20 @@ import { normalizeEntries, unique } from '../common/utils';
 import { YargsParser } from '../common/yargsParser';
 import { IntegrityObject } from '../interfaces/integrityObject';
 import { IntegrityOptions } from '../interfaces/integrityOptions';
-import { IParsedArgs } from '../interfaces/parsedArgs';
-import { ISpinner } from '../interfaces/spinner';
+import { ParsedArgs } from '../interfaces/parsedArgs';
+import { Spinner } from '../interfaces/spinner';
 
 /** @internal */
 export default (async (): Promise<void> => {
   const id = 'nsri';
   const logger = new Logger();
   logger.eventEmitter.on('SIGINT', (): void => logger.handleForcedExit(!!logger));
-  let spinner: ISpinner = { timer: setImmediate((): void => void 0), line: 1 };
+  let spinner: Spinner = { timer: setImmediate((): void => void 0), line: 1 };
   let command;
   let message = '';
   try {
     await new ConfigExplorer().assignArgs();
-    const pargs: IParsedArgs = new YargsParser().parse();
+    const pargs: ParsedArgs = new YargsParser().parse();
     let exclusions = await Integrity.getExclusionsFromIgnoreFile();
     exclusions = unique([...exclusions, ...normalizeEntries(pargs.exclude)]);
     const options: IntegrityOptions = {

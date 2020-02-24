@@ -1,6 +1,6 @@
-import { IHashObject } from './hashObject';
+import { HashObject } from './hashObject';
 
 export interface IntegrityObject {
   version: string;
-  hashes: IHashObject;
+  hashes: HashObject;
 }

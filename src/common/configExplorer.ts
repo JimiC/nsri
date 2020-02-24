@@ -5,55 +5,55 @@ type Explorer = ReturnType<typeof cosmiconfig>;
 
 /** @internal */
 export class ConfigExplorer {
-  private _explorer: Explorer;
+  private explorer: Explorer;
   public constructor() {
-    this._explorer = cosmiconfig('nsri');
+    this.explorer = cosmiconfig('nsri');
   }
 
   public async assignArgs(): Promise<void> {
-    const _config = await this.getConfig();
-    if (!Object.keys(_config).length) {
+    const config = await this.getConfig();
+    if (!Object.keys(config).length) {
       return Promise.resolve();
     }
-    if (!this._existsArg(['-m', 'manifest']) && _config.manifest !== undefined) {
-      process.argv.push('-m', _config.manifest);
+    if (!this.existsArg(['-m', 'manifest']) && config.manifest !== undefined) {
+      process.argv.push('-m', config.manifest);
     }
-    if (!this._existsArg(['-s', 'source']) && _config.source) {
-      process.argv.push('-s', _config.source);
+    if (!this.existsArg(['-s', 'source']) && config.source) {
+      process.argv.push('-s', config.source);
     }
-    if (!this._existsArg(['-v', 'verbose']) && _config.verbose !== undefined) {
-      process.argv.push('-v', _config.verbose);
+    if (!this.existsArg(['-v', 'verbose']) && config.verbose !== undefined) {
+      process.argv.push('-v', config.verbose);
     }
-    if (!this._existsArg(['-da', 'diralgorithm']) && _config.cryptoOptions && _config.cryptoOptions.dirAlgorithm) {
-      process.argv.push('-da', _config.cryptoOptions.dirAlgorithm);
+    if (!this.existsArg(['-da', 'diralgorithm']) && config.cryptoOptions && config.cryptoOptions.dirAlgorithm) {
+      process.argv.push('-da', config.cryptoOptions.dirAlgorithm);
     }
-    if (!this._existsArg(['-fa', 'filealgorithm']) && _config.cryptoOptions && _config.cryptoOptions.fileAlgorithm) {
-      process.argv.push('-fa', _config.cryptoOptions.fileAlgorithm);
+    if (!this.existsArg(['-fa', 'filealgorithm']) && config.cryptoOptions && config.cryptoOptions.fileAlgorithm) {
+      process.argv.push('-fa', config.cryptoOptions.fileAlgorithm);
     }
-    if (!this._existsArg(['-e', 'encoding']) && _config.cryptoOptions && _config.cryptoOptions.encoding) {
-      process.argv.push('-e', _config.cryptoOptions.encoding);
+    if (!this.existsArg(['-e', 'encoding']) && config.cryptoOptions && config.cryptoOptions.encoding) {
+      process.argv.push('-e', config.cryptoOptions.encoding);
     }
-    if (!this._existsArg(['-x', 'exclude']) && _config.exclude) {
-      process.argv.push('-x', ..._config.exclude);
+    if (!this.existsArg(['-x', 'exclude']) && config.exclude) {
+      process.argv.push('-x', ...config.exclude);
     }
-    if (!this._existsArg(['-i', 'integrity']) && _config.integrity) {
-      process.argv.push('-i', _config.integrity);
+    if (!this.existsArg(['-i', 'integrity']) && config.integrity) {
+      process.argv.push('-i', config.integrity);
     }
-    if (!this._existsArg(['-o', 'output']) && _config.output) {
-      process.argv.push('-o', _config.output);
+    if (!this.existsArg(['-o', 'output']) && config.output) {
+      process.argv.push('-o', config.output);
     }
   }
 
   public async getConfig(fromPath?: string): Promise<any> {
-    if (!this._explorer) {
+    if (!this.explorer) {
       return Promise.reject(new Error('CosmiConfig not initialized'));
     }
-    this._explorer.clearSearchCache();
-    const _result = await this._explorer.search(fromPath);
-    return _result ? _result.config : {};
+    this.explorer.clearSearchCache();
+    const result = await this.explorer.search(fromPath);
+    return result ? result.config : {};
   }
 
-  private _existsArg(args: string[]): boolean {
+  private existsArg(args: string[]): boolean {
     return args.some((arg: string): boolean =>
       process.argv.some((argv: string): boolean => argv === arg));
   }

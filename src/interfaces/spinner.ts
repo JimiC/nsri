@@ -1,5 +1,5 @@
 /** @internal */
-export interface ISpinner {
+export interface Spinner {
   timer: NodeJS.Timer;
   line: number;
 }

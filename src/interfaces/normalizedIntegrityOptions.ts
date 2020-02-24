@@ -1,8 +1,8 @@
-import { ICryptoOptions } from './cryptoOptions';
+import { CryptoOptions } from './cryptoOptions';
 
 /** @internal */
-export interface INormalizedIntegrityOptions {
-  cryptoOptions: ICryptoOptions;
+export interface NormalizedIntegrityOptions {
+  cryptoOptions: CryptoOptions;
   verbose: boolean;
   strict: boolean;
   exclude: string[];

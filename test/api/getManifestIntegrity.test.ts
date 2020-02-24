@@ -59,7 +59,7 @@ describe(`Integrity: function 'getManifestIntegrity' tests`, function (): void {
 
       beforeEach(function (): void {
         // @ts-ignore
-        getManifestStub = sandbox.stub(Integrity, '_getManifestInfo');
+        getManifestStub = sandbox.stub(Integrity, 'getManifestInfo');
       });
 
       it(`and return 'undefined' when it's NOT found`,

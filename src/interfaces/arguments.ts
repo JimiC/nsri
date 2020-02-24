@@ -1,5 +1,5 @@
 /** @internal */
-export interface IArguments {
+export interface Arguments {
   diralgorithm?: string;
   source?: string;
   encoding?: string;

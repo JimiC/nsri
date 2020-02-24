@@ -12,8 +12,11 @@ describe(`Integrity: function 'updateManifestIntegrity' tests`, function (): voi
   context('expects', function (): void {
 
     type WriteFileType = [PathLike | number, any,
-      (string | { encoding?: string | null | undefined; mode?: string | number | undefined; floag?: string | undefined }
-        | null | undefined)?];
+      (string | {
+        encoding?: string | null | undefined;
+        mode?: string | number | undefined;
+        floag?: string | undefined;
+      } | null | undefined)?];
 
     context('to update the manifest with the integrity object', function (): void {
 
@@ -26,7 +29,7 @@ describe(`Integrity: function 'updateManifestIntegrity' tests`, function (): voi
         sandbox = sinon.createSandbox();
         writeFileAsyncStub = sandbox.stub(fsAsync, 'writeFileAsync');
         // @ts-ignore
-        getManifestStub = sandbox.stub(Integrity, '_getManifestInfo');
+        getManifestStub = sandbox.stub(Integrity, 'getManifestInfo');
         integrityTestObject = { hashes: {}, version: '' };
       });
 

@@ -1,7 +1,7 @@
-import { ICryptoOptions } from './cryptoOptions';
+import { CryptoOptions } from './cryptoOptions';
 
 export interface IntegrityOptions {
-  cryptoOptions?: ICryptoOptions;
+  cryptoOptions?: CryptoOptions;
   verbose?: boolean;
   strict?: boolean;
   exclude?: string[];

@@ -1,5 +1,5 @@
 /** @internal */
-export interface IParsedArgs {
+export interface ParsedArgs {
   command: string;
   dirAlgorithm: string;
   encoding: string;

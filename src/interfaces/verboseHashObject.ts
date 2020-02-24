@@ -1,6 +1,6 @@
-import { IHashObject } from './hashObject';
+import { HashObject } from './hashObject';
 
-export interface IVerboseHashObject {
-  contents: IHashObject;
+export interface VerboseHashObject {
+  contents: HashObject;
   hash: string;
 }

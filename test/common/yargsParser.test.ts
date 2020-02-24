@@ -136,8 +136,7 @@ describe('YargsParser: tests', function (): void {
         exitStub.restore();
       });
 
-    it('to throw an Error on invalid use of ' +
-      `'manifest' and 'integrity' options with the 'check' command`,
+    it(`to throw an Error on invalid use of 'manifest' and 'integrity' options with the 'check' command`,
       function (): void {
         const consoleErrorStub = sandbox.stub(console, 'error');
         const stderrStub = sandbox.stub(process.stderr, 'write');
@@ -158,8 +157,7 @@ describe('YargsParser: tests', function (): void {
         exitStub.restore();
       });
 
-    it('to throw an Error on invalid use of ' +
-      `'integrity' options with the 'check' command`,
+    it(`to throw an Error on invalid use of 'integrity' options with the 'check' command`,
       function (): void {
         const consoleErrorStub = sandbox.stub(console, 'error');
         const stderrStub = sandbox.stub(process.stderr, 'write');
