@@ -6,6 +6,9 @@
     "diagnostics": false,
     "sourceMap": false,
     "stripInternal": true,
-    "removeComments": true
-  }
+    "removeComments": true,
+    "outDir": "lib",
+    "rootDir": "src"
+  },
+  "exclude": ["test/**/*.ts"]
 }

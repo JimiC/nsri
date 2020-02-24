@@ -7,7 +7,7 @@
     ],
     "module": "commonjs",
     "moduleResolution": "node",
-    "newLine": "LF",
+    "newLine": "lf",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "outDir": "out",
