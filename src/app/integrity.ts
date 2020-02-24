@@ -240,6 +240,7 @@ export class Integrity {
     return options;
   }
 
+  /** @internal */
   private static async detectCryptoOptions(
     firstElement: string | VerboseHashObject,
     inPath: string): Promise<CryptoOptions> {
