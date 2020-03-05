@@ -96,13 +96,11 @@
       "error",
       "as-needed"
     ],
-    "camelcase": "error",
     "comma-dangle": [
       "error",
       "always-multiline"
     ],
     "complexity": "off",
-    "constructor-super": "error",
     "curly": "error",
     "dot-notation": "error",
     "eol-last": "error",
@@ -119,7 +117,7 @@
       "boolean"
     ],
     "id-match": "error",
-    "indent": "off",
+    "indent": "off", //TODO: examine
     "max-classes-per-file": [
       "error",
       1
@@ -133,48 +131,14 @@
     "new-parens": "error",
     "no-bitwise": "error",
     "no-caller": "error",
-    "no-cond-assign": "error",
-    "no-console": [
-      "error",
-      {
-        "allow": [
-          "dirxml",
-          "error",
-          "dir",
-          "time",
-          "timeEnd",
-          "trace",
-          "assert",
-          "clear",
-          "count",
-          "countReset",
-          "group",
-          "groupCollapsed",
-          "groupEnd",
-          "table",
-          "Console",
-          "markTimeline",
-          "profile",
-          "profileEnd",
-          "timeline",
-          "timelineEnd",
-          "timeStamp",
-          "context"
-        ]
-      }
-    ],
-    "no-debugger": "error",
-    "no-duplicate-case": "error",
+    "no-console": "error",
     "no-duplicate-imports": "error",
-    "no-empty": "error",
     "no-eval": "error",
     "no-extra-bind": "error",
-    "no-fallthrough": "error",
     "no-invalid-this": "error",
     "no-multiple-empty-lines": "error",
     "no-new-func": "error",
     "no-new-wrappers": "error",
-    "no-redeclare": "error",
     "no-return-await": "error",
     "no-sequences": "error",
     "no-shadow": [
@@ -183,23 +147,18 @@
         "hoist": "all"
       }
     ],
-    "no-sparse-arrays": "error",
     "no-template-curly-in-string": "error",
     "no-throw-literal": "error",
     "no-trailing-spaces": "error",
     "no-undef-init": "error",
     "no-underscore-dangle": "error",
-    "no-unsafe-finally": "error",
     "no-unused-expressions": "error",
-    "no-unused-labels": "error",
-    "no-var": "error",
     "object-shorthand": "error",
     "one-var": [
       "error",
       "never"
     ],
     "prefer-arrow-callback": "error",
-    "prefer-const": "error",
     "prefer-object-spread": "error",
     "quote-props": [
       "error",
@@ -227,8 +186,6 @@
           "#endregion"
         ]
       }
-    ],
-    "use-isnan": "error",
-    "valid-typeof": "off"
+    ]
   }
 }
