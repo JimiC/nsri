@@ -247,7 +247,7 @@ export class Integrity {
     const cryptoOptions: CryptoOptions = {};
     // find integrity members
     const getIntegrityMembers = (hash: string): RegExpMatchArray | null =>
-      hash ? hash.match(/^([a-zA-Z0-9-]*)-([\s\S]*)/) : null;
+      hash ? /^([a-zA-Z0-9-]*)-([\s\S]*)/.exec(hash) : null;
     const firstHash: string = typeof firstElement === 'string' ? firstElement : firstElement.hash;
     const integrityMembers = getIntegrityMembers(firstHash);
     if (!integrityMembers || !integrityMembers.length) {
@@ -317,7 +317,7 @@ export class Integrity {
       if (cryptoOptions.dirAlgorithm && !utils.isSupportedHash(cryptoOptions.dirAlgorithm)) {
         throw new Error(`ENOSUP: Hash algorithm not supported: '${cryptoOptions.dirAlgorithm}'`);
       }
-      if (cryptoOptions.encoding && this.allowedCryptoEncodings.indexOf(cryptoOptions.encoding.toLowerCase()) === -1) {
+      if (cryptoOptions.encoding && !this.allowedCryptoEncodings.includes(cryptoOptions.encoding.toLowerCase())) {
         throw new Error(`ENOSUP: Hash encoding not supported: '${cryptoOptions.encoding}'`);
       }
       return {
@@ -341,7 +341,7 @@ export class Integrity {
       const directoryPattern = /(^|\/)[^/]*\*[^/]*$/;
       filteredExclude = [...filteredExclude, ...filteredExclude
         .filter((excl: string): boolean => !directoryPattern.test(excl))
-        .map((excl: string): string => /\/$/.test(excl) ? `${excl}**` : `${excl}/**`)];
+        .map((excl: string): string => excl.endsWith('/') ? `${excl}**` : `${excl}/**`)];
       const negatePattern = /^\s*!/;
       const filteredInclude = filteredExclude
         .filter((excl: string): boolean => negatePattern.test(excl))
@@ -388,12 +388,12 @@ export class Integrity {
   }
 
   /** @internal */
-  private static async verify(
+  private static verify(
     intObj: IntegrityObject,
     integrity: IntegrityObject,
     sourceDirPath?: string,
     integrityDirPath?: string,
-  ): Promise<boolean> {
+  ): boolean {
     if (!intObj) {
       return false;
     }
@@ -402,43 +402,38 @@ export class Integrity {
     }
     const equals = (obj1: IntegrityObject, obj2: IntegrityObject): boolean =>
       !!obj1 && !!obj2 && JSON.stringify(utils.sortObject(obj1)) === JSON.stringify(utils.sortObject(obj2));
-    const deepEquals = async (): Promise<boolean> => {
-      const hashes: HashObject = integrity.hashes;
-      if (!sourceDirPath || !integrityDirPath) {
-        return false;
+    const getNodeOrDefault = (obj: HashObject, element: string): string | VerboseHashObject =>
+      obj[element] || obj[Object.keys(obj)[0]] || '';
+    const findHash = (array: string[], hashObj: HashObject): boolean => {
+      if (array.length === 1) {
+        const integrityHash: string | VerboseHashObject = getNodeOrDefault(hashObj, array[0]);
+        const hashedObjHash: string | VerboseHashObject = getNodeOrDefault(intObj.hashes, array[0]);
+        return typeof integrityHash === 'string'
+          ? typeof hashedObjHash === 'string'
+            ? integrityHash === hashedObjHash
+            : integrityHash === hashedObjHash.hash
+          : typeof hashedObjHash === 'string'
+            ? integrityHash.hash === hashedObjHash
+            : integrityHash.hash === hashedObjHash.hash;
       }
-      const getNodeOrDefault = (obj: HashObject, element: string): string | VerboseHashObject =>
-        obj[element] || obj[Object.keys(obj)[0]] || '';
-      const findHash = (array: string[], hashObj: HashObject): boolean => {
-        if (array.length === 1) {
-          const integrityHash: string | VerboseHashObject = getNodeOrDefault(hashObj, array[0]);
-          const hashedObjHash: string | VerboseHashObject = getNodeOrDefault(intObj.hashes, array[0]);
-          return typeof integrityHash === 'string'
-            ? typeof hashedObjHash === 'string'
-              ? integrityHash === hashedObjHash
-              : integrityHash === hashedObjHash.hash
-            : typeof hashedObjHash === 'string'
-              ? integrityHash.hash === hashedObjHash
-              : integrityHash.hash === hashedObjHash.hash;
-        }
-        const rootHash: string | VerboseHashObject = getNodeOrDefault(hashObj, array[0]);
-        // non-verbosely directory hash
-        if (typeof rootHash === 'string') {
-          return rootHash === getNodeOrDefault(intObj.hashes, array[0]);
-        }
-        // verbosely directory hash
-        const subDir: string | undefined =
-          Object.keys(rootHash.contents).find((key: string): boolean => key === array[1]);
-        array = subDir ? array.splice(1) : [];
-        return array.length ? findHash(array, rootHash.contents) : false;
-      };
-      const dirNameList = `.${path.sep}${path.relative(integrityDirPath, sourceDirPath)}`
-        .split(path.sep)
-        .filter((dir: string): string => dir);
-      return findHash(dirNameList, hashes);
+      const rootHash: string | VerboseHashObject = getNodeOrDefault(hashObj, array[0]);
+      // non-verbosely directory hash
+      if (typeof rootHash === 'string') {
+        return rootHash === getNodeOrDefault(intObj.hashes, array[0]);
+      }
+      // verbosely directory hash
+      const subDir: string | undefined =
+        Object.keys(rootHash.contents).find((key: string): boolean => key === array[1]);
+      array = subDir ? array.splice(1) : [];
+      return array.length ? findHash(array, rootHash.contents) : false;
     };
+    const dirNameList = `.${path.sep}${path.relative(integrityDirPath || '', sourceDirPath || '')}`
+      .split(path.sep)
+      .filter((dir: string): string => dir);
+    const deepEquals = (): boolean =>
+      sourceDirPath && integrityDirPath ? findHash(dirNameList, integrity.hashes) : false;
     const isEqual: boolean = equals(intObj, integrity);
-    const isDeepEqual: boolean = await deepEquals();
+    const isDeepEqual: boolean = deepEquals();
     return isEqual || isDeepEqual;
   }
 

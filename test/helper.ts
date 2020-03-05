@@ -2,7 +2,7 @@ export function checker(
   hash: string, encodingPattern: RegExp, hashToMatch: string,
   algorithmToMatch = 'sha1', lengthToMatch = 0,
 ): boolean {
-  const members = hash.match(/^([a-zA-Z0-9-]*)-([\s\S]*)/);
+  const members = /^([a-zA-Z0-9-]*)-([\s\S]*)/.exec(hash);
   if (!members || !members.length) {
     return false;
   }

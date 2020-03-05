@@ -35,7 +35,7 @@ export class Logger extends BaseLogger {
   public updateLog(message: string, line?: number, groupId?: string): void;
   public updateLog(message: string, lineOrGroupId?: number | string, groupId?: string): void {
     groupId = (typeof lineOrGroupId === 'string' && Number.isNaN(Number.parseInt(lineOrGroupId, 10)))
-      ? lineOrGroupId as string
+      ? lineOrGroupId
       : groupId;
 
     if (!process.stdout.isTTY) {
@@ -44,7 +44,7 @@ export class Logger extends BaseLogger {
     }
 
     const line = (typeof lineOrGroupId === 'number' && !Number.isNaN(lineOrGroupId))
-      ? lineOrGroupId as number
+      ? lineOrGroupId
       : 1;
     this.moveCursorTo(-line);
     readline.clearLine(process.stdout, 0);
