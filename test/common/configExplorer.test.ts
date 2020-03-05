@@ -11,7 +11,7 @@ describe('ConfigExplorer: tests', function (): void {
 
     let sandbox: sinon.SinonSandbox;
     let configExplorer: ConfigExplorer;
-    let getConfigStub: sinon.SinonStub<[(string | undefined)?], Promise<any>>;
+    let getConfigStub: sinon.SinonStub<[(string | undefined)?], Promise<object>>;
     let baseConfigDirPath: string;
 
     beforeEach(function (): void {

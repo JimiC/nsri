@@ -1,4 +1,5 @@
 import { cosmiconfig } from 'cosmiconfig';
+import { ConfigOptions } from '../interfaces/configOptions';
 
 /** @internal */
 type Explorer = ReturnType<typeof cosmiconfig>;
@@ -44,7 +45,7 @@ export class ConfigExplorer {
     }
   }
 
-  public async getConfig(fromPath?: string): Promise<any> {
+  public async getConfig(fromPath?: string): Promise<ConfigOptions> {
     if (!this.explorer) {
       return Promise.reject(new Error('CosmiConfig not initialized'));
     }

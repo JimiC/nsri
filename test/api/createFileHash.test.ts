@@ -55,7 +55,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
 
       it('the provided encoding is not supported',
         async function (): Promise<void> {
-          const cryptoOptions: any = { encoding: 'ascii' };
+          const cryptoOptions: object = { encoding: 'ascii' };
           try {
             await Integrity.createFileHash(fileToHashFilePath, cryptoOptions);
           } catch (error) {

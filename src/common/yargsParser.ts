@@ -88,10 +88,10 @@ export class YargsParser {
       .usage('Usage: $0 {command} [options]')
       .command('create [options]',
         `Creates integrity hash from the provided source (use '--help' for [options] details)`,
-        sortObject({ ...this.createOptions, ...this.commonOptions }))
+        sortObject({ ...this.createOptions, ...this.commonOptions }) as {[key: string]: y.Options})
       .command('check [options]',
         `Checks integrity hash against the provided source (use '--help' for [options] details)`,
-        sortObject({ ...this.checkOptions, ...this.commonOptions }))
+        sortObject({ ...this.checkOptions, ...this.commonOptions }) as {[key: string]: y.Options})
       .demandCommand(1, 'Missing command')
       .recommendCommands()
       .options({

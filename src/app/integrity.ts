@@ -14,6 +14,7 @@ import { HashObject } from '../interfaces/hashObject';
 import { IndexedObject } from '../interfaces/indexedObject';
 import { IntegrityObject } from '../interfaces/integrityObject';
 import { IntegrityOptions } from '../interfaces/integrityOptions';
+import { ManifestInfo } from '../interfaces/manifestInfo';
 import { NormalizedCryptoOptions } from '../interfaces/normalizedCryptoOptions';
 import { NormalizedIntegrityOptions } from '../interfaces/normalizedIntegrityOptions';
 import { VerboseHashObject } from '../interfaces/verboseHashObject';
@@ -163,7 +164,7 @@ export class Integrity {
         fileAlgorithm: config.cryptoOptions && config.cryptoOptions.fileAlgorithm,
       },
       exclude: config.exclude,
-      verbose: config.verbose,
+      verbose: Boolean(config.verbose),
     };
   }
 
@@ -178,7 +179,7 @@ export class Integrity {
   }
 
   /** @internal */
-  private static async getManifestInfo(dirPath: string): Promise<IndexedObject> {
+  private static async getManifestInfo(dirPath: string): Promise<ManifestInfo> {
     const manifestFilePath = path.resolve(dirPath, constants.manifestFile);
     if (!(await pfs.existsAsync(manifestFilePath))) {
       return Promise.reject(`Error: '${constants.manifestFile}' not found.`);
@@ -462,8 +463,8 @@ export class Integrity {
         : '');
       hash.update(path.basename(filePath));
       createReadStream(filePath)
-        .on('error', (error: any): void => rej(error))
-        .on('data', (chunk: any): Hash => hash.update(chunk))
+        .on('error', (error: unknown): void => rej(error))
+        .on('data', (chunk: string): Hash => hash.update(chunk))
         .on('end', result);
     });
   }

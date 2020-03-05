@@ -60,7 +60,6 @@
     "@typescript-eslint/interface-name-prefix": "error",
     "@typescript-eslint/member-ordering": "error",
     "@typescript-eslint/no-empty-function": "error",
-    "@typescript-eslint/no-explicit-any": "off", // TODO: examine
     "@typescript-eslint/no-parameter-properties": "error",
     "@typescript-eslint/no-use-before-define": "error",
     "@typescript-eslint/prefer-for-of": "error",
@@ -117,7 +116,7 @@
       "boolean"
     ],
     "id-match": "error",
-    "indent": "off", //TODO: examine
+    "indent": "off",
     "max-classes-per-file": [
       "error",
       1

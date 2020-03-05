@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-expressions */
 import ajv from 'ajv';
 import { expect } from 'chai';
+import fs from 'fs';
 import path from 'path';
 import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
@@ -17,6 +18,8 @@ describe(`Integrity: function 'create' tests`, function (): void {
     let fixturesDirPath: string;
     let fileToHashFilePath: string;
     let schemaValidator: ajv.Ajv;
+    let sandbox: sinon.SinonSandbox;
+    let fsStatsMock: sinon.SinonStubbedInstance<fs.Stats>;
 
     before(function (): void {
       schemaValidator = new ajv();
@@ -26,6 +29,8 @@ describe(`Integrity: function 'create' tests`, function (): void {
     let options: IntegrityOptions;
 
     beforeEach(function (): void {
+      sandbox = sinon.createSandbox();
+      fsStatsMock = sandbox.createStubInstance(fs.Stats);
       fixturesDirPath = path.resolve(__dirname, '../../../test/fixtures');
       fileToHashFilePath = path.resolve(fixturesDirPath, fileToHashFilename);
       options = {
@@ -35,10 +40,16 @@ describe(`Integrity: function 'create' tests`, function (): void {
       };
     });
 
+    afterEach(function (): void {
+      sandbox.restore();
+    });
+
     it('to return an empty object when path is not a file or directory',
       async function (): Promise<void> {
-        const lstatStub = sinon.stub(fsAsync, 'lstatAsync')
-          .resolves({ isDirectory: (): boolean => false, isFile: (): boolean => false } as any);
+        fsStatsMock.isDirectory.returns(false);
+        fsStatsMock.isFile.returns(false);
+        const lstatStub = sandbox.stub(fsAsync, 'lstatAsync')
+          .resolves(fsStatsMock);
         const sut = await Integrity.create(fixturesDirPath);
         lstatStub.restore();
         expect(lstatStub.calledOnce).to.be.true;

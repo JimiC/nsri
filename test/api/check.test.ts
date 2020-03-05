@@ -1,7 +1,7 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import { PathLike } from 'fs';
+import fs, { PathLike } from 'fs';
 import path from 'path';
 import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
@@ -33,6 +33,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
     let options: IntegrityOptions;
     let sandbox: sinon.SinonSandbox;
+    let fsStatsMock: sinon.SinonStubbedInstance<fs.Stats>;
 
     beforeEach(function (): void {
       sandbox = sinon.createSandbox();
@@ -47,6 +48,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
         strict: true,
         verbose: undefined,
       };
+      fsStatsMock = sandbox.createStubInstance(fs.Stats);
     });
 
     afterEach(function (): void {
@@ -58,8 +60,9 @@ describe(`Integrity: function 'check' tests`, function (): void {
       it('is a file path and filename is invalid',
         async function (): Promise<void> {
           const existsAsyncStub = sandbox.stub(fsAsync, 'existsAsync').resolves(true);
-          const lstatAsyncStub = sandbox.stub(fsAsync, 'lstatAsync')
-            .resolves({ isDirectory: (): boolean => false, isFile: (): boolean => true } as any);
+          fsStatsMock.isDirectory.returns(false);
+          fsStatsMock.isFile.returns(true);
+          const lstatAsyncStub = sandbox.stub(fsAsync, 'lstatAsync').resolves(fsStatsMock);
           try {
             await Integrity.check(fileToHashFilePath, 'package.json');
           } catch (error) {
@@ -107,8 +110,9 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
       it('path is other than a file or a directory',
         async function (): Promise<void> {
-          const lstatAsyncStub = sandbox.stub(fsAsync, 'lstatAsync')
-            .resolves({ isDirectory: (): boolean => false, isFile: (): boolean => false } as any);
+          fsStatsMock.isDirectory.returns(false);
+          fsStatsMock.isFile.returns(false);
+          const lstatAsyncStub = sandbox.stub(fsAsync, 'lstatAsync').resolves(fsStatsMock);
           try {
             await Integrity.check(fileToHashFilePath, integrityTestFilePath);
           } catch (error) {
@@ -952,7 +956,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
           it('function injection',
             async function (): Promise<void> {
-              const hashObj = function (): void { void 0; } as any;
+              const hashObj = (): string => '';
               const sut = await Integrity.check(fixturesDirPath, hashObj());
               expect(sut).to.be.a('boolean').and.to.be.false;
             });

@@ -10,7 +10,7 @@ describe(`Integrity: function 'getIntegrityOptionsFromConfig' tests`, function (
   context('expects', function (): void {
 
     let sandbox: sinon.SinonSandbox;
-    let getConfigStub: sinon.SinonStub<[(string | undefined)?], Promise<any>>;
+    let getConfigStub: sinon.SinonStub<[(string | undefined)?], Promise<object>>;
 
     beforeEach(function (): void {
       sandbox = sinon.createSandbox();

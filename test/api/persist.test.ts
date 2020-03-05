@@ -12,7 +12,7 @@ describe(`Integrity: function 'persist' tests`, function (): void {
 
   context('expects', function (): void {
 
-    type WriteFileType = [PathLike | number, any,
+    type WriteFileType = [PathLike | number, {},
       (string | {
         encoding?: string | null | undefined;
         mode?: string | number | undefined;

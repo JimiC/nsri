@@ -1,4 +1,4 @@
 /** @internal */
 export interface IndexedObject {
-  [key: string]: any;
+  [key: string]: unknown;
 }
