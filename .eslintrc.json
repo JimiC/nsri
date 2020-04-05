@@ -116,7 +116,6 @@
       "boolean"
     ],
     "id-match": "error",
-    "indent": "off",
     "max-classes-per-file": [
       "error",
       1
