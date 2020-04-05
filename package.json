@@ -48,7 +48,6 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "start": "node ./out/src/cli.js",
-    "lint-staged": "lint-staged",
     "lint": "eslint . --ext .ts",
     "prebuild:dev": "npm run cleanup && npm run lint",
     "build:dev": "npm run build -- -p tsconfig.dev.json",
