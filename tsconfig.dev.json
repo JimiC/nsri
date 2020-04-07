@@ -6,7 +6,7 @@
       "es6"
     ],
     "target": "es6",
-    "module": "es2015",
+    "module": "commonjs",
     "moduleResolution": "node",
     "newLine": "lf",
     "noUnusedLocals": true,
