@@ -1,4 +1,4 @@
-import readline, { ReadLine } from 'readline';
+import { clearLine, createInterface, cursorTo, moveCursor, ReadLine } from 'readline';
 import { BaseLogger } from '../abstractions/baseLogger';
 import { Spinner } from '../interfaces/spinner';
 
@@ -14,7 +14,7 @@ export class Logger extends BaseLogger {
 
   public constructor() {
     super();
-    this.eventEmitter = readline.createInterface(process.stdin, process.stdout);
+    this.eventEmitter = createInterface(process.stdin, process.stdout);
     this.frames = ['- ', '\\ ', '| ', '/ '];
     this.showSpinnerInFront = true;
     this.spinnerInterval = 80;
@@ -47,7 +47,7 @@ export class Logger extends BaseLogger {
       ? lineOrGroupId
       : 1;
     this.moveCursorTo(-line);
-    readline.clearLine(process.stdout, 0);
+    clearLine(process.stdout, 0);
     process.stdout.write(`${this.getHeader(groupId)}${message}`);
     this.moveCursorTo(line);
   }
@@ -73,9 +73,9 @@ export class Logger extends BaseLogger {
     }
     const moveAndClear = (): void => {
       this.moveCursorTo(-1);
-      readline.clearLine(process.stdout, 0);
+      clearLine(process.stdout, 0);
     };
-    readline.clearLine(process.stdout, 0);
+    clearLine(process.stdout, 0);
     this.updateLog('');
     if (hasInfoLogging) {
       this.updateLog('', 2);
@@ -90,8 +90,8 @@ export class Logger extends BaseLogger {
     if (!process.stdout.isTTY) {
       return;
     }
-    readline.cursorTo(process.stdout, 0);
-    readline.moveCursor(process.stdout, 0, line);
+    cursorTo(process.stdout, 0);
+    moveCursor(process.stdout, 0, line);
   }
 
   private spin(message: string, groupId: string | undefined, line: number): NodeJS.Timer {

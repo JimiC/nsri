@@ -1,13 +1,16 @@
 {
   "extends": "./tsconfig.dev.json",
   "compilerOptions": {
+    "lib": [
+      "es5"
+    ],
     "target": "es5",
     "declaration": true,
     "diagnostics": false,
     "sourceMap": false,
     "stripInternal": true,
-    "removeComments": true,
-    "outDir": "lib",
+    "removeComments": false,
+    "outDir": "dist",
     "rootDir": "src"
   },
   "exclude": ["test/**/*.ts"]

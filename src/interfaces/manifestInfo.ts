@@ -1,4 +1,5 @@
-import detectIndent = require('detect-indent');
+// eslint-disable-next-line import/default
+import detectIndent from 'detect-indent';
 import { IndexedObject } from './indexedObject';
 
 /** @internal */
