@@ -1,5 +1,6 @@
 import { CryptoOptions } from './cryptoOptions';
 
+/** @internal */
 export interface ConfigOptions {
   manifest?: string;
   source?: string;

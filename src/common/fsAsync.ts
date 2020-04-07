@@ -1,17 +1,17 @@
-import fs from 'fs';
+import { exists, lstat, readdir, readFile, writeFile } from 'fs';
 import { promisify } from 'util';
 
 /** @internal */
-export const existsAsync = promisify(fs.exists);
+export const existsAsync = promisify(exists);
 
 /** @internal */
-export const lstatAsync = promisify(fs.lstat);
+export const lstatAsync = promisify(lstat);
 
 /** @internal */
-export const readdirAsync = promisify(fs.readdir);
+export const readdirAsync = promisify(readdir);
 
 /** @internal */
-export const readFileAsync = promisify(fs.readFile);
+export const readFileAsync = promisify(readFile);
 
 /** @internal */
-export const writeFileAsync = promisify(fs.writeFile);
+export const writeFileAsync = promisify(writeFile);

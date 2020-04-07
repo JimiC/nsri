@@ -63,7 +63,7 @@ All `API` calls are `static` members of the `Integrity` class.
 
 `Info`: `createDirHash` is a function designed to create an `integrity` object for a directory. The `dirPath` can be an absolute or relative path. Creating a non-verbosely `integrity` object will compute all contents hashes combined.
 
-`Return Type`: `Promise<IHashObject>`
+`Return Type`: `Promise<HashObject>`
 
 `Parameters`:
 
@@ -85,14 +85,14 @@ All `API` calls are `static` members of the `Integrity` class.
 
 `Info`: `createFileHash` is a function designed to create an `integrity` object for a file. The `filePath` can be an absolute or relative path.
 
-`Return Type`: `Promise<IHashObject>`
+`Return Type`: `Promise<HashObject>`
 
 `Parameters`:
 
 |Name|Type|Attribute|Default|Description|
 |:---:|:---:|:---:|:---:|:---:|
 |filePath|string|||the path of the file to hash|
-|options|ICryptoOptions|optional|see [options](#options) section|the `crypto` options to use|
+|options|CryptoOptions|optional|see [options](#options) section|the `crypto` options to use|
 
 `Examples`
 
@@ -107,14 +107,14 @@ All `API` calls are `static` members of the `Integrity` class.
 
 `Info`: `createFilesHash` is a function designed to create an `integrity` object for a list of files. The `filenames` can be absolute or relative paths.
 
-`Return Type`: `Promise<IHashObject>`
+`Return Type`: `Promise<HashObject>`
 
 `Parameters`:
 
 |Name|Type|Attribute|Default|Description|
 |:---:|:---:|:---:|:---:|:---:|
 |filenames|string[]|||the list of the file paths to hash|
-|options|ICryptoOptions|optional|see [options](#options) section|the `crypto` options to use|
+|options|CryptoOptions|optional|see [options](#options) section|the `crypto` options to use|
 
 `Examples`
 
@@ -233,12 +233,12 @@ All `API` calls are `static` members of the `Integrity` class.
 
 |Name|Type|Attribute|Default|Description|
 |:---:|:---:|:---:|:---:|:---:|
-|cryptoOptions|ICryptoOptions|optional|see `ICryptoOptions` |the `crypto` options to use|
+|cryptoOptions|CryptoOptions|optional|see `CryptoOptions` |the `crypto` options to use|
 |strict|boolean|optional|false|whether the computed hashes are strictly using the directory name|
 |verbose|boolean|optional|false|whether the computed hashes are returned in a verbosely or non-verbosely structure|
 |exclude|string[]|optional|[]|the paths to be excluded, supports also `glob` expressions (positive & negative)|
 
-### ICryptoOptions
+### CryptoOptions
 
 |Name|Type|Attribute|Default|Description|
 |:---:|:---:|:---:|:---:|:---:|

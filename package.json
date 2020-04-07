@@ -39,25 +39,26 @@
     "nsri"
   ],
   "main": "lib/index.js",
+  "module": "lib/index.es.js",
   "bin": {
     "nsri": "lib/cli.js"
   },
   "files": [
     "lib"
   ],
-  "types": "lib/index.d.ts",
+  "types": "lib/nsri.d.ts",
   "scripts": {
     "start": "node ./out/src/cli.js",
     "lint": "eslint . --ext .ts",
-    "prebuild:dev": "npm run cleanup && npm run lint",
+    "prebuild:dev": "npm run lint",
     "build:dev": "npm run build -- -p tsconfig.dev.json",
     "prebuild": "npm run cleanup",
     "build": "tsc",
-    "cleanup": "rimraf ./.nyc_output ./coverage ./out ./lib",
+    "cleanup": "rimraf ./.nyc_output ./coverage ./out ./lib ./dist",
     "pretest": "npm run build:dev",
     "test": "nyc mocha",
     "posttest": "nyc report -r lcov",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build && npx api-extractor run && npx rollup -c"
   },
   "dependencies": {
     "ajv": "^6.12.0",
@@ -73,17 +74,26 @@
     "@types/node": "10",
     "@types/sinon": "^9.0.0",
     "@types/yargs": "^15.0.4",
-    "@typescript-eslint/eslint-plugin": "^2.26.0",
-    "@typescript-eslint/parser": "^2.26.0",
+    "@typescript-eslint/eslint-plugin": "^2.27.0",
+    "@typescript-eslint/parser": "^2.27.0",
+    "@microsoft/api-extractor": "^7.7.12",
+    "@rollup/plugin-typescript": "^3.1.1",
+    "builtin-modules": "^3.1.0",
     "eslint": "^6.8.0",
     "eslint-plugin-import": "^2.20.2",
     "chai": "^4.2.0",
     "husky": "^4.2.3",
-    "lint-staged": "^10.1.1",
+    "lint-staged": "^10.1.2",
     "mocha": "^7.1.1",
     "nyc": "^15.0.1",
     "rimraf": "^3.0.2",
+    "rollup": "^2.3.3",
+    "rollup-plugin-copy": "^3.3.0",
+    "rollup-plugin-delete": "^1.2.0",
+    "rollup-plugin-preserve-shebangs": "^0.2.0",
+    "rollup-plugin-terser": "^5.3.0",
     "sinon": "^9.0.1",
+    "tslib": "^1.11.1",
     "typescript": "^3.8.3"
   }
 }

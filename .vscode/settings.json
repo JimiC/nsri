@@ -5,7 +5,8 @@
   "files.associations": {
     ".huskyrc": "json",
     ".lintstagedrc": "json",
-    ".nycrc": "json"
+    ".nycrc": "json",
+    "api-extractor.json": "jsonc",
   },
   "typescript.tsdk": "node_modules/typescript/lib"
 }

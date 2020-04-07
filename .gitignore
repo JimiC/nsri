@@ -4,6 +4,7 @@ node_modules
 coverage
 out
 lib
+dist
 npm-debug.*
 *.lcov
 /.integrity.json

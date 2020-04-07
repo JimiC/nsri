@@ -1,11 +1,9 @@
 import { HexBase64Latin1Encoding } from 'crypto';
-import { Integrity } from '../app/integrity';
+import { Integrity, IntegrityObject, IntegrityOptions } from '../';
 import { ConfigExplorer } from '../common/configExplorer';
 import { Logger } from '../common/logger';
 import { normalizeEntries, unique } from '../common/utils';
 import { YargsParser } from '../common/yargsParser';
-import { IntegrityObject } from '../interfaces/integrityObject';
-import { IntegrityOptions } from '../interfaces/integrityOptions';
 import { ParsedArgs } from '../interfaces/parsedArgs';
 import { Spinner } from '../interfaces/spinner';
 
@@ -15,12 +13,12 @@ export default (async (): Promise<void> => {
   const logger = new Logger();
   logger.eventEmitter.on('SIGINT', (): void => logger.handleForcedExit(!!logger));
   let spinner: Spinner = { timer: setImmediate((): void => void 0), line: 1 };
-  let command;
+  let command = '';
   let message = '';
   try {
     await new ConfigExplorer().assignArgs();
     const pargs: ParsedArgs = new YargsParser().parse();
-    let exclusions = await Integrity.getExclusionsFromIgnoreFile();
+    let exclusions: string[] = await Integrity.getExclusionsFromIgnoreFile();
     exclusions = unique([...exclusions, ...normalizeEntries(pargs.exclude)]);
     const options: IntegrityOptions = {
       cryptoOptions: {

@@ -1,6 +1,6 @@
 import { existsSync, statSync } from 'fs';
 import { dirname } from 'path';
-import y from 'yargs';
+import * as y from 'yargs';
 import { Arguments } from '../interfaces/arguments';
 import { ParsedArgs } from '../interfaces/parsedArgs';
 import { sortObject } from './utils';

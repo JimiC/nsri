@@ -3,7 +3,7 @@ import ajv from 'ajv';
 import { createHash, getHashes, Hash, HexBase64Latin1Encoding } from 'crypto';
 import { createReadStream, Stats } from 'fs';
 import mm from 'minimatch';
-import path from 'path';
+import * as path from 'path';
 import { ConfigExplorer } from '../common/configExplorer';
 import * as constants from '../common/constants';
 import { CryptoEncoding } from '../common/enums';
@@ -19,6 +19,7 @@ import { NormalizedCryptoOptions } from '../interfaces/normalizedCryptoOptions';
 import { NormalizedIntegrityOptions } from '../interfaces/normalizedIntegrityOptions';
 import { VerboseHashObject } from '../interfaces/verboseHashObject';
 
+/** @public */
 export class Integrity {
   public static readonly CurrentSchemaVersion = '1';
 
