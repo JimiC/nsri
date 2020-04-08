@@ -1,39 +1,46 @@
+dist: bionic
 language: node_js
 os:
   - linux
   - osx
+version: ~> 1.0
 node_js:
   - node # latest node
   - 12
   - 10 # minimum
 git:
   depth: 5
-matrix:
+cache: npm
+before_install:
+  - if [[ $TRAVIS_COMMIT_MESSAGE =~ ^[[:digit:]\.]+] && [$TRAVIS_BRANCH != $TRAVIS_TAG ]] ; then echo -e "Skiping due to existing tagged build" && exit 0 ; fi
+install:
+  - npm install
+before_script:
+  - CC_OS_NAME=$(if [[ $TRAVIS_OS_NAME == "osx" ]]; then echo "darwin"; else echo $TRAVIS_OS_NAME; fi)
+  - URL="https://codeclimate.com/downloads/test-reporter/test-reporter-latest-$CC_OS_NAME-amd64"
+  - curl -sL $URL > cc-test-reporter && chmod +x cc-test-reporter && ./cc-test-reporter before-build
+script: npm test
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+
+jobs:
   allow_failures:
     - node_js: node
   fast_finish: true
-cache: yarn
-before_install:
-  - if [[ $TRAVIS_COMMIT_MESSAGE =~ ^[[:digit:]\.]+] && [$TRAVIS_BRANCH != $TRAVIS_TAG ]] ; then echo -e "Skiping due to existing tagged build" && exit 0 ; fi
-  - curl -L https://yarnpkg.com/install.sh | bash
-  - export PATH=$HOME/.yarn/bin:$PATH
-before_script: npm i codeclimate-test-reporter --no-save
-script: npm t
-after_success: if [[ $CODECLIMATE_REPO_TOKEN ]] ; then codeclimate-test-reporter < ./coverage/lcov.info ; fi
-
-jobs:
   include:
     - stage: publish
       if: repo =~ ^JimiC AND tag IS present AND type = push
       os: linux
-      node_js: 8
-      before_script: false
-      script: npm run prepublishOnly
-      after_success: false
+      node_js: 10
+      before_script: skip
+      script: skip
+      after_script: skip
       deploy:
-        skip_cleanup: true
-        provider: npm
-        email: jimikar@gmail.com
-        api_key: $NPM_TOKEN
-        on:
-          tags: true
+          provider: npm
+          email: jimikar@gmail.com
+          api_token: $NPM_TOKEN
+          edge: true
+          on:
+            repo: JimiC/nsri
+            branch: master
+            tags: true
