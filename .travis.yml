@@ -12,7 +12,8 @@ git:
   depth: 5
 cache: npm
 before_install:
-  - if [[ $TRAVIS_COMMIT_MESSAGE =~ ^[[:digit:]\.]+] && [$TRAVIS_BRANCH != $TRAVIS_TAG ]] ; then echo -e "Skiping due to existing tagged build" && exit 0 ; fi
+  - if [[ $TRAVIS_COMMIT_MESSAGE =~ ^[[:digit:]\.]+ && $TRAVIS_BRANCH != $TRAVIS_TAG ]] ;
+    then echo -e "Skipping due to existing tagged build" && exit 0 ; fi
 install:
   - npm install
 before_script:
