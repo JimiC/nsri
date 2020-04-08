@@ -2,23 +2,21 @@ version: '#{build}'
 image:
   - Visual Studio 2017
 environment:
-  # Define versions of Node.js
   matrix:
     - node_js: '' # latest node
     - node_js: '12'
     - node_js: '10' # minimum
 clone_depth: 5
 skip_tags: true
+build: off
 matrix:
   fast_finish: true
   allow_failures:
     - node_js: ''
-# Define platforms
 platform:
   - x64
 cache:
-# - node_modules
-  - '%LOCALAPPDATA%\Yarn'
+  - node_modules
 init:
   # Install the platform version of Node.js
   - ps: Install-Product node $env:node_js $env:platform
@@ -28,16 +26,6 @@ init:
   - yarn --version
   - ps: $PSVersionTable.PSVersion -f ''
 install:
-  # Install the latest version of Yarn
-  - ps: curl -o $env:temp\install.ps1 https://raw.githubusercontent.com/JimiC/ps-yarn-install/master/install.ps1 | powershell $env:temp\install.ps1
-  # Install modules
-  - yarn install
-before_test:
-  - npm i codeclimate-test-reporter --no-save
+  - npm install
 test_script:
-  # run test script
-  - npm t
-after_test:
-  # send coverage report
-  - ps: If ($env:CODECLIMATE_REPO_TOKEN -ne $null) { gc .\coverage\lcov.info | & .\node_modules\.bin\codeclimate-test-reporter }
-build: off
+  - npm test
