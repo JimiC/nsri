@@ -25,10 +25,10 @@ plugins:
   nodesecurity:
     enabled: true
   tslint:
-    enabled: true
+    enabled: false
 exclude_patterns:
   - "!src/**/*.ts"
-  - "!test/**/*.ts" 
+  - "!test/**/*.ts"
   - "src/cli.ts"
   - "test/"
   - ".github/"
