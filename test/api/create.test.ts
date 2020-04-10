@@ -8,7 +8,7 @@ import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import * as fsAsync from '../../src/common/fsAsync';
 import { IntegrityOptions } from '../../src/interfaces/integrityOptions';
-import * as schema from '../../src/schemas/v1/schema.json';
+import * as schema from '../../src/app/schemas/v1/schema.json';
 
 describe(`Integrity: function 'create' tests`, function (): void {
 

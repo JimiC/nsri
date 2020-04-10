@@ -33,7 +33,7 @@ export default [
       terser(),
       copy({
         targets: [
-          { src: 'src/schemas', dest: 'lib' }
+          { src: 'src/app/schemas', dest: 'lib' }
         ],
         copyOnce: true,
       }),
@@ -66,7 +66,7 @@ export default [
       terser(),
       copy({
         targets: [
-          { src: 'schemas', dest: 'lib' }
+          { src: 'src/app/schemas', dest: 'lib' }
         ],
         copyOnce: true,
       }),

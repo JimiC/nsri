@@ -59,7 +59,7 @@ export class Integrity {
       integrity = await this.pathCheck(integrity);
       const content = await pfs.readFileAsync(integrity, 'utf8');
       integrityObj = utils.parseJSON(content) as IntegrityObject;
-      this.validate(integrityObj);
+      await this.validate(integrityObj);
       return this.verify(intObj, integrityObj, fileOrDirPath, path.dirname(integrity));
     }
     // 'integrity' is a stringified JSON
@@ -75,7 +75,7 @@ export class Integrity {
         version: this.CurrentSchemaVersion,
       };
     }
-    this.validate(integrityObj);
+    await this.validate(integrityObj);
     return this.verify(intObj, integrityObj);
   }
 
@@ -228,7 +228,7 @@ export class Integrity {
     if (!integrityObj || !integrityObj.hashes) {
       return options;
     }
-    this.validate(integrityObj);
+    await this.validate(integrityObj);
     const first: string | VerboseHashObject = integrityObj.hashes[basename];
     if (!first) {
       return options;
@@ -567,10 +567,10 @@ export class Integrity {
   }
 
   /** @internal */
-  private static validate(data: IntegrityObject): void {
+  private static async validate(data: IntegrityObject): Promise<void> {
     let schema;
     try {
-      schema = require(`../schemas/v${data.version}/schema.json`);
+      schema = await import(`./schemas/v${data.version}/schema.json`);
     } catch {
       throw new Error(`EINVER: Invalid schema version: '${data.version}'`);
     }
