@@ -78,7 +78,7 @@
     "@typescript-eslint/eslint-plugin": "^2.27.0",
     "@typescript-eslint/parser": "^2.27.0",
     "@microsoft/api-extractor": "^7.7.13",
-    "@rollup/plugin-typescript": "3.1.1",
+    "@rollup/plugin-typescript": "4.1.1",
     "builtin-modules": "^3.1.0",
     "eslint": "^6.8.0",
     "eslint-plugin-import": "^2.20.2",
