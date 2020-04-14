@@ -1,34 +1,58 @@
+version: ~> 1.0
 dist: bionic
 language: node_js
 os:
   - linux
   - osx
-version: ~> 1.0
 node_js:
   - node # latest node
   - 12
   - 10 # minimum
 git:
   depth: 5
-cache: npm
+cache:
+  npm: false
 before_install:
-  - if [[ $TRAVIS_COMMIT_MESSAGE =~ ^[[:digit:]\.]+ && $TRAVIS_BRANCH != $TRAVIS_TAG ]] ;
-    then echo -e "Skipping due to existing tagged build" && exit 0 ; fi
+  - '[[ $TRAVIS_COMMIT_MESSAGE =~ ^(?:[[:digit:]]\.?)+ && $TRAVIS_BRANCH != $TRAVIS_TAG ]]
+    && echo -e "Skipping due to existing tagged build"
+    && exit 0
+    || echo -e "Skipped"'
 install:
   - npm install
 before_script:
-  - CC_OS_NAME=$(if [[ $TRAVIS_OS_NAME == "osx" ]]; then echo "darwin"; else echo $TRAVIS_OS_NAME; fi)
-  - URL="https://codeclimate.com/downloads/test-reporter/test-reporter-latest-$CC_OS_NAME-amd64"
-  - curl -sL $URL > cc-test-reporter && chmod +x cc-test-reporter && ./cc-test-reporter before-build
-script: npm test
+  - '[[ $TRAVIS_OS_NAME == "linux" ]]
+    && URL="https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64"
+    && curl -sL $URL > cc-test-reporter && chmod +x cc-test-reporter && ./cc-test-reporter before-build
+    && echo -e "Test report initialized"
+    || echo -e "Skipped"'
+script:
+  - npm test
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - '[[ $TRAVIS_OS_NAME == "linux" ]]
+    && ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+    || echo -e "Skipped"'
 
 jobs:
   allow_failures:
     - node_js: node
+    - os: windows
   fast_finish: true
   include:
+    - os: windows
+      node_js: node # latest node
+      env: YARN_GPG=no
+      before_script: skip
+      after_script: skip
+    - os: windows
+      node_js: 12
+      env: YARN_GPG=no
+      before_script: skip
+      after_script: skip
+    - os: windows
+      node_js: 10 # minimum
+      env: YARN_GPG=no
+      before_script: skip
+      after_script: skip
     - stage: publish
       if: repo =~ ^JimiC AND tag IS present AND type = push
       os: linux
