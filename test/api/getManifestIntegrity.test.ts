@@ -27,7 +27,7 @@ describe(`Integrity: function 'getManifestIntegrity' tests`, function (): void {
       sandbox.restore();
     });
 
-    context('to return an Error when', function (): void {
+    context(`to return an 'Error' when`, function (): void {
 
       it('the manifest file is not found',
         async function (): Promise<void> {
@@ -39,10 +39,23 @@ describe(`Integrity: function 'getManifestIntegrity' tests`, function (): void {
           }
         });
 
-      it(`the manifest is 'null'`,
+      it(`the manifest is NOT valid`,
         async function (): Promise<void> {
           existsAsyncStub.resolves(true);
           readFileAsyncStub.resolves('');
+          try {
+            await Integrity.getManifestIntegrity();
+          } catch (error) {
+            expect(existsAsyncStub.calledOnce).to.be.true;
+            expect(readFileAsyncStub.calledOnce).to.be.true;
+            expect(error).to.match(/Error: Manifest not found/);
+          }
+        });
+
+      it(`the manifest is an empty JSON`,
+        async function (): Promise<void> {
+          existsAsyncStub.resolves(true);
+          readFileAsyncStub.resolves('{\n }');
           try {
             await Integrity.getManifestIntegrity();
           } catch (error) {
@@ -61,17 +74,6 @@ describe(`Integrity: function 'getManifestIntegrity' tests`, function (): void {
         // @ts-ignore
         getManifestStub = sandbox.stub(Integrity, 'getManifestInfo');
       });
-
-      it(`and return 'undefined' when it's NOT found`,
-        async function (): Promise<void> {
-          getManifestStub.restore();
-          existsAsyncStub.resolves(true);
-          readFileAsyncStub.resolves('{\n }');
-          const sut = await Integrity.getManifestIntegrity();
-          expect(existsAsyncStub.calledOnce).to.be.true;
-          expect(readFileAsyncStub.calledOnce).to.be.true;
-          expect(sut).to.be.equal(undefined);
-        });
 
       it(`when it's found`,
         async function (): Promise<void> {

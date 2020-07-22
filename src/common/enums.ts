@@ -1,6 +1,6 @@
 /** @internal */
 export enum CryptoEncoding {
-  Hex = 'hex',
-  Base64 = 'base64',
-  Latin1 = 'latin1',
+  hex = 'hex',
+  base64 = 'base64',
+  latin1 = 'latin1',
 }

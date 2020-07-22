@@ -1,9 +1,11 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
+import { HexBase64Latin1Encoding } from 'crypto';
 import path from 'path';
 import { Integrity } from '../../src/app/integrity';
 import * as utils from '../../src/common/utils';
+import { CryptoOptions } from '../../src/interfaces/cryptoOptions';
 import { checker } from '../helper';
 
 describe(`Integrity: function 'createFilesHash' tests`, function (): void {
@@ -52,7 +54,7 @@ describe(`Integrity: function 'createFilesHash' tests`, function (): void {
 
       it('the provided encoding is not supported',
         async function (): Promise<void> {
-          const cryptoOptions: object = { encoding: 'ascii' };
+          const cryptoOptions: CryptoOptions = { encoding: 'ascii' as HexBase64Latin1Encoding };
           try {
             await Integrity.createFilesHash([fileToHashFilePath], cryptoOptions);
           } catch (error) {

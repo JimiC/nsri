@@ -196,7 +196,7 @@ describe('CLI: tests', function (): void {
         async function (): Promise<void> {
           process.stdout.isTTY = true;
           pargs.command = 'check';
-          const error = new Error();
+          const error = new Error('test');
           icCheckStub.throws(error);
           const exitStub = sandbox.stub(process, 'exit');
           const consoleLogStub = sandbox.stub(console, 'log');
@@ -210,6 +210,26 @@ describe('CLI: tests', function (): void {
           expect(loggerSpinnerLogStopSpy.calledOnce).to.be.true;
           expect(loggerUpdateLogSpy.callCount).to.equal(3);
           expect(loggerUpdateLogSpy.thirdCall.calledWithMatch(error.message)).to.be.true;
+        });
+
+      it('Error',
+        async function (): Promise<void> {
+          process.stdout.isTTY = true;
+          pargs.command = 'check';
+          const error = new Error();
+          icCheckStub.throws(error);
+          const exitStub = sandbox.stub(process, 'exit');
+          const consoleLogStub = sandbox.stub(console, 'log');
+          const stdoutStub = sandbox.stub(process.stdout, 'write');
+          const loggerSpinnerLogStopSpy = sandbox.spy(Logger.prototype, 'spinnerLogStop');
+          const loggerUpdateLogSpy = sandbox.spy(Logger.prototype, 'updateLog');
+          await nsri();
+          stdoutStub.restore();
+          consoleLogStub.restore();
+          exitStub.restore();
+          expect(loggerSpinnerLogStopSpy.calledOnce).to.be.true;
+          expect(loggerUpdateLogSpy.callCount).to.equal(3);
+          expect(loggerUpdateLogSpy.thirdCall.calledWithMatch(error.toString())).to.be.true;
         });
 
     });

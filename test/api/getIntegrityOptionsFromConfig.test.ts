@@ -4,13 +4,15 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import { ConfigExplorer } from '../../src/common/configExplorer';
+import { ConfigOptions } from '../../src/interfaces/configOptions';
+import { IntegrityOptions } from '../../src/interfaces/integrityOptions';
 
 describe(`Integrity: function 'getIntegrityOptionsFromConfig' tests`, function (): void {
 
   context('expects', function (): void {
 
     let sandbox: sinon.SinonSandbox;
-    let getConfigStub: sinon.SinonStub<[(string | undefined)?], Promise<object>>;
+    let getConfigStub: sinon.SinonStub<[(string | undefined)?], Promise<ConfigOptions>>;
 
     beforeEach(function (): void {
       sandbox = sinon.createSandbox();
@@ -30,20 +32,22 @@ describe(`Integrity: function 'getIntegrityOptionsFromConfig' tests`, function (
 
     it('to return the integrity options',
       async function (): Promise<void> {
-        const rc = {
+        const rc: ConfigOptions = {
           cryptoOptions: {
             dirAlgorithm: 'mr',
-            encoding: 'utf',
+            encoding: 'hex',
             fileAlgorithm: 'rm',
           },
           exclude: ['dir', 'file'],
           source: '.',
           verbose: true,
+          strict: true,
         };
-        const expected = {
+        const expected: IntegrityOptions = {
           cryptoOptions: rc.cryptoOptions,
           exclude: rc.exclude,
           verbose: rc.verbose,
+          strict: rc.strict,
         };
         getConfigStub.resolves(rc);
         const config = await Integrity.getIntegrityOptionsFromConfig();

@@ -17,13 +17,16 @@ export class ConfigExplorer {
       return Promise.resolve();
     }
     if (!this.existsArg(['-m', 'manifest']) && config.manifest !== undefined) {
-      process.argv.push('-m', config.manifest);
+      process.argv.push('-m', config.manifest.toString());
     }
     if (!this.existsArg(['-s', 'source']) && config.source) {
       process.argv.push('-s', config.source);
     }
     if (!this.existsArg(['-v', 'verbose']) && config.verbose !== undefined) {
-      process.argv.push('-v', config.verbose);
+      process.argv.push('-v', config.verbose.toString());
+    }
+    if (!this.existsArg(['-st', 'strict']) && config.strict !== undefined) {
+      process.argv.push('-st', config.strict.toString());
     }
     if (!this.existsArg(['-da', 'diralgorithm']) && config.cryptoOptions && config.cryptoOptions.dirAlgorithm) {
       process.argv.push('-da', config.cryptoOptions.dirAlgorithm);
@@ -51,7 +54,7 @@ export class ConfigExplorer {
     }
     this.explorer.clearSearchCache();
     const result = await this.explorer.search(fromPath);
-    return result ? result.config : {};
+    return (result ? result.config : {}) as ConfigOptions;
   }
 
   private existsArg(args: string[]): boolean {
