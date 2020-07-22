@@ -20,8 +20,10 @@ import { NormalizedIntegrityOptions } from '../interfaces/normalizedIntegrityOpt
 import { VerboseHashObject } from '../interfaces/verboseHashObject';
 
 /** @public */
+const CURRENT_SCHEMA_VERSION = '1';
+
+/** @public */
 export class Integrity {
-  public static readonly CurrentSchemaVersion = '1';
 
   /** @internal */
   // ['hex', 'base64', 'latin1']
@@ -58,21 +60,21 @@ export class Integrity {
     if (await pfs.existsAsync(integrity)) {
       integrity = await this.pathCheck(integrity);
       const content = await pfs.readFileAsync(integrity, 'utf8');
-      integrityObj = utils.parseJSON(content) as IntegrityObject;
+      integrityObj = utils.parseJSONSafe<IntegrityObject>(content);
       await this.validate(integrityObj);
       return this.verify(intObj, integrityObj, fileOrDirPath, path.dirname(integrity));
     }
     // 'integrity' is a stringified JSON
-    integrityObj = utils.parseJSON(integrity) as IntegrityObject;
+    integrityObj = utils.parseJSONSafe<IntegrityObject>(integrity);
     // 'integrity' is a hash
-    if (!integrityObj) {
+    if (!integrityObj || !Object.keys(integrityObj).length) {
       const ls = await pfs.lstatAsync(fileOrDirPath);
       const basename = ls.isFile() || options.strict ? path.basename(fileOrDirPath) : '.';
       integrityObj = {
         hashes: {
           [basename]: integrity,
         },
-        version: this.CurrentSchemaVersion,
+        version: CURRENT_SCHEMA_VERSION,
       };
     }
     await this.validate(integrityObj);
@@ -81,7 +83,7 @@ export class Integrity {
 
   public static async create(fileOrDirPath: string, options?: IntegrityOptions): Promise<IntegrityObject> {
     const ls: Stats = await pfs.lstatAsync(fileOrDirPath);
-    const obj: IntegrityObject = { version: this.CurrentSchemaVersion, hashes: {} };
+    const obj: IntegrityObject = { version: CURRENT_SCHEMA_VERSION, hashes: {} };
     if (ls.isDirectory()) {
       obj.hashes = await Integrity.createDirHash(fileOrDirPath, options);
     }
@@ -165,7 +167,8 @@ export class Integrity {
         fileAlgorithm: config.cryptoOptions && config.cryptoOptions.fileAlgorithm,
       },
       exclude: config.exclude,
-      verbose: Boolean(config.verbose),
+      verbose: config.verbose,
+      strict: config.strict,
     };
   }
 
@@ -186,8 +189,8 @@ export class Integrity {
       return Promise.reject(`Error: '${constants.manifestFile}' not found.`);
     }
     const content = await pfs.readFileAsync(manifestFilePath, 'utf8');
-    const manifest: IndexedObject | null = utils.parseJSON(content);
-    if (!manifest) {
+    const manifest = utils.parseJSONSafe<IndexedObject>(content);
+    if (!manifest || !Object.keys(manifest).length) {
       return Promise.reject('Error: Manifest not found');
     }
     return {
@@ -210,17 +213,17 @@ export class Integrity {
     if (await pfs.existsAsync(integrity)) {
       integrity = await this.pathCheck(integrity);
       const content = await pfs.readFileAsync(integrity, 'utf8');
-      integrityObj = utils.parseJSON(content) as IntegrityObject;
+      integrityObj = utils.parseJSONSafe<IntegrityObject>(content);
     } else {
       // 'integrity' is a stringified JSON
-      integrityObj = utils.parseJSON(integrity) as IntegrityObject;
+      integrityObj = utils.parseJSONSafe<IntegrityObject>(integrity);
       // 'integrity' is a hash
-      if (!integrityObj) {
+      if (!integrityObj || !Object.keys(integrityObj).length) {
         integrityObj = {
           hashes: {
             [basename]: integrity,
           },
-          version: this.CurrentSchemaVersion,
+          version: CURRENT_SCHEMA_VERSION,
         };
       }
     }
@@ -259,11 +262,11 @@ export class Integrity {
     const enc = integrityMembers[2];
     const encoding: HexBase64Latin1Encoding | undefined =
       utils.hexRegexPattern.test(enc)
-        ? CryptoEncoding.Hex
+        ? CryptoEncoding.hex
         : utils.base64RegexPattern.test(enc)
-          ? CryptoEncoding.Base64
+          ? CryptoEncoding.base64
           : utils.latin1RegexPattern.test(enc)
-            ? CryptoEncoding.Latin1
+            ? CryptoEncoding.latin1
             : undefined;
     if (!encoding) {
       return cryptoOptions;
@@ -568,14 +571,14 @@ export class Integrity {
 
   /** @internal */
   private static async validate(data: IntegrityObject): Promise<void> {
-    let schema;
+    let schema: Record<string, unknown>;
     try {
-      schema = await import(`./schemas/v${data.version}/schema.json`);
+      schema = await import(`./schemas/v${data.version}/schema.json`) as Record<string, unknown>;
     } catch {
       throw new Error(`EINVER: Invalid schema version: '${data.version}'`);
     }
     const validator = new ajv();
-    validator.validate(schema as object, data);
+    await validator.validate(schema, data);
     if (validator.errors) {
       throw new Error(`EVALER: ${validator.errorsText()}`);
     }

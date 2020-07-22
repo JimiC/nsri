@@ -50,8 +50,9 @@ export default (async (): Promise<void> => {
     }
     logger.spinnerLogStop(spinner, message, id);
   } catch (error) {
+    const err = error as Error;
     logger.spinnerLogStop(spinner, `Failed to ${command} integrity hash`, id);
-    logger.updateLog(`Error: ${error.message || error}`);
+    logger.updateLog(`Error: ${err.message || err.toString()}`);
   } finally {
     process.exit();
   }

@@ -7,28 +7,28 @@ describe('Utils: tests', function (): void {
 
   context('expects', function (): void {
 
-    context(`function 'parseJSON'`, function (): void {
+    context(`function 'parseJSONSafe'`, function (): void {
 
       context('to return a JSON when passed parameter is of type', function (): void {
 
         it('string',
           function (): void {
             const data = '{"some": "valid JSON"}';
-            expect(utils.parseJSON(data)).to.eql({ some: 'valid JSON' });
+            expect(utils.parseJSONSafe(data)).to.eql({ some: 'valid JSON' });
           });
 
         it('Buffer',
           function (): void {
             const data = Buffer.from('{"some": "valid JSON"}');
-            expect(utils.parseJSON(data)).to.eql({ some: 'valid JSON' });
+            expect(utils.parseJSONSafe(data)).to.eql({ some: 'valid JSON' });
           });
 
       });
 
-      it(`to return 'null' when provided text is not a valid JSON`,
+      it(`to return an empty JSON when provided text is not a valid JSON`,
         function (): void {
           const text = 'some invalid json';
-          expect(utils.parseJSON(text)).to.be.null;
+          expect(utils.parseJSONSafe(text)).to.be.empty;
         });
 
     });
@@ -82,6 +82,7 @@ describe('Utils: tests', function (): void {
           });
 
       });
+
     });
 
   });

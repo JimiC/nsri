@@ -124,6 +124,18 @@
 
 ---
 
+>## --strict
+
+`Alias`: -st
+
+`Description`: Strictly compares names and contents.
+
+`Default`: false
+
+`Type`: boolean
+
+---
+
 >## --help
 
 `Alias`: -h

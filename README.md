@@ -1,4 +1,5 @@
- # nsri (Node Subresource Integrity) <img src="https://raw.githubusercontent.com/jimic/nsri/master/media/nsri-logo.png" width="50" align="left">
+<!-- markdownlint-disable MD033-->
+# nsri (Node Subresource Integrity) <img src="https://raw.githubusercontent.com/jimic/nsri/master/media/nsri-logo.png" width="50" align="left">
 
 [![Build Status](https://travis-ci.com/JimiC/nsri.svg?branch=master)](https://travis-ci.com/JimiC/nsri)
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/JimiC/nsri?branch=master&svg=true)](https://ci.appveyor.com/project/JimiC/nsri)

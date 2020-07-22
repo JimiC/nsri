@@ -4,6 +4,7 @@ import { expect } from 'chai';
 import { join, resolve } from 'path';
 import sinon from 'sinon';
 import { ConfigExplorer } from '../../src/common/configExplorer';
+import { ConfigOptions } from '../../src/interfaces/configOptions';
 
 describe('ConfigExplorer: tests', function (): void {
 
@@ -11,7 +12,7 @@ describe('ConfigExplorer: tests', function (): void {
 
     let sandbox: sinon.SinonSandbox;
     let configExplorer: ConfigExplorer;
-    let getConfigStub: sinon.SinonStub<[(string | undefined)?], Promise<object>>;
+    let getConfigStub: sinon.SinonStub<[(string | undefined)?], Promise<ConfigOptions>>;
     let baseConfigDirPath: string;
 
     beforeEach(function (): void {
@@ -45,7 +46,7 @@ describe('ConfigExplorer: tests', function (): void {
             async function (): Promise<void> {
               getConfigStub.resolves({ manifest: true });
               await configExplorer.assignArgs();
-              expect(process.argv).to.contain('-m').and.to.contain(true);
+              expect(process.argv).to.contain('-m').and.to.contain('true');
             });
 
           it(`the 'source' value`,
@@ -59,7 +60,14 @@ describe('ConfigExplorer: tests', function (): void {
             async function (): Promise<void> {
               getConfigStub.resolves({ verbose: true });
               await configExplorer.assignArgs();
-              expect(process.argv).to.contain('-v').and.to.contain(true);
+              expect(process.argv).to.contain('-v').and.to.contain('true');
+            });
+
+          it(`the 'strict' value`,
+            async function (): Promise<void> {
+              getConfigStub.resolves({ strict: true });
+              await configExplorer.assignArgs();
+              expect(process.argv).to.contain('-st').and.to.contain('true');
             });
 
           it(`the 'diralgorithm' value`,

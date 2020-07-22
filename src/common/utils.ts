@@ -19,12 +19,12 @@ export function isSupportedHash(algorithm: string): boolean {
 }
 
 /** @internal */
-export function parseJSON(data: string | Buffer): IndexedObject | null {
+export function parseJSONSafe<T>(data: string | Buffer): T {
   try {
     const text = Buffer.isBuffer(data) ? data.toString() : data;
-    return JSON.parse(text);
-  } catch (err) {
-    return null;
+    return JSON.parse(text) as T;
+  } catch {
+    return {} as T;
   }
 }
 

@@ -14,7 +14,7 @@ export const defaultFileCryptoAlgorithm = 'sha1';
 export const defaultDirCryptoAlgorithm = 'sha512';
 
 /** @internal */
-export const defaultCryptoEncoding: HexBase64Latin1Encoding = CryptoEncoding.Base64;
+export const defaultCryptoEncoding: HexBase64Latin1Encoding = CryptoEncoding.base64;
 
 /** @internal */
 export const ignoreFile = '.nsriignore';
