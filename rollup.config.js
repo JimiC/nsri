@@ -12,11 +12,13 @@ export default [
     input: 'src/index.ts',
     output: [
       {
-        file: pkg.main,
+        dir: 'dist',
+        entryFileNames: pkg.main,
         format: 'cjs',
       },
       {
-        file: pkg.module,
+        dir: 'dist',
+        entryFileNames: pkg.module,
         format: 'es',
       },
     ],
@@ -33,12 +35,14 @@ export default [
       terser(),
       copy({
         targets: [
-          { src: 'src/app/schemas', dest: 'lib' }
+          { src: 'src/app/schemas', dest: 'lib' },
+          { src: 'dist/lib', dest: '.' }
         ],
         copyOnce: true,
+        hook: 'writeBundle'
       }),
       del({
-        targets: 'dist/',
+        targets: 'dist/out',
         runOnce: true,
         hook: 'buildEnd'
       })
@@ -48,7 +52,8 @@ export default [
     input: 'src/cli.ts',
     output: [
       {
-        file: 'lib/cli.js',
+        dir: 'dist',
+        entryFileNames: pkg.bin.nsri,
         format: 'cjs',
       }
     ],
@@ -66,12 +71,14 @@ export default [
       terser(),
       copy({
         targets: [
-          { src: 'src/app/schemas', dest: 'lib' }
+          { src: 'src/app/schemas', dest: 'lib' },
+          { src: 'dist/lib', dest: '.' }
         ],
         copyOnce: true,
+        hook: 'writeBundle'
       }),
       del({
-        targets: 'dist/',
+        targets: 'dist/out',
         runOnce: true,
         hook: 'buildEnd'
       })

@@ -10,7 +10,7 @@
     "sourceMap": false,
     "stripInternal": true,
     "removeComments": false,
-    "outDir": "dist",
+    "outDir": "dist/out",
     "rootDir": "src"
   },
   "exclude": ["test/**/*.ts"]
