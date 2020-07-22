@@ -1,8 +1,7 @@
 import { HashObject } from './hashObject';
-import { IndexedObject } from './indexedObject';
 
 /** @public */
-export interface IntegrityObject extends IndexedObject {
+export interface IntegrityObject extends Record<string, unknown>  {
   version: string;
   hashes: HashObject;
 }

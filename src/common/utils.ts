@@ -1,7 +1,6 @@
 import { getHashes } from 'crypto';
 // eslint-disable-next-line import/default
 import detectIndent from 'detect-indent';
-import { IndexedObject } from '../interfaces/indexedObject';
 
 /** @internal */
 export const hexRegexPattern = /^(?:[a-f0-9])+$/;
@@ -29,10 +28,10 @@ export function parseJSONSafe<T>(data: string | Buffer): T {
 }
 
 /** @internal */
-export function sortObject(obj: IndexedObject): IndexedObject {
+export function sortObject(obj: Record<string, unknown>): Record<string, unknown>  {
   return Object.keys(obj)
     .sort()
-    .reduce((p: IndexedObject, c: string): IndexedObject => {
+    .reduce((p: Record<string, unknown>, c: string): Record<string, unknown>  => {
       p[c] = obj[c];
       return p;
     }, {});

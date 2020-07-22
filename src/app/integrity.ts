@@ -11,7 +11,6 @@ import * as pfs from '../common/fsAsync';
 import * as utils from '../common/utils';
 import { CryptoOptions } from '../interfaces/cryptoOptions';
 import { HashObject } from '../interfaces/hashObject';
-import { IndexedObject } from '../interfaces/indexedObject';
 import { IntegrityObject } from '../interfaces/integrityObject';
 import { IntegrityOptions } from '../interfaces/integrityOptions';
 import { ManifestInfo } from '../interfaces/manifestInfo';
@@ -20,7 +19,7 @@ import { NormalizedIntegrityOptions } from '../interfaces/normalizedIntegrityOpt
 import { VerboseHashObject } from '../interfaces/verboseHashObject';
 
 /** @public */
-const CURRENT_SCHEMA_VERSION = '1';
+export const CURRENT_SCHEMA_VERSION = '1';
 
 /** @public */
 export class Integrity {
@@ -189,7 +188,7 @@ export class Integrity {
       return Promise.reject(`Error: '${constants.manifestFile}' not found.`);
     }
     const content = await pfs.readFileAsync(manifestFilePath, 'utf8');
-    const manifest = utils.parseJSONSafe<IndexedObject>(content);
+    const manifest = utils.parseJSONSafe<Record<string, unknown>>(content);
     if (!manifest || !Object.keys(manifest).length) {
       return Promise.reject('Error: Manifest not found');
     }

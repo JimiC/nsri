@@ -23,7 +23,7 @@ nsri.Integrity. ...
 
 All examples require to import the `Integrity` class before you will be able to use them.
 
-Additionally `CryptoOptions`, `IntegrityOptions`, `IntegrityObject`,  `HashObject`, `VerboseHashObject` and `IndexedObject` are also available types.
+Additionally `CryptoOptions`, `IntegrityOptions`, `IntegrityObject`, `HashObject` and `VerboseHashObject` are also available types.
 
 ```ts
 import { Integrity } from 'nsri';
