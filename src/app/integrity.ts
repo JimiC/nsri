@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unified-signatures */
 import ajv from 'ajv';
 import { createHash, getHashes, Hash, HexBase64Latin1Encoding } from 'crypto';
 import { createReadStream, Stats } from 'fs';
@@ -32,8 +31,6 @@ export class Integrity {
   /** @internal */
   private static rootDirPath = '';
 
-  public static async check(fileOrDirPath: string, integrity: string): Promise<boolean>;
-  public static async check(fileOrDirPath: string, integrity: string, options: IntegrityOptions): Promise<boolean>;
   public static async check(
     fileOrDirPath: string, integrity: string, options?: IntegrityOptions): Promise<boolean> {
     if (!fileOrDirPath || typeof fileOrDirPath !== 'string' ||

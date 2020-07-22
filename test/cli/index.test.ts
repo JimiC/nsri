@@ -20,7 +20,7 @@ describe('CLI: tests', function (): void {
   let configExplorerStub: sinon.SinonStub<[], Promise<void>>;
   let ypParseStub: sinon.SinonStub<[], ParsedArgs>;
   let icCreateStub: sinon.SinonStub<[string, (IntegrityOptions | undefined)?], Promise<IntegrityObject>>;
-  let icCheckStub: sinon.SinonStub<[string, string, IntegrityOptions], Promise<boolean>>;
+  let icCheckStub: sinon.SinonStub<[string, string, IntegrityOptions?], Promise<boolean>>;
   let isTTY: true | undefined;
 
   beforeEach(function (): void {
