@@ -1,13 +1,22 @@
 <!-- markdownlint-disable MD033-->
-# nsri (Node Subresource Integrity) <img src="https://raw.githubusercontent.com/jimic/nsri/master/media/nsri-logo.png" width="50" align="left">
+# nsri (NodeJS Subresource Integrity) <img src="https://raw.githubusercontent.com/jimic/nsri/master/media/nsri-logo.png" width="50" align="left">
 
-[![Build Status](https://travis-ci.com/JimiC/nsri.svg?branch=master)](https://travis-ci.com/JimiC/nsri)
-[![Build Status](https://ci.appveyor.com/api/projects/status/github/JimiC/nsri?branch=master&svg=true)](https://ci.appveyor.com/project/JimiC/nsri)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/jimic/nsri)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/jimic/nsri)
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/77bea27f9bd1906ac525/maintainability)](https://codeclimate.com/github/JimiC/nsri/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/77bea27f9bd1906ac525/test_coverage)](https://codeclimate.com/github/JimiC/nsri/test_coverage)
+[![License](https://img.shields.io/github/license/jimic/nsri)](https://raw.githubusercontent.com/jimic/nsri/master/LICENSE)
+![Semantic Version](https://img.shields.io/badge/semver-2.0.0-green)
+![node-current](https://img.shields.io/node/v/nsri?label=supported%20node%20versions)
+
+[![Build Status](https://travis-ci.com/jimic/nsri.svg?branch=master)](https://travis-ci.com/jimic/nsri)
+[![Build Status](https://ci.appveyor.com/api/projects/status/github/jimic/nsri?branch=master&svg=true)](https://ci.appveyor.com/project/jimic/nsri)
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/77bea27f9bd1906ac525/maintainability)](https://codeclimate.com/github/jimic/nsri/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/77bea27f9bd1906ac525/test_coverage)](https://codeclimate.com/github/jimic/nsri/test_coverage)
 
 [![Known Vulnerabilities](https://snyk.io/test/github/jimic/nsri/badge.svg?targetFile=package.json)](https://snyk.io/test/github/jimic/nsri?targetFile=package.json)
+
+![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/nsri)
 
 ---
 
