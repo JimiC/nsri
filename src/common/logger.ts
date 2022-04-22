@@ -96,7 +96,7 @@ export class Logger extends BaseLogger {
 
   private spin(message: string, groupId: string | undefined, line: number): NodeJS.Timer {
     if (!process.stdout.isTTY) {
-      return setImmediate((): void => void 0);
+      return setInterval((): void => void 0);
     }
     let index = 0;
     this.cursorHide();

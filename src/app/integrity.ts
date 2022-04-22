@@ -1,5 +1,5 @@
 import ajv from 'ajv';
-import { createHash, getHashes, Hash, HexBase64Latin1Encoding } from 'crypto';
+import { createHash, getHashes, Hash, BinaryToTextEncoding } from 'crypto';
 import { createReadStream, Stats } from 'fs';
 import mm from 'minimatch';
 import * as path from 'path';
@@ -24,7 +24,7 @@ export const CURRENT_SCHEMA_VERSION = '1';
 export class Integrity {
 
   /** @internal */
-  // ['hex', 'base64', 'latin1']
+  // ['hex', 'base64', 'base64url']
   private static readonly allowedCryptoEncodings = Object.keys(CryptoEncoding)
     .map<string>((k: string): string => CryptoEncoding[k as keyof typeof CryptoEncoding]);
 
@@ -158,9 +158,9 @@ export class Integrity {
     }
     return {
       cryptoOptions: {
-        dirAlgorithm: config.cryptoOptions && config.cryptoOptions.dirAlgorithm,
-        encoding: config.cryptoOptions && config.cryptoOptions.encoding,
-        fileAlgorithm: config.cryptoOptions && config.cryptoOptions.fileAlgorithm,
+        dirAlgorithm: config.cryptoOptions?.dirAlgorithm,
+        encoding: config.cryptoOptions?.encoding,
+        fileAlgorithm: config.cryptoOptions?.fileAlgorithm,
       },
       exclude: config.exclude,
       verbose: config.verbose,
@@ -256,13 +256,13 @@ export class Integrity {
     }
     // detect encoding
     const enc = integrityMembers[2];
-    const encoding: HexBase64Latin1Encoding | undefined =
+    const encoding: BinaryToTextEncoding | undefined =
       utils.hexRegexPattern.test(enc)
         ? CryptoEncoding.hex
         : utils.base64RegexPattern.test(enc)
           ? CryptoEncoding.base64
-          : utils.latin1RegexPattern.test(enc)
-            ? CryptoEncoding.latin1
+          : utils.base64urlRegexPattern.test(enc)
+            ? CryptoEncoding.base64url
             : undefined;
     if (!encoding) {
       return cryptoOptions;
@@ -456,7 +456,7 @@ export class Integrity {
     filePath: string,
     hash: Hash,
     algorithm: string,
-    encoding?: HexBase64Latin1Encoding): Promise<string> {
+    encoding?: BinaryToTextEncoding): Promise<string> {
     return new Promise((res, rej): void => {
       const result = (): void => res(encoding
         ? `${algorithm}-${hash.digest(encoding)}`

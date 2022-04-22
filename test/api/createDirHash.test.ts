@@ -113,7 +113,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
               'sha512'));
       });
 
-    it(`to return an 'sha512' and 'hex' encoded hash string`,
+    it(`to return a 'sha512' and 'hex' encoded hash string`,
       async function (): Promise<void> {
         options.cryptoOptions = { encoding: 'hex' };
         options.verbose = false;
@@ -127,18 +127,17 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
               'sha512', sha512Length));
       });
 
-    it(`to return an 'sha512' and 'latin1' encoded hash string`,
+    it(`to return a 'sha512' and 'base64url' encoded hash string`,
       async function (): Promise<void> {
-        options.cryptoOptions = { encoding: 'latin1' };
+        options.cryptoOptions = { encoding: 'base64url' };
         options.verbose = false;
         const sut = await Integrity.createDirHash(fixturesDirPath, options);
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty('fixtures')
           .and.to.satisfy((hash: string): boolean =>
-            checker(hash, utils.latin1RegexPattern,
-              // tslint:disable-next-line:max-line-length
-              'ZQOú@\u000ft|wÑ<J\t\u0005\u001b¿?eýÊ£·È\u0000±ÃubÁ"I' +
-              '\u0019\u001b\u00181Æ\nVfà\u0011-Pû\u0000 ±«ÊÕxÖð4¾Í+\'°',
+            checker(hash, utils.base64urlRegexPattern,
+              'WlFP-kAPdHyGd9E8SgkFfxuGvz9l_cqjt8gAhrHDdWL' +
+              'BIkkZGxgxxgpWZuARLVD7ACCxq8rVeNbwNL7NKyeWsA',
               'sha512'));
       });
 
@@ -200,9 +199,9 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
                 'sha1', sha1Length));
         });
 
-      it(`with 'sha1' and 'latin1' encoding`,
+      it(`with 'sha1' and 'base64url' encoding`,
         async function (): Promise<void> {
-          options.cryptoOptions = { encoding: 'latin1' };
+          options.cryptoOptions = { encoding: 'base64url' };
           const sut = await Integrity.createDirHash(fixturesDirPath, options);
           expect(sut).to.be.an('object')
             .to.haveOwnProperty('fixtures')
@@ -210,7 +209,9 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
           const fixtures = sut.fixtures as VerboseHashObject;
           expect(fixtures.contents).to.haveOwnProperty(fileToHashFilename)
             .and.to.satisfy((hash: string): boolean =>
-              checker(hash, utils.latin1RegexPattern, '\u001f&`ØÛ0äÛï5øö`©wrM'));
+              checker(hash, utils.base64urlRegexPattern,
+                'H58mYNjbMJTkiNvvNfj2YKl3ck0',
+                'sha1'));
         });
 
       it(`with 'md5' and 'base64' encoding`,

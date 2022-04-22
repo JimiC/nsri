@@ -1,4 +1,4 @@
-import { HexBase64Latin1Encoding } from 'crypto';
+import { BinaryToTextEncoding } from 'crypto';
 import { Integrity, IntegrityObject, IntegrityOptions } from '../';
 import { ConfigExplorer } from '../common/configExplorer';
 import { Logger } from '../common/logger';
@@ -12,7 +12,7 @@ export default (async (): Promise<void> => {
   const id = 'nsri';
   const logger = new Logger();
   logger.eventEmitter.on('SIGINT', (): void => logger.handleForcedExit(!!logger));
-  let spinner: Spinner = { timer: setImmediate((): void => void 0), line: 1 };
+  let spinner: Spinner = { timer: setInterval((): void => void 0), line: 1 };
   let command = '';
   let message = '';
   try {
@@ -23,7 +23,7 @@ export default (async (): Promise<void> => {
     const options: IntegrityOptions = {
       cryptoOptions: {
         dirAlgorithm: pargs.dirAlgorithm,
-        encoding: pargs.encoding as HexBase64Latin1Encoding,
+        encoding: pargs.encoding as BinaryToTextEncoding,
         fileAlgorithm: pargs.fileAlgorithm,
       },
       exclude: exclusions,

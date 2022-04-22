@@ -1,7 +1,7 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import { HexBase64Latin1Encoding } from 'crypto';
+import { BinaryToTextEncoding } from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import sinon from 'sinon';
@@ -57,7 +57,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
 
       it('the provided encoding is not supported',
         async function (): Promise<void> {
-          const cryptoOptions: CryptoOptions = { encoding: 'ascii' as HexBase64Latin1Encoding };
+          const cryptoOptions: CryptoOptions = { encoding: 'ascii' as BinaryToTextEncoding };
           try {
             await Integrity.createFileHash(fileToHashFilePath, cryptoOptions);
           } catch (error) {
@@ -104,22 +104,26 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
             checker(hash, utils.base64RegexPattern, 'H58mYNjbMJTkiNvvNfj2YKl3ck0='));
       });
 
-    it(`to return an 'sha1' and 'hex' encoded hash string`,
+    it(`to return a 'sha1' and 'hex' encoded hash string`,
       async function (): Promise<void> {
         const sut = await Integrity.createFileHash(fileToHashFilePath, { encoding: 'hex' });
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty(fileToHashFilename)
           .and.to.satisfy((hash: string): boolean =>
-            checker(hash, utils.hexRegexPattern, '1f9f2660d8db3094e488dbef35f8f660a977724d', 'sha1', sha1Length));
+            checker(hash, utils.hexRegexPattern,
+              '1f9f2660d8db3094e488dbef35f8f660a977724d',
+              'sha1', sha1Length));
       });
 
-    it(`to return an 'sha1' and 'latin1' encoded hash string`,
+    it(`to return a 'sha1' and 'base64url' encoded hash string`,
       async function (): Promise<void> {
-        const sut = await Integrity.createFileHash(fileToHashFilePath, { encoding: 'latin1' });
+        const sut = await Integrity.createFileHash(fileToHashFilePath, { encoding: 'base64url' });
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty(fileToHashFilename)
           .and.to.satisfy((hash: string): boolean =>
-            checker(hash, utils.latin1RegexPattern, '\u001f&`ØÛ0äÛï5øö`©wrM'));
+            checker(hash, utils.base64urlRegexPattern,
+              'H58mYNjbMJTkiNvvNfj2YKl3ck0',
+              'sha1'));
       });
 
     it(`to return an 'md5' and 'base64' encoded hash string`,

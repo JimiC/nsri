@@ -243,7 +243,7 @@ All `API` calls are `static` members of the `Integrity` class.
 |Name|Type|Attribute|Default|Description|
 |:---:|:---:|:---:|:---:|:---:|
 |dirAlgorithm|string|optional|`sha512`|the `crypto` algorithm to use for directories|
-|encoding|HexBase64Latin1Encoding|optional|`hex`|the `crypto` encoding to use|
+|encoding|BinaryToTextEncoding|optional|`hex`|the `crypto` encoding to use|
 |fileAlgorithm|string|optional|`sha1`|the `crypto` algorithm to use for files|
 
 ---

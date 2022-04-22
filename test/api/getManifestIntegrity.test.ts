@@ -1,7 +1,7 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import { PathLike } from 'fs';
+import { BaseEncodingOptions, PathLike } from 'fs';
 import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import * as fsAsync from '../../src/common/fsAsync';
@@ -11,7 +11,7 @@ describe(`Integrity: function 'getManifestIntegrity' tests`, function (): void {
   context('expects', function (): void {
 
     type ReadFileType = [PathLike | number,
-      (string | { encoding?: string | null | undefined; flag?: string | undefined } | null | undefined)?];
+      (BaseEncodingOptions & { flag?: string | undefined } | BufferEncoding | null)?];
 
     let sandbox: sinon.SinonSandbox;
     let existsAsyncStub: sinon.SinonStub<[PathLike], Promise<boolean>>;
