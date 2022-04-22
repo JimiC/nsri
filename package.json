@@ -48,7 +48,7 @@
   ],
   "types": "lib/nsri.d.ts",
   "scripts": {
-    "reinstall": "rimraf ./yarn.lock ./package-lock.json ./node_modules && npm i && yarn",
+    "reinstall": "rimraf ./yarn.lock ./package-lock.json ./node_modules && npm i",
     "start": "node ./out/src/cli.js",
     "lint": "eslint --ext .ts .",
     "prebuild:dev": "npm run lint",
