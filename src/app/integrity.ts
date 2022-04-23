@@ -102,7 +102,7 @@ export class Integrity {
       ? await this.computeHashVerbosely(nomOptions, dirPath)
       : await this.computeHash(nomOptions, dirPath);
     const hasHashes = typeof hashes === 'string' ? !!hashes : !!hashes.hash;
-    const dirName = options && options.strict ? path.basename(dirPath) : '.';
+    const dirName = options?.strict ? path.basename(dirPath) : '.';
     return hasHashes ? { [dirName]: hashes } : {};
   }
 
@@ -157,10 +157,10 @@ export class Integrity {
       return Promise.resolve({});
     }
     return {
-      cryptoOptions: {
-        dirAlgorithm: config.cryptoOptions && config.cryptoOptions.dirAlgorithm,
-        encoding: config.cryptoOptions && config.cryptoOptions.encoding,
-        fileAlgorithm: config.cryptoOptions && config.cryptoOptions.fileAlgorithm,
+      cryptoOptions: config.cryptoOptions && {
+        dirAlgorithm: config.cryptoOptions.dirAlgorithm,
+        encoding: config.cryptoOptions.encoding,
+        fileAlgorithm: config.cryptoOptions.fileAlgorithm,
       },
       exclude: config.exclude,
       verbose: config.verbose,
@@ -336,7 +336,10 @@ export class Integrity {
 
   /** @internal */
   private static normalizeOptions(options?: IntegrityOptions): NormalizedIntegrityOptions {
-    const getExclusions = (exclusions: string[]): { include: string[]; exclude: string[] } => {
+    const getExclusions = (exclusions?: string[]): { include: string[]; exclude: string[] } => {
+      if (!exclusions) {
+        exclusions = [];
+      }
       const commentsPattern = /^\s*#/;
       let filteredExclude = exclusions.filter((excl: string): boolean => !!excl && !commentsPattern.test(excl));
       const directoryPattern = /(^|\/)[^/]*\*[^/]*$/;
@@ -356,14 +359,10 @@ export class Integrity {
         include: filteredInclude,
       };
     };
-    const cryptoOptions = this.normalizeCryptoOptions(options && options.cryptoOptions);
-    const { exclude, include } = getExclusions((options && options.exclude) || []);
-    const verbose = options && options.verbose !== undefined
-      ? options.verbose
-      : false;
-    const strict = options && options.strict !== undefined
-      ? options.strict
-      : false;
+    const cryptoOptions = this.normalizeCryptoOptions(options?.cryptoOptions);
+    const { exclude, include } = getExclusions(options?.exclude);
+    const verbose = options?.verbose !== undefined ? options.verbose : false;
+    const strict = options?.strict !== undefined ? options.strict : false;
     return {
       cryptoOptions,
       exclude,

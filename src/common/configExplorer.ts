@@ -28,13 +28,13 @@ export class ConfigExplorer {
     if (!this.existsArg(['-st', 'strict']) && config.strict !== undefined) {
       process.argv.push('-st', config.strict.toString());
     }
-    if (!this.existsArg(['-da', 'diralgorithm']) && config.cryptoOptions && config.cryptoOptions.dirAlgorithm) {
+    if (!this.existsArg(['-da', 'diralgorithm']) && config.cryptoOptions?.dirAlgorithm) {
       process.argv.push('-da', config.cryptoOptions.dirAlgorithm);
     }
-    if (!this.existsArg(['-fa', 'filealgorithm']) && config.cryptoOptions && config.cryptoOptions.fileAlgorithm) {
+    if (!this.existsArg(['-fa', 'filealgorithm']) && config.cryptoOptions?.fileAlgorithm) {
       process.argv.push('-fa', config.cryptoOptions.fileAlgorithm);
     }
-    if (!this.existsArg(['-e', 'encoding']) && config.cryptoOptions && config.cryptoOptions.encoding) {
+    if (!this.existsArg(['-e', 'encoding']) && config.cryptoOptions?.encoding) {
       process.argv.push('-e', config.cryptoOptions.encoding);
     }
     if (!this.existsArg(['-x', 'exclude']) && config.exclude) {

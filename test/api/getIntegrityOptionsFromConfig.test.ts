@@ -23,36 +23,91 @@ describe(`Integrity: function 'getIntegrityOptionsFromConfig' tests`, function (
       sandbox.restore();
     });
 
+    const expected = (options: ConfigOptions): IntegrityOptions => (
+      !Object.keys(options).length
+        ? options
+        : {
+          cryptoOptions: options.cryptoOptions,
+          exclude: options.exclude,
+          verbose: options.verbose,
+          strict: options.strict,
+        }
+    );
+
+    let rc: ConfigOptions = {
+      cryptoOptions: {
+        dirAlgorithm: 'mr',
+        encoding: 'hex',
+        fileAlgorithm: 'rm',
+      },
+      exclude: ['dir', 'file'],
+      source: '.',
+      verbose: true,
+      strict: true,
+    };
+
     it('to return an empty object, when failing to find a configuration',
       async function (): Promise<void> {
-        getConfigStub.resolves({});
-        const config = await Integrity.getIntegrityOptionsFromConfig();
-        expect(config).to.eql({});
-      });
-
-    it('to return the integrity options',
-      async function (): Promise<void> {
-        const rc: ConfigOptions = {
-          cryptoOptions: {
-            dirAlgorithm: 'mr',
-            encoding: 'hex',
-            fileAlgorithm: 'rm',
-          },
-          exclude: ['dir', 'file'],
-          source: '.',
-          verbose: true,
-          strict: true,
-        };
-        const expected: IntegrityOptions = {
-          cryptoOptions: rc.cryptoOptions,
-          exclude: rc.exclude,
-          verbose: rc.verbose,
-          strict: rc.strict,
-        };
+        rc = {};
         getConfigStub.resolves(rc);
         const config = await Integrity.getIntegrityOptionsFromConfig();
-        expect(config).to.eql(expected);
+        expect(config).to.eql(expected(rc));
       });
+
+    context('to return the integrity options', function (): void {
+
+      it('with all options',
+        async function (): Promise<void> {
+          getConfigStub.resolves(rc);
+          const config = await Integrity.getIntegrityOptionsFromConfig();
+          expect(config).to.eql(expected(rc));
+        });
+
+      it('without `cryptoOptions`',
+        async function (): Promise<void> {
+          rc.cryptoOptions = undefined;
+          getConfigStub.resolves(rc);
+          const config = await Integrity.getIntegrityOptionsFromConfig();
+          expect(config).to.eql(expected(rc));
+        });
+
+      it('with `dirAlgorithm` `undefined`',
+        async function (): Promise<void> {
+          rc.cryptoOptions = {
+            dirAlgorithm: undefined,
+            encoding: 'hex',
+            fileAlgorithm: 'rm',
+          };
+          getConfigStub.resolves(rc);
+          const config = await Integrity.getIntegrityOptionsFromConfig();
+          expect(config).to.eql(expected(rc));
+        });
+
+      it('with `encoding` `undefined`',
+        async function (): Promise<void> {
+          rc.cryptoOptions = {
+            dirAlgorithm: 'mr',
+            encoding: undefined,
+            fileAlgorithm: 'rm',
+          };
+          getConfigStub.resolves(rc);
+          const config = await Integrity.getIntegrityOptionsFromConfig();
+          expect(config).to.eql(expected(rc));
+        });
+
+      it('with `fileAlgorithm` `undefined`',
+        async function (): Promise<void> {
+          rc.cryptoOptions = {
+            dirAlgorithm: 'mr',
+            encoding: 'hex',
+            fileAlgorithm: undefined,
+          };
+          getConfigStub.resolves(rc);
+          const config = await Integrity.getIntegrityOptionsFromConfig();
+          expect(config).to.eql(expected(rc));
+        });
+
+    });
 
   });
 
