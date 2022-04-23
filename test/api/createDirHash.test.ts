@@ -1,10 +1,9 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import fs from 'fs';
+import fs, { ReadStream } from 'fs';
 import path from 'path';
 import sinon from 'sinon';
-import { Readable } from 'stream';
 import { Integrity } from '../../src/app/integrity';
 import * as utils from '../../src/common/utils';
 import { IntegrityOptions } from '../../src/interfaces/integrityOptions';
@@ -90,11 +89,15 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
       it('a file can not be read',
         async function (): Promise<void> {
           options.verbose = false;
-          sandbox.stub(fs, 'createReadStream').returns(new Readable() as fs.ReadStream);
+          sandbox.stub(fs, 'createReadStream').returns({
+            pipe: sinon.stub().returnsThis(),
+            on: sinon.stub().callsFake((_, cb: (err: Error) => void) =>
+              cb(new Error('Failed reading directory'))),
+          } as unknown as ReadStream);
           try {
             await Integrity.createDirHash(fixturesDirPath, options);
           } catch (error) {
-            expect(error).to.be.an.instanceof(Error);
+            expect(error).to.be.an.instanceof(Error).and.match(/Failed reading directory/);
           }
         });
 

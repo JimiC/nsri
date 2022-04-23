@@ -1,5 +1,5 @@
 import ajv from 'ajv';
-import { createHash, getHashes, Hash, BinaryToTextEncoding } from 'crypto';
+import { createHash, getHashes, Hash, BinaryToTextEncoding, BinaryLike } from 'crypto';
 import { createReadStream, Stats } from 'fs';
 import mm from 'minimatch';
 import * as path from 'path';
@@ -158,9 +158,9 @@ export class Integrity {
     }
     return {
       cryptoOptions: {
-        dirAlgorithm: config.cryptoOptions?.dirAlgorithm,
-        encoding: config.cryptoOptions?.encoding,
-        fileAlgorithm: config.cryptoOptions?.fileAlgorithm,
+        dirAlgorithm: config.cryptoOptions && config.cryptoOptions.dirAlgorithm,
+        encoding: config.cryptoOptions && config.cryptoOptions.encoding,
+        fileAlgorithm: config.cryptoOptions && config.cryptoOptions.fileAlgorithm,
       },
       exclude: config.exclude,
       verbose: config.verbose,
@@ -463,8 +463,8 @@ export class Integrity {
         : '');
       hash.update(path.basename(filePath));
       createReadStream(filePath)
-        .on('error', (error: unknown): void => rej(error))
-        .on('data', (chunk: string): Hash => hash.update(chunk))
+        .on('error', (error: Error): void => rej(error))
+        .on('data', (chunk: BinaryLike): Hash => hash.update(chunk))
         .on('end', result);
     });
   }

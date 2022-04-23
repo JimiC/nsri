@@ -2,10 +2,9 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import { BinaryToTextEncoding } from 'crypto';
-import fs from 'fs';
+import fs, { ReadStream } from 'fs';
 import path from 'path';
 import sinon from 'sinon';
-import { Readable } from 'stream';
 import { Integrity } from '../../src/app/integrity';
 import * as utils from '../../src/common/utils';
 import { CryptoOptions } from '../../src/interfaces/cryptoOptions';
@@ -85,11 +84,15 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
 
       it('the file can not be read',
         async function (): Promise<void> {
-          sandbox.stub(fs, 'createReadStream').returns(new Readable() as fs.ReadStream);
+          sandbox.stub(fs, 'createReadStream').returns({
+            pipe: sinon.stub().returnsThis(),
+            on: sinon.stub().callsFake((_, cb: (err: Error) => void) =>
+              cb(new Error('Failed reading file'))),
+          } as unknown as ReadStream);
           try {
             await Integrity.createFileHash(fileToHashFilePath);
           } catch (error) {
-            expect(error).to.be.an.instanceof(Error);
+            expect(error).to.be.an.instanceof(Error).and.match(/Failed reading file/);
           }
         });
 
