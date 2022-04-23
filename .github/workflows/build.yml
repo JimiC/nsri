@@ -1,0 +1,84 @@
+name: build
+
+on:
+  push:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    name: Test
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macOS-latest
+          - windows-latest
+        node_version:
+          - 16
+        experimental: [false]
+        minimum: [false]
+        include:
+          - os: ubuntu-latest
+            node_version: 18 # latest
+            experimental: true
+            minimum: false
+          - os: macOS-latest
+            node_version: 18 # latest
+            experimental: true
+            minimum: false
+          - os: windows-latest
+            node_version: 18 # latest
+            experimental: true
+            minimum: false
+
+          - os: ubuntu-latest
+            node_version: 14 # minimum
+            experimental: false
+            minimum: true
+          - os: macOS-latest
+            node_version: 14 # minimum
+            experimental: false
+            minimum: true
+          - os: windows-latest
+            node_version: 14 # minimum
+            experimental: false
+            minimum: true
+
+    steps:
+      - name: Cloning repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 5
+
+      - name: "Setting up Node.js: ${{ matrix.node_version }}"
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node_version }}
+
+      - name: Build info
+        run: |
+          node --version
+          npm --version
+
+      - name: Setting up coverage reporter
+        if: (matrix.os == 'ubuntu-latest' && matrix.minimum)
+        run: |
+          curl -sL "https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64" > cc-test-reporter
+          chmod +x cc-test-reporter
+          ./cc-test-reporter before-build
+
+      - name: Installing dependencies
+        run: npm ci
+
+      - name: Running tests
+        continue-on-error: ${{ matrix.experimental }}
+        run: npm test
+
+      - name: Test coverage report
+        if: (success() && matrix.os == 'ubuntu-latest' && matrix.minimum)
+        run: ./cc-test-reporter after-build -r ${{ secrets.CC_TEST_REPORTER_ID }}
