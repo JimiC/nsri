@@ -38,5 +38,4 @@ exclude_patterns:
   - "*.lock"
   - ".editorconfig"
   - ".git*"
-  - "wallaby.js"
   - "**/*.d.ts"

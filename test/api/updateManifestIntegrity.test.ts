@@ -1,7 +1,7 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import { PathLike } from 'fs';
+import { PathLike, WriteFileOptions } from 'fs';
 import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import * as fsAsync from '../../src/common/fsAsync';
@@ -11,12 +11,7 @@ describe(`Integrity: function 'updateManifestIntegrity' tests`, function (): voi
 
   context('expects', function (): void {
 
-    type WriteFileType = [PathLike | number, string,
-      (string | {
-        encoding?: string | null | undefined;
-        mode?: string | number | undefined;
-        floag?: string | undefined;
-      } | null | undefined)?];
+    type WriteFileType = [PathLike | number, string | NodeJS.ArrayBufferView, (WriteFileOptions)?];
 
     context('to update the manifest with the integrity object', function (): void {
 

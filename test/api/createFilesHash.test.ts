@@ -1,7 +1,7 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import { HexBase64Latin1Encoding } from 'crypto';
+import { BinaryToTextEncoding } from 'crypto';
 import path from 'path';
 import { Integrity } from '../../src/app/integrity';
 import * as utils from '../../src/common/utils';
@@ -54,7 +54,7 @@ describe(`Integrity: function 'createFilesHash' tests`, function (): void {
 
       it('the provided encoding is not supported',
         async function (): Promise<void> {
-          const cryptoOptions: CryptoOptions = { encoding: 'ascii' as HexBase64Latin1Encoding };
+          const cryptoOptions: CryptoOptions = { encoding: 'ascii' as BinaryToTextEncoding };
           try {
             await Integrity.createFilesHash([fileToHashFilePath], cryptoOptions);
           } catch (error) {
@@ -64,7 +64,7 @@ describe(`Integrity: function 'createFilesHash' tests`, function (): void {
 
     });
 
-    it(`to return by default an 'sha1' and 'base64' encoded hash JSON`,
+    it(`to return by default a 'sha1' and 'base64' encoded hash JSON`,
       async function (): Promise<void> {
         const files = [anotherFileToHashFilePath, otherFileToHashFilePath];
         const sut = await Integrity.createFilesHash(files);
@@ -77,7 +77,7 @@ describe(`Integrity: function 'createFilesHash' tests`, function (): void {
             checker(hash, utils.base64RegexPattern, 'B8FJ4uKgHESSgMvJUyrj3ix2uG8='));
       });
 
-    it(`to return an 'sha1' and 'hex' encoded hash JSON`,
+    it(`to return a 'sha1' and 'hex' encoded hash JSON`,
       async function (): Promise<void> {
         const files = [anotherFileToHashFilePath, otherFileToHashFilePath];
         const sut = await Integrity.createFilesHash(files, { encoding: 'hex' });
@@ -94,17 +94,21 @@ describe(`Integrity: function 'createFilesHash' tests`, function (): void {
               'sha1', sha1Length));
       });
 
-    it(`to return an 'sha1' and 'latin1' encoded hash JSON`,
+    it(`to return a 'sha1' and 'base64url' encoded hash JSON`,
       async function (): Promise<void> {
         const files = [anotherFileToHashFilePath, otherFileToHashFilePath];
-        const sut = await Integrity.createFilesHash(files, { encoding: 'latin1' });
+        const sut = await Integrity.createFilesHash(files, { encoding: 'base64url' });
         expect(sut).to.be.an('object');
         expect(sut).to.haveOwnProperty(anotherFileToHashFilename)
           .and.to.satisfy((hash: string): boolean =>
-            checker(hash, utils.latin1RegexPattern, '\u0011°Ò»\u0012pNuÒ(Ïb(8±\u0019¤'));
+            checker(hash, utils.base64urlRegexPattern,
+              'EZ2w0rsSmXBOddIoz2IoOIuxGaQ',
+              'sha1'));
         expect(sut).to.haveOwnProperty(otherFileToHashFilename)
           .and.to.satisfy((hash: string): boolean =>
-            checker(hash, utils.latin1RegexPattern, '\u0007ÁIââ \u001cDËÉS*ãÞ,v¸o'));
+            checker(hash, utils.base64urlRegexPattern,
+              'B8FJ4uKgHESSgMvJUyrj3ix2uG8',
+              'sha1'));
       });
 
     it(`to return an 'md5' and 'base64' encoded hash JSON`,

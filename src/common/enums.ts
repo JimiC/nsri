@@ -2,5 +2,5 @@
 export enum CryptoEncoding {
   hex = 'hex',
   base64 = 'base64',
-  latin1 = 'latin1',
+  base64url = 'base64url',
 }

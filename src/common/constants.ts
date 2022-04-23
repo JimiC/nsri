@@ -1,4 +1,4 @@
-import { HexBase64Latin1Encoding } from 'crypto';
+import { BinaryToTextEncoding } from 'crypto';
 import { CryptoEncoding } from './enums';
 
 /** @internal */
@@ -14,7 +14,7 @@ export const defaultFileCryptoAlgorithm = 'sha1';
 export const defaultDirCryptoAlgorithm = 'sha512';
 
 /** @internal */
-export const defaultCryptoEncoding: HexBase64Latin1Encoding = CryptoEncoding.base64;
+export const defaultCryptoEncoding: BinaryToTextEncoding = CryptoEncoding.base64;
 
 /** @internal */
 export const ignoreFile = '.nsriignore';

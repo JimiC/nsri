@@ -45,7 +45,7 @@ describe('Logger: tests', function (): void {
 
     context('when calling', function (): void {
 
-      let isTTY: true | undefined;
+      let isTTY: boolean;
       let timer: sinon.SinonFakeTimers;
 
       beforeEach(function (): void {
@@ -202,7 +202,7 @@ describe('Logger: tests', function (): void {
 
             it(`to display the 'groupId' when provided`,
               function (): void {
-                process.stdout.isTTY = undefined;
+                process.stdout.isTTY = false;
                 const writeStub = sandbox.stub(process.stdout, 'write');
                 logger.updateLog('test', 'Mocha');
                 writeStub.restore();
@@ -211,7 +211,7 @@ describe('Logger: tests', function (): void {
 
             it('the cursor does not move',
               function (): void {
-                process.stdout.isTTY = undefined;
+                process.stdout.isTTY = false;
                 const writeStub = sandbox.stub(process.stdout, 'write');
                 const moveCursorSpy = sandbox.spy(readline, 'moveCursor');
                 const cursorToStub = sandbox.spy(readline, 'cursorTo');
@@ -319,7 +319,7 @@ describe('Logger: tests', function (): void {
 
             it('to not display the spinner',
               function (): void {
-                process.stdout.isTTY = undefined;
+                process.stdout.isTTY = false;
                 const writeStub = sandbox.stub(process.stdout, 'write');
                 const logSpy = sandbox.spy(logger, 'log');
                 const updateLogSpy = sandbox.spy(logger, 'updateLog');
@@ -378,7 +378,7 @@ describe('Logger: tests', function (): void {
 
             it('the cursor indicatior does not change',
               function (): void {
-                process.stdout.isTTY = undefined;
+                process.stdout.isTTY = false;
                 const writeStub = sandbox.stub(process.stdout, 'write');
                 const spinner = logger.spinnerLogStart('test start');
                 timer.tick(logger.spinnerInterval);
@@ -418,7 +418,7 @@ describe('Logger: tests', function (): void {
 
             it('does not move the cursor',
               function (): void {
-                process.stdout.isTTY = undefined;
+                process.stdout.isTTY = false;
                 const writeStub = sandbox.stub(process.stdout, 'write');
                 const moveCursorSpy = sandbox.spy(readline, 'moveCursor');
                 const cursorToStub = sandbox.spy(readline, 'cursorTo');
@@ -438,17 +438,13 @@ describe('Logger: tests', function (): void {
 
         context('if the terminal', function (): void {
 
-          type SN = string | number;
-          type NU = number | undefined;
-          type SU = string | undefined;
-          // eslint-disable-next-line
-          type FU = Function | undefined;
+          type Callback = (err?: Error) => void;
 
-          let moveCursorStub: sinon.SinonStub<[NodeJS.WritableStream, SN, SN], void>;
-          let clearLineStub: sinon.SinonStub<[NodeJS.WritableStream, number], void>;
-          let cursorToStub: sinon.SinonStub<[NodeJS.WritableStream, number, (NU)?], void>;
-          let updateLogStub: sinon.SinonStub<[string, (NU)?, (SU)?], void>;
-          let cursorShowStub: sinon.SinonStub<[string, (SU)?, (FU)?], boolean>;
+          let moveCursorStub: sinon.SinonStub<[NodeJS.WritableStream, number, number, (Callback)?], boolean>;
+          let clearLineStub: sinon.SinonStub<[NodeJS.WritableStream, readline.Direction, (Callback)?], boolean>;
+          let cursorToStub: sinon.SinonStub<[NodeJS.WritableStream, number, (number)?, (Callback)?], boolean>;
+          let updateLogStub: sinon.SinonStub<[string, (number)?, (string)?], void>;
+          let cursorShowStub: sinon.SinonStub<[string | Uint8Array, (BufferEncoding)?, (Callback)?], boolean>;
 
           beforeEach(function (): void {
             moveCursorStub = sandbox.stub(readline, 'moveCursor');
@@ -514,7 +510,7 @@ describe('Logger: tests', function (): void {
 
               it('the cursor does not move and the process exits',
                 function (): void {
-                  process.stdout.isTTY = undefined;
+                  process.stdout.isTTY = false;
                   const exitStub = sandbox.stub(process, 'exit');
                   logger.handleForcedExit(true);
                   exitStub.restore();
@@ -533,7 +529,7 @@ describe('Logger: tests', function (): void {
 
               it('the cursor does not move and the process exits',
                 function (): void {
-                  process.stdout.isTTY = undefined;
+                  process.stdout.isTTY = false;
                   const exitStub = sandbox.stub(process, 'exit');
                   logger.handleForcedExit(false);
                   cursorShowStub.restore();

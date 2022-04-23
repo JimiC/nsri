@@ -9,8 +9,7 @@ export const hexRegexPattern = /^(?:[a-f0-9])+$/;
 export const base64RegexPattern = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
 
 /** @internal */
-// eslint-disable-next-line no-control-regex
-export const latin1RegexPattern = /^(?:[\x00-\xFF])+$/;
+export const base64urlRegexPattern = /^(?:[A-Za-z0-9-_]{4})*(?:[A-Za-z0-9-_]{2}|[A-Za-z0-9-_]{3})?$/;
 
 /** @internal */
 export function isSupportedHash(algorithm: string): boolean {

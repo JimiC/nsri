@@ -1,7 +1,7 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import fs, { PathLike } from 'fs';
+import { BaseEncodingOptions, PathLike, Stats } from 'fs';
 import path from 'path';
 import sinon from 'sinon';
 import { Integrity } from '../../src/app/integrity';
@@ -14,7 +14,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
   context('expects', function (): void {
 
     type ReadFileType = [PathLike | number,
-      (string | { encoding?: string | null | undefined; flag?: string | undefined } | null | undefined)?];
+      (BaseEncodingOptions & { flag?: string | undefined } | BufferEncoding | null)?];
 
     let anotherFileToHashFilename: string;
     let fileToHashFilename: string;
@@ -33,7 +33,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
     let options: IntegrityOptions;
     let sandbox: sinon.SinonSandbox;
-    let fsStatsMock: sinon.SinonStubbedInstance<fs.Stats>;
+    let fsStatsMock: sinon.SinonStubbedInstance<Stats>;
 
     beforeEach(function (): void {
       sandbox = sinon.createSandbox();
@@ -48,7 +48,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
         strict: true,
         verbose: undefined,
       };
-      fsStatsMock = sandbox.createStubInstance(fs.Stats);
+      fsStatsMock = sandbox.createStubInstance(Stats);
     });
 
     afterEach(function (): void {
@@ -805,7 +805,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
         it('the crypto algorithm when NOT provided',
           async function (): Promise<void> {
-            options.cryptoOptions = { encoding: 'latin1' };
+            options.cryptoOptions = { encoding: 'base64' };
             const sut = await Integrity.check(fixturesDirPath, integrityTestFilePath, options);
             expect(sut).to.be.a('boolean').and.to.be.true;
           });
@@ -854,7 +854,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
 
         it('provided a file path, the integrity object can not be determined',
           async function (): Promise<void> {
-            options.cryptoOptions = { encoding: 'latin1' };
+            options.cryptoOptions = { encoding: 'base64' };
             const resolvedHashObj = await Integrity.create(fixturesDirPath, options);
             const parseStub = sandbox.stub(utils, 'parseJSONSafe')
               .onCall(0).returns(null)
@@ -1049,9 +1049,9 @@ describe(`Integrity: function 'check' tests`, function (): void {
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
-          it(`'latin1' encoding`,
+          it(`'base64url' encoding`,
             async function (): Promise<void> {
-              const hashObj = '{"version":"1","hashes":{"fixtures":"sha1-\\fÇ8\\u0011ÌúIÄÎ(Lo]¹tÁ"}}';
+              const hashObj = '{"version":"1","hashes":{"fixtures":"sha1-DIjHOBHMnvpJxM4onkxvXbmcdME"}}';
               const sut = await Integrity.check(fixturesDirPath, hashObj, options);
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
@@ -1121,9 +1121,9 @@ describe(`Integrity: function 'check' tests`, function (): void {
               expect(sut).to.be.a('boolean').and.to.be.true;
             });
 
-          it(`latin1' encoding`,
+          it(`base64url' encoding`,
             async function (): Promise<void> {
-              const hash = 'sha1-\fÇ8\u0011ÌúIÄÎ(Lo]¹tÁ';
+              const hash = 'sha1-DIjHOBHMnvpJxM4onkxvXbmcdME';
               const sut = await Integrity.check(fixturesDirPath, hash, { strict: true });
               expect(sut).to.be.a('boolean').and.to.be.true;
             });

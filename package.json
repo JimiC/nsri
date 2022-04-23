@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/JimiC/nsri#readme",
   "engines": {
-    "node": ">= 10.*"
+    "node": ">= 14"
   },
   "keywords": [
     "node",
@@ -48,7 +48,7 @@
   ],
   "types": "lib/nsri.d.ts",
   "scripts": {
-    "reinstall": "rimraf ./yarn.lock ./package-lock.json ./node_modules && npm i && yarn",
+    "reinstall": "rimraf ./yarn.lock ./package-lock.json ./node_modules && npm i",
     "start": "node ./out/src/cli.js",
     "lint": "eslint --ext .ts .",
     "prebuild:dev": "npm run lint",
@@ -74,7 +74,7 @@
     "@types/chai": "^4.2.11",
     "@types/minimatch": "^3.0.3",
     "@types/mocha": "^8.0.0",
-    "@types/node": "10",
+    "@types/node": "14",
     "@types/sinon": "^9.0.4",
     "@types/yargs": "^15.0.5",
     "@typescript-eslint/eslint-plugin": "^3.7.0",
@@ -94,7 +94,7 @@
     "rollup-plugin-preserve-shebangs": "^0.2.0",
     "rollup-plugin-terser": "^6.1.0",
     "sinon": "^9.0.2",
-    "tslib": "^2.0.0",
+    "tslib": "^2.4.0",
     "typescript": "^3.9.7"
   }
 }
