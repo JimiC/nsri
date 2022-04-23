@@ -29,7 +29,7 @@
 
 A [Node.js](https://nodejs.org) utility tool that creates an integrity object containing the hash checksums of a file or a directory structure, that can be saved to an `.integrity.json` file [<img src="https://raw.githubusercontent.com/jimic/nsri/master/media/integrity_file.png" width="16" />], or put inside the project's manifest file (`project.json`).
 
-The hashes are computed using, by default, the `sha1` algorithm for files and `sha512` algorithm for directories, with `base64` encoding, complying to [Subresource Integrity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity) spec, but other [Node.js crypto](https://nodejs.org/api/crypto.html) supported [algorithms](https://nodejs.org/api/crypto.html#crypto_crypto_gethashes) and [encodings](https://nodejs.org/api/crypto.html#crypto_hash_digest_encoding) can be used.
+The hashes are computed using, by default, the `sha1` algorithm for files and `sha512` algorithm for directories, with `base64` encoding, complying to [Subresource Integrity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity) spec, but other [Node.js crypto](https://nodejs.org/api/crypto.html) supported [algorithms](https://nodejs.org/api/crypto.html#cryptogethashes) and [encodings](https://nodejs.org/api/crypto.html#hashdigestencoding) can be used.
 
 ## Instalation
 
