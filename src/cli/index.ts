@@ -17,7 +17,8 @@ export default (async (): Promise<void> => {
   let message = '';
   try {
     await new ConfigExplorer().assignArgs();
-    const pargs: ParsedArgs = new YargsParser().parse();
+    const parser = new YargsParser();
+    const pargs: ParsedArgs = await parser.parse();
     let exclusions: string[] = await Integrity.getExclusionsFromIgnoreFile();
     exclusions = unique([...exclusions, ...normalizeEntries(pargs.exclude)]);
     const options: IntegrityOptions = {

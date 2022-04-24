@@ -1,7 +1,7 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import sinon from 'sinon';
+import sinon, { createSandbox } from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import { ConfigExplorer } from '../../src/common/configExplorer';
 import { ConfigOptions } from '../../src/interfaces/configOptions';
@@ -15,7 +15,7 @@ describe(`Integrity: function 'getIntegrityOptionsFromConfig' tests`, function (
     let getConfigStub: sinon.SinonStub<[(string | undefined)?], Promise<ConfigOptions>>;
 
     beforeEach(function (): void {
-      sandbox = sinon.createSandbox();
+      sandbox = createSandbox();
       getConfigStub = sandbox.stub(ConfigExplorer.prototype, 'getConfig');
     });
 

@@ -1,4 +1,4 @@
-import ajv from 'ajv';
+import Ajv, { Schema } from 'ajv';
 import { createHash, getHashes, Hash, BinaryToTextEncoding, BinaryLike } from 'crypto';
 import { createReadStream, Stats } from 'fs';
 import mm from 'minimatch';
@@ -566,14 +566,14 @@ export class Integrity {
 
   /** @internal */
   private static async validate(data: IntegrityObject): Promise<void> {
-    let schema: Record<string, unknown>;
+    let schema: Schema;
     try {
-      schema = await import(`./schemas/v${data.version}/schema.json`) as Record<string, unknown>;
+      schema = await import(`./schemas/v${data.version}/schema.json`) as Schema;
     } catch {
       throw new Error(`EINVER: Invalid schema version: '${data.version}'`);
     }
-    const validator = new ajv();
-    await validator.validate(schema, data);
+    const validator = new Ajv({allowUnionTypes: true});
+    validator.validate<IntegrityObject>(schema, data);
     if (validator.errors) {
       throw new Error(`EVALER: ${validator.errorsText()}`);
     }

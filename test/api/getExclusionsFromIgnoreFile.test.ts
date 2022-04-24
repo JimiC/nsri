@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import { resolve } from 'path';
-import sinon from 'sinon';
+import sinon, { createSandbox } from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 
 describe(`Integrity: function 'getExclusionsFromIgnoreFile' tests`, function (): void {
@@ -13,7 +13,7 @@ describe(`Integrity: function 'getExclusionsFromIgnoreFile' tests`, function ():
     let baseIgnoreFilePath: string;
 
     beforeEach(function (): void {
-      sandbox = sinon.createSandbox();
+      sandbox = createSandbox();
       baseIgnoreFilePath = resolve(__dirname, '../../../test/ignoreFile');
     });
 

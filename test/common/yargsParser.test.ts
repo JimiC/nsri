@@ -3,7 +3,7 @@
 import { expect } from 'chai';
 import fs from 'fs';
 import path from 'path';
-import sinon from 'sinon';
+import sinon, { createSandbox } from 'sinon';
 import { YargsParser } from '../../src/common/yargsParser';
 
 describe('YargsParser: tests', function (): void {
@@ -15,7 +15,7 @@ describe('YargsParser: tests', function (): void {
   let fsStatsMock: sinon.SinonStubbedInstance<fs.Stats>;
 
   beforeEach(function (): void {
-    sandbox = sinon.createSandbox();
+    sandbox = createSandbox();
     argv = sandbox.stub(process, 'argv');
     fsStatsMock = sandbox.createStubInstance(fs.Stats);
     parser = new YargsParser();
@@ -29,9 +29,9 @@ describe('YargsParser: tests', function (): void {
   context('expects', function (): void {
 
     it('the returned parsed arguments object to have the correct properties',
-      function (): void {
+      async function (): Promise<void> {
         argv.value([...args]);
-        const sut = parser.parse();
+        const sut = await parser.parse();
         const props = ['dirAlgorithm', 'fileAlgorithm', 'command', 'encoding',
           'exclude', 'inPath', 'integrity', 'manifest', 'outPath', 'pretty',
           'strict', 'verbose'];
@@ -41,84 +41,103 @@ describe('YargsParser: tests', function (): void {
       });
 
     it(`that the 'fileAlgorithm' option gets parsed correctly`,
-      function (): void {
+      async function (): Promise<void> {
         args = [...args, '--fa', 'sha'];
         argv.value(args);
-        expect(parser.parse()).to.be.have.property('fileAlgorithm', args[6]);
+        const pargs = await parser.parse();
+        expect(pargs).to.be.have.property('fileAlgorithm', args[6]);
       });
 
     it(`that the 'dirAlgorithm' option gets parsed correctly`,
-      function (): void {
+      async function (): Promise<void> {
         args = [...args, '--da', 'sha'];
         argv.value(args);
-        expect(parser.parse()).to.be.have.property('dirAlgorithm', args[6]);
+        const pargs = await parser.parse();
+        expect(pargs).to.be.have.property('dirAlgorithm', args[6]);
       });
 
     it(`that the 'command' gets parsed correctly`,
-      function (): void {
+      async function (): Promise<void> {
         argv.value([...args]);
-        expect(parser.parse()).to.be.have.property('command', args[2]);
+        const pargs = await parser.parse();
+        expect(pargs).to.be.have.property('command', args[2]);
       });
 
     it(`that the 'encoding' option gets parsed correctly`,
-      function (): void {
+      async function (): Promise<void> {
         args = [...args, '-e', 'base64'];
         argv.value(args);
-        expect(parser.parse()).to.be.have.property('encoding', args[6]);
+        const pargs = await parser.parse();
+        expect(pargs).to.be.have.property('encoding', args[6]);
       });
 
     it(`that the 'exclude' option gets parsed correctly`,
-      function (): void {
+      async function (): Promise<void> {
         args = [...args, '-x', 'some/path'];
         argv.value(args);
-        expect(parser.parse()).to.be.have.property('exclude').with.members([args[6]]);
+        const pargs = await parser.parse();
+        expect(pargs).to.be.have.property('exclude').with.members([args[6]]);
       });
 
     it(`that the 'inPath' option gets parsed correctly`,
-      function (): void {
+      async function (): Promise<void> {
         args = [...args];
         argv.value(args);
-        expect(parser.parse()).to.be.have.property('inPath', args[4]);
+        const pargs = await parser.parse();
+        expect(pargs).to.be.have.property('inPath', args[4]);
       });
 
     it(`that the 'integrity' option gets parsed correctly`,
-      function (): void {
+      async function (): Promise<void> {
         args.splice(2, 1, 'check');
         args = [...args, '-i', '123456789'];
         argv.value(args);
-        expect(parser.parse()).to.be.have.property('integrity', args[6]);
+        const pargs = await parser.parse();
+        expect(pargs).to.be.have.property('integrity', args[6]);
       });
 
     it(`that the 'manifest' option gets parsed correctly`,
-      function (): void {
+      async function (): Promise<void> {
         args = [...args, '-m', 'true'];
         argv.value(args);
-        expect(parser.parse()).to.be.have.property('manifest', true);
+        const pargs = await parser.parse();
+        expect(pargs).to.be.have.property('manifest', true);
       });
 
     it(`that the 'outPath' option gets parsed correctly`,
-      function (): void {
+      async function (): Promise<void> {
         args = [...args, '-o', './out'];
         argv.value(args);
-        expect(parser.parse()).to.be.have.property('outPath', args[6]);
+        const pargs = await parser.parse();
+        expect(pargs).to.be.have.property('outPath', args[6]);
       });
 
     it(`that the 'pretty' option gets parsed correctly`,
-      function (): void {
+      async function (): Promise<void> {
         args = [...args, '-p', 'true'];
         argv.value(args);
-        expect(parser.parse()).to.be.have.property('pretty', true);
+        const pargs = await parser.parse();
+        expect(pargs).to.be.have.property('pretty', true);
+      });
+
+    it(`that the 'strict' option gets parsed correctly`,
+      async function (): Promise<void> {
+        args = [...args, '--st', 'true'];
+        argv.value(args);
+        const pargs = await parser.parse();
+        expect(pargs).to.be.have.property('strict', true);
       });
 
     it(`that the 'verbose' option gets parsed correctly`,
-      function (): void {
+      async function (): Promise<void> {
         args = [...args, '-v', 'true'];
         argv.value(args);
-        expect(parser.parse()).to.be.have.property('verbose', true);
+        const pargs = await parser.parse();
+        expect(pargs).to.be.have.property('verbose', true);
       });
 
     it('to throw an Error on invalid file path',
-      function (): void {
+      async function (): Promise<void> {
         const consoleErrorStub = sandbox.stub(console, 'error');
         const stderrStub = sandbox.stub(process.stderr, 'write');
         const exitStub = sandbox.stub(process, 'exit');
@@ -127,7 +146,7 @@ describe('YargsParser: tests', function (): void {
         args.pop();
         args.push('file.io');
         argv.value(args);
-        parser.parse();
+        await parser.parse();
         expect(consoleErrorStub.called).to.be.true;
         expect(consoleErrorStub.thirdCall
           .calledWithExactly(`ENOENT: no such file or directory, 'file.io'`))
@@ -140,7 +159,7 @@ describe('YargsParser: tests', function (): void {
       });
 
     it(`to throw an Error on invalid use of 'manifest' and 'integrity' options with the 'check' command`,
-      function (): void {
+      async function (): Promise<void> {
         const consoleErrorStub = sandbox.stub(console, 'error');
         const stderrStub = sandbox.stub(process.stderr, 'write');
         const exitStub = sandbox.stub(process, 'exit');
@@ -149,7 +168,7 @@ describe('YargsParser: tests', function (): void {
         args.splice(2, 1, 'check');
         args.push(...['-m', '-i', '.']);
         argv.value(args);
-        parser.parse();
+        await parser.parse();
         expect(consoleErrorStub.called).to.be.true;
         expect(consoleErrorStub.thirdCall
           .calledWithExactly('Arguments integrity and manifest are mutually exclusive'))
@@ -162,7 +181,7 @@ describe('YargsParser: tests', function (): void {
       });
 
     it(`to throw an Error on invalid use of 'integrity' options with the 'check' command`,
-      function (): void {
+      async function (): Promise<void> {
         const consoleErrorStub = sandbox.stub(console, 'error');
         const stderrStub = sandbox.stub(process.stderr, 'write');
         const exitStub = sandbox.stub(process, 'exit');
@@ -170,7 +189,7 @@ describe('YargsParser: tests', function (): void {
         const statStub = sandbox.stub(fs, 'statSync').returns(fsStatsMock);
         args.splice(2, 1, 'check');
         argv.value(args);
-        parser.parse();
+        await parser.parse();
         expect(consoleErrorStub.called).to.be.true;
         expect(consoleErrorStub.thirdCall
           .calledWithExactly('Missing required argument: integrity'))
@@ -185,21 +204,23 @@ describe('YargsParser: tests', function (): void {
     context(`that the 'outPath' gets assigned to`, function (): void {
 
       it(`the input directory when 'input' is a file`,
-        function (): void {
+        async function (): Promise<void> {
           const filePath = path.resolve(__dirname, '../../../test/fixtures/fileToHash.txt');
           args.pop();
           args.push(filePath);
           argv.value(args);
-          expect(parser.parse().outPath).to.equal(path.dirname(filePath));
+          const pargs = await parser.parse();
+          expect(pargs.outPath).to.equal(path.dirname(filePath));
         });
 
       it(`the input when 'input' is a directory`,
-        function (): void {
+        async function (): Promise<void> {
           const dirPath = path.resolve(__dirname, '../../../test/fixtures');
           args.pop();
           args.push(dirPath);
           argv.value(args);
-          expect(parser.parse().outPath).to.equal(dirPath);
+          const pargs = await parser.parse();
+          expect(pargs.outPath).to.equal(dirPath);
         });
 
     });

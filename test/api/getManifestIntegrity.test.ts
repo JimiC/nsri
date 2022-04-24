@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import { BaseEncodingOptions, PathLike } from 'fs';
-import sinon from 'sinon';
+import sinon, { createSandbox } from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import * as fsAsync from '../../src/common/fsAsync';
 
@@ -18,7 +18,7 @@ describe(`Integrity: function 'getManifestIntegrity' tests`, function (): void {
     let readFileAsyncStub: sinon.SinonStub<ReadFileType, Promise<string | Buffer>>;
 
     beforeEach(function (): void {
-      sandbox = sinon.createSandbox();
+      sandbox = createSandbox();
       existsAsyncStub = sandbox.stub(fsAsync, 'existsAsync');
       readFileAsyncStub = sandbox.stub(fsAsync, 'readFileAsync');
     });

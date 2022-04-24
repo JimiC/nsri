@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import readline from 'readline';
-import sinon from 'sinon';
+import sinon, { createSandbox } from 'sinon';
 import { Logger } from '../../src/common/logger';
 
 describe('Logger: tests', function (): void {
@@ -11,7 +11,7 @@ describe('Logger: tests', function (): void {
   let logger: Logger;
 
   beforeEach(function (): void {
-    sandbox = sinon.createSandbox();
+    sandbox = createSandbox();
     logger = new Logger();
     process.stdout.setMaxListeners(Infinity);
     process.stdin.setMaxListeners(Infinity);

@@ -141,7 +141,8 @@
     "no-shadow": [
       "error",
       {
-        "hoist": "all"
+        "hoist": "all",
+        "allow": ["CryptoEncoding"]
       }
     ],
     "no-template-curly-in-string": "error",
@@ -150,6 +151,8 @@
     "no-undef-init": "error",
     "no-underscore-dangle": "error",
     "no-unused-expressions": "error",
+    "no-nonoctal-decimal-escape": "error",
+    "no-unsafe-optional-chaining": "error",
     "object-shorthand": "error",
     "one-var": [
       "error",
