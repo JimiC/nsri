@@ -15,8 +15,10 @@
         },
         "contents": {
           "$ref": "#/definitions/hashes"
-        }
+        },
+        "additionalProperties": false
       },
+      "additionalProperties": false,
       "required": [
         "hash",
         "contents"
@@ -30,12 +32,14 @@
       "title": "The computed hashes",
       "type": "object",
       "patternProperties": {
-        "^[\\w-.]+$": {
+        "^[\\w\\-.]+$": {
           "$ref": "#/definitions/entity"
         }
-      }
+      },
+      "additionalProperties": false
     }
   },
+  "type": "object",
   "properties": {
     "version": {
       "title": "The schema version",
@@ -44,7 +48,8 @@
     },
     "hashes": {
       "$ref": "#/definitions/hashes"
-    }
+    },
+    "additionalProperties": false
   },
   "required": [
     "version",

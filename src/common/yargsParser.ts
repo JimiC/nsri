@@ -1,9 +1,10 @@
 import { existsSync, statSync } from 'fs';
 import { dirname } from 'path';
-import y from 'yargs';
-import { Arguments } from '../interfaces/arguments';
+import y, { Arguments } from 'yargs';
+import { Arguments as Args } from '../interfaces/arguments';
 import { ParsedArgs } from '../interfaces/parsedArgs';
 import { sortObject } from './utils';
+
 
 /** @internal */
 export class YargsParser {
@@ -88,12 +89,13 @@ export class YargsParser {
       .usage('Usage: $0 {command} [options]')
       .command('create [options]',
         `Creates integrity hash from the provided source (use '--help' for [options] details)`,
-        sortObject({ ...this.createOptions, ...this.commonOptions }) as {[key: string]: y.Options})
+        sortObject({ ...this.createOptions, ...this.commonOptions }) as { [key: string]: y.Options })
       .command('check [options]',
         `Checks integrity hash against the provided source (use '--help' for [options] details)`,
-        sortObject({ ...this.checkOptions, ...this.commonOptions }) as {[key: string]: y.Options})
+        sortObject({ ...this.checkOptions, ...this.commonOptions }) as { [key: string]: y.Options })
       .demandCommand(1, 'Missing command')
       .recommendCommands()
+      .version(false)
       .options({
         help: {
           alias: 'h',
@@ -106,12 +108,12 @@ export class YargsParser {
           global: false,
         },
       })
-      .check((argv: y.Arguments<Arguments>): boolean => this.validate(argv))
+      .check((argv: y.Arguments<Args>): boolean => this.validate(argv))
       .strict();
   }
 
-  public parse(): ParsedArgs {
-    const pargs = y.parse(process.argv.slice(2));
+  public async parse(): Promise<ParsedArgs> {
+    const pargs: Arguments<Args> = await y.parseAsync(process.argv.slice(2));
     // Set 'output' dir same as 'source' when not provided
     if (!pargs.output) {
       const source = pargs.source as string;
@@ -120,7 +122,7 @@ export class YargsParser {
         : pargs.source;
     }
     return {
-      command: pargs._[0],
+      command: pargs._[0] as string,
       dirAlgorithm: pargs.diralgorithm as string,
       encoding: pargs.encoding as string,
       exclude: pargs.exclude as string[],
@@ -135,7 +137,7 @@ export class YargsParser {
     };
   }
 
-  private validate(argv: y.Arguments<Arguments>): boolean {
+  private validate(argv: y.Arguments<Args>): boolean {
     let errorMsg = '';
     if (!existsSync(argv.source as string)) {
       errorMsg = `ENOENT: no such file or directory, '${argv.source as string}'`;

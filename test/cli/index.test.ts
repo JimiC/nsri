@@ -3,7 +3,7 @@
 import { expect } from 'chai';
 import { EventEmitter } from 'events';
 import readline, { ReadLine } from 'readline';
-import sinon from 'sinon';
+import sinon, { createSandbox } from 'sinon';
 import { IntegrityOptions } from '../../src';
 import { Integrity } from '../../src/app/integrity';
 import nsri from '../../src/cli/index';
@@ -18,7 +18,7 @@ describe('CLI: tests', function (): void {
   let sandbox: sinon.SinonSandbox;
   let pargs: ParsedArgs;
   let configExplorerStub: sinon.SinonStub<[], Promise<void>>;
-  let ypParseStub: sinon.SinonStub<[], ParsedArgs>;
+  let ypParseStub: sinon.SinonStub<[], Promise<ParsedArgs>>;
   let icCreateStub: sinon.SinonStub<[string, (IntegrityOptions | undefined)?], Promise<IntegrityObject>>;
   let icCheckStub: sinon.SinonStub<[string, string, IntegrityOptions?], Promise<boolean>>;
   let isTTY: boolean;
@@ -38,8 +38,8 @@ describe('CLI: tests', function (): void {
       strict: false,
       verbose: false,
     };
-    sandbox = sinon.createSandbox();
-    ypParseStub = sandbox.stub(YargsParser.prototype, 'parse').returns(pargs);
+    sandbox = createSandbox();
+    ypParseStub = sandbox.stub(YargsParser.prototype, 'parse').resolves(pargs);
     configExplorerStub = sandbox.stub(ConfigExplorer.prototype, 'assignArgs').resolves();
     icCreateStub = sandbox.stub(Integrity, 'create');
     icCheckStub = sandbox.stub(Integrity, 'check');

@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import { BinaryToTextEncoding } from 'crypto';
 import fs, { ReadStream } from 'fs';
 import path from 'path';
-import sinon from 'sinon';
+import sinon, { createSandbox } from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import * as utils from '../../src/common/utils';
 import { CryptoOptions } from '../../src/interfaces/cryptoOptions';
@@ -32,7 +32,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
     });
 
     beforeEach(function (): void {
-      sandbox = sinon.createSandbox();
+      sandbox = createSandbox();
       fixturesDirPath = path.resolve(__dirname, '../../../test/fixtures');
       fileToHashFilePath = path.resolve(fixturesDirPath, fileToHashFilename);
       integrityTestFilePath = path.resolve(fixturesDirPath, integrityTestFilename);
@@ -85,8 +85,8 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
       it('the file can not be read',
         async function (): Promise<void> {
           sandbox.stub(fs, 'createReadStream').returns({
-            pipe: sinon.stub().returnsThis(),
-            on: sinon.stub().callsFake((_, cb: (err: Error) => void) =>
+            pipe: sandbox.stub().returnsThis(),
+            on: sandbox.stub().callsFake((_, cb: (err: Error) => void) =>
               cb(new Error('Failed reading file'))),
           } as unknown as ReadStream);
           try {

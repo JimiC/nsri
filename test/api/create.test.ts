@@ -1,10 +1,10 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
-import ajv from 'ajv';
+import Ajv from 'ajv';
 import { expect } from 'chai';
 import fs from 'fs';
 import path from 'path';
-import sinon from 'sinon';
+import sinon, { createSandbox } from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import * as fsAsync from '../../src/common/fsAsync';
 import { IntegrityOptions } from '../../src/interfaces/integrityOptions';
@@ -17,19 +17,19 @@ describe(`Integrity: function 'create' tests`, function (): void {
     let fileToHashFilename: string;
     let fixturesDirPath: string;
     let fileToHashFilePath: string;
-    let schemaValidator: ajv.Ajv;
+    let schemaValidator: Ajv;
     let sandbox: sinon.SinonSandbox;
     let fsStatsMock: sinon.SinonStubbedInstance<fs.Stats>;
 
     before(function (): void {
-      schemaValidator = new ajv();
+      schemaValidator = new Ajv({allowUnionTypes: true});
       fileToHashFilename = 'fileToHash.txt';
     });
 
     let options: IntegrityOptions;
 
     beforeEach(function (): void {
-      sandbox = sinon.createSandbox();
+      sandbox = createSandbox();
       fsStatsMock = sandbox.createStubInstance(fs.Stats);
       fixturesDirPath = path.resolve(__dirname, '../../../test/fixtures');
       fileToHashFilePath = path.resolve(fixturesDirPath, fileToHashFilename);

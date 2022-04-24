@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import { join, resolve } from 'path';
-import sinon from 'sinon';
+import sinon, { createSandbox } from 'sinon';
 import { ConfigExplorer } from '../../src/common/configExplorer';
 import { ConfigOptions } from '../../src/interfaces/configOptions';
 
@@ -16,7 +16,7 @@ describe('ConfigExplorer: tests', function (): void {
     let baseConfigDirPath: string;
 
     beforeEach(function (): void {
-      sandbox = sinon.createSandbox();
+      sandbox = createSandbox();
       configExplorer = new ConfigExplorer();
       baseConfigDirPath = resolve(__dirname, '../../../test/cosmiconfig/');
     });

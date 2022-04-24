@@ -3,7 +3,7 @@
 import { expect } from 'chai';
 import { BaseEncodingOptions, PathLike, Stats } from 'fs';
 import path from 'path';
-import sinon from 'sinon';
+import sinon, { createSandbox } from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import * as fsAsync from '../../src/common/fsAsync';
 import * as utils from '../../src/common/utils';
@@ -36,7 +36,7 @@ describe(`Integrity: function 'check' tests`, function (): void {
     let fsStatsMock: sinon.SinonStubbedInstance<Stats>;
 
     beforeEach(function (): void {
-      sandbox = sinon.createSandbox();
+      sandbox = createSandbox();
       fixturesDirPath = path.resolve(__dirname, '../../../test/fixtures/');
       directoryDirPath = path.resolve(fixturesDirPath, 'directory');
       anotherFileToHashFilePath = path.resolve(directoryDirPath, anotherFileToHashFilename);

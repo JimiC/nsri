@@ -3,7 +3,7 @@
 import { expect } from 'chai';
 import fs, { ReadStream } from 'fs';
 import path from 'path';
-import sinon from 'sinon';
+import sinon, { createSandbox } from 'sinon';
 import { Integrity } from '../../src/app/integrity';
 import * as utils from '../../src/common/utils';
 import { IntegrityOptions } from '../../src/interfaces/integrityOptions';
@@ -35,7 +35,7 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
     let options: IntegrityOptions;
 
     beforeEach(function (): void {
-      sandbox = sinon.createSandbox();
+      sandbox = createSandbox();
       fixturesDirPath = path.resolve(__dirname, '../../../test/fixtures');
       fileToHashFilePath = path.resolve(fixturesDirPath, fileToHashFilename);
       options = {
@@ -90,8 +90,8 @@ describe(`Integrity: function 'createDirHash' tests`, function (): void {
         async function (): Promise<void> {
           options.verbose = false;
           sandbox.stub(fs, 'createReadStream').returns({
-            pipe: sinon.stub().returnsThis(),
-            on: sinon.stub().callsFake((_, cb: (err: Error) => void) =>
+            pipe: sandbox.stub().returnsThis(),
+            on: sandbox.stub().callsFake((_, cb: (err: Error) => void) =>
               cb(new Error('Failed reading directory'))),
           } as unknown as ReadStream);
           try {

@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/JimiC/nsri#readme",
   "engines": {
-    "node": ">= 14"
+    "node": ">=14"
   },
   "keywords": [
     "node",
@@ -62,39 +62,39 @@
     "prepublishOnly": "npm run build && npx api-extractor run && npx rollup -c"
   },
   "dependencies": {
-    "ajv": "^6.12.3",
-    "cosmiconfig": "^6.0.0",
-    "detect-indent": "^6.0.0",
-    "minimatch": "^3.0.4",
-    "yargs": "^15.4.1"
+    "ajv": "^8.11.0",
+    "cosmiconfig": "^7.0.1",
+    "detect-indent": "^6.1.0",
+    "minimatch": "^5.0.1",
+    "yargs": "^17.4.1"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.22.2",
-    "@rollup/plugin-typescript": "^5.0.2",
-    "@types/chai": "^4.2.11",
-    "@types/minimatch": "^3.0.3",
-    "@types/mocha": "^8.0.0",
+    "@microsoft/api-extractor": "^7.23.0",
+    "@rollup/plugin-typescript": "^8.3.2",
+    "@types/chai": "^4.3.1",
+    "@types/minimatch": "^3.0.5",
+    "@types/mocha": "^9.1.1",
     "@types/node": "14",
-    "@types/sinon": "^9.0.4",
-    "@types/yargs": "^15.0.5",
-    "@typescript-eslint/eslint-plugin": "^3.7.0",
-    "@typescript-eslint/parser": "^3.7.0",
-    "builtin-modules": "^3.1.0",
-    "chai": "^4.2.0",
-    "eslint": "^7.5.0",
-    "eslint-plugin-import": "^2.22.0",
-    "husky": "^4.2.5",
-    "lint-staged": "^10.2.11",
-    "mocha": "^8.0.1",
+    "@types/sinon": "^10.0.11",
+    "@types/yargs": "^17.0.10",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "@typescript-eslint/parser": "^5.20.0",
+    "builtin-modules": "^3.2.0",
+    "chai": "^4.3.6",
+    "eslint": "^8.14.0",
+    "eslint-plugin-import": "^2.26.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.4.0",
+    "mocha": "^9.2.2",
     "nyc": "^15.1.0",
     "rimraf": "^3.0.2",
-    "rollup": "^2.22.2",
-    "rollup-plugin-copy": "^3.3.0",
+    "rollup": "^2.70.2",
+    "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-preserve-shebangs": "^0.2.0",
-    "rollup-plugin-terser": "^6.1.0",
-    "sinon": "^9.0.2",
+    "rollup-plugin-terser": "^7.0.2",
+    "sinon": "^13.0.2",
     "tslib": "^2.4.0",
-    "typescript": "^3.9.7"
+    "typescript": "^4.6.3"
   }
 }
