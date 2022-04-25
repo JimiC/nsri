@@ -8,46 +8,59 @@ on:
 
 jobs:
   test:
-    name: Test
+    name: 'Node.js: ${{ matrix.node-version }} | ${{ matrix.os }} | ${{ matrix.arch }}'
 
     runs-on: ${{ matrix.os }}
 
     strategy:
+      max-parallel: 3
       matrix:
         os:
           - ubuntu-latest
           - macOS-latest
           - windows-latest
-        node_version:
+        arch:
+          - x64
+        node-version:
           - 16
         experimental: [false]
         minimum: [false]
         include:
           - os: ubuntu-latest
-            node_version: 18 # latest
+            arch: x64
+            node-version: 18 # latest
             experimental: true
             minimum: false
           - os: macOS-latest
-            node_version: 18 # latest
+            arch: x64
+            node-version: 18 # latest
             experimental: true
             minimum: false
           - os: windows-latest
-            node_version: 18 # latest
+            arch: x64
+            node-version: 18 # latest
             experimental: true
             minimum: false
 
           - os: ubuntu-latest
-            node_version: 14 # minimum
+            node-version: 14 # minimum
+            arch: x64
             experimental: false
             minimum: true
           - os: macOS-latest
-            node_version: 14 # minimum
+            arch: x64
+            node-version: 14 # minimum
             experimental: false
             minimum: true
           - os: windows-latest
-            node_version: 14 # minimum
+            arch: x64
+            node-version: 14 # minimum
             experimental: false
             minimum: true
+
+    # concurrency:
+    #   group: ${{ github.workflow }}-${{ github.ref }}
+    #   cancel-in-progress: true
 
     steps:
       - name: Cloning repository
@@ -55,10 +68,10 @@ jobs:
         with:
           fetch-depth: 5
 
-      - name: "Setting up Node.js: ${{ matrix.node_version }}"
+      - name: "Setting up Node.js: ${{ matrix.node-version }}"
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node_version }}
+          node-version: ${{ matrix.node-version }}
 
       - name: Build info
         run: |
