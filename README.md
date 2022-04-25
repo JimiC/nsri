@@ -5,6 +5,7 @@
 
 [![License](https://img.shields.io/github/license/jimic/nsri)](https://raw.githubusercontent.com/jimic/nsri/master/LICENSE)
 ![Semantic Version](https://img.shields.io/badge/semver-2.0.0-green)
+![npm type definitions](https://img.shields.io/npm/types/nsri)
 
 ### Release Info
 
@@ -15,6 +16,7 @@
 ### Development Info
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/jimic/nsri)
+![node-dev](https://img.shields.io/badge/dynamic/json?color=brightgreen&label=supported%20node%20versions&query=engines.node&url=https%3A%2F%2Fraw.githubusercontent.com%2FJimiC%2Fnsri%2Fmaster%2Fpackage.json)
 
 ![Build Status](https://github.com/JimiC/nsri/actions/workflows/build.yml/badge.svg)
 
@@ -22,8 +24,6 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/77bea27f9bd1906ac525/test_coverage)](https://codeclimate.com/github/jimic/nsri/test_coverage)
 
 [![Known Vulnerabilities](https://snyk.io/test/github/jimic/nsri/badge.svg?targetFile=package.json)](https://snyk.io/test/github/jimic/nsri?targetFile=package.json)
-
-![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/jimic/nsri)
 
 ---
 
