@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "diagnostics": true,
+    "esModuleInterop": true,
+    "lib": [
+      "es2020"
+    ],
+    "target": "es2020",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "newLine": "lf",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "out",
+    "pretty": true,
+    "resolveJsonModule": true,
+    "rootDir": ".",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "importHelpers": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "importsNotUsedAsValues": "error",
+    "checkJs": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts"
+  ]
+}
