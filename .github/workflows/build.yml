@@ -92,7 +92,7 @@ jobs:
         run: npm test
 
       - name: Sending coverage report
-        if: (success() && matrix.os == 'ubuntu-latest' && matrix.minimum)
+        if: (success() && matrix.os == 'ubuntu-latest' && matrix.minimum && github.actor != 'dependabot[bot]')
         uses: paambaati/codeclimate-action@v3.0.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
