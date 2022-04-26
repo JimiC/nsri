@@ -1,4 +1,3 @@
-/* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import { EventEmitter } from 'events';
@@ -13,7 +12,7 @@ import { YargsParser } from '../../src/common/yargsParser';
 import { ParsedArgs } from '../../src/interfaces//parsedArgs';
 import { IntegrityObject } from '../../src/interfaces/integrityObject';
 
-describe('CLI: tests', function (): void {
+describe('CLI: tests', (): void => {
 
   let sandbox: sinon.SinonSandbox;
   let pargs: ParsedArgs;
@@ -23,7 +22,7 @@ describe('CLI: tests', function (): void {
   let icCheckStub: sinon.SinonStub<[string, string, IntegrityOptions?], Promise<boolean>>;
   let isTTY: boolean;
 
-  beforeEach(function (): void {
+  beforeEach((): void => {
     pargs = {
       command: '',
       dirAlgorithm: 'md5',
@@ -51,19 +50,19 @@ describe('CLI: tests', function (): void {
     process.stdin.setMaxListeners(Infinity);
   });
 
-  afterEach(function (): void {
+  afterEach((): void => {
     process.stdout.isTTY = isTTY;
     sandbox.restore();
   });
 
-  context('expects', function (): void {
+  context('expects', (): void => {
 
-    context('to log', function (): void {
+    context('to log', (): void => {
 
-      context('process messages', function (): void {
+      context('process messages', (): void => {
 
         it('when creating an integrity file',
-          async function (): Promise<void> {
+          async (): Promise<void> => {
             pargs.command = 'create';
             pargs.manifest = false;
             const exitStub = sandbox.stub(process, 'exit');
@@ -84,7 +83,7 @@ describe('CLI: tests', function (): void {
           });
 
         it('when creating an integrity property in manifest',
-          async function (): Promise<void> {
+          async (): Promise<void> => {
             pargs.command = 'create';
             pargs.manifest = true;
             const exitStub = sandbox.stub(process, 'exit');
@@ -104,10 +103,10 @@ describe('CLI: tests', function (): void {
             expect(spinnerLogStopSpy.calledWith(returnValue, 'Integrity hash created -> Manifest updated')).to.be.true;
           });
 
-        context('when integrity check passes against an integrity', function (): void {
+        context('when integrity check passes against an integrity', (): void => {
 
           it('file',
-            async function (): Promise<void> {
+            async (): Promise<void> => {
               pargs.command = 'check';
               pargs.manifest = false;
               icCheckStub.resolves(true);
@@ -129,7 +128,7 @@ describe('CLI: tests', function (): void {
             });
 
           it('in manifest',
-            async function (): Promise<void> {
+            async (): Promise<void> => {
               pargs.command = 'check';
               pargs.manifest = true;
               icCheckStub.resolves(true);
@@ -153,7 +152,7 @@ describe('CLI: tests', function (): void {
         });
 
         it('when integrity check fails',
-          async function (): Promise<void> {
+          async (): Promise<void> => {
             pargs.command = 'check';
             icCheckStub.resolves(false);
             const exitStub = sandbox.stub(process, 'exit');
@@ -176,7 +175,7 @@ describe('CLI: tests', function (): void {
       });
 
       it('informative messages',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           process.stdout.isTTY = true;
           pargs.command = 'check';
           const exitStub = sandbox.stub(process, 'exit');
@@ -193,7 +192,7 @@ describe('CLI: tests', function (): void {
         });
 
       it('Error messages',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           process.stdout.isTTY = true;
           pargs.command = 'check';
           const error = new Error('test');
@@ -213,7 +212,7 @@ describe('CLI: tests', function (): void {
         });
 
       it('Error',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           process.stdout.isTTY = true;
           pargs.command = 'check';
           const error = new Error();
@@ -234,10 +233,10 @@ describe('CLI: tests', function (): void {
 
     });
 
-    context('to call', function (): void {
+    context('to call', (): void => {
 
       it(`the ConfigExplorer 'assignArgs' function`,
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           pargs.command = 'check';
           const exitStub = sandbox.stub(process, 'exit');
           const consoleLogStub = sandbox.stub(console, 'log');
@@ -250,7 +249,7 @@ describe('CLI: tests', function (): void {
         });
 
       it(`the YargsParser 'parse' function`,
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           pargs.command = 'check';
           const exitStub = sandbox.stub(process, 'exit');
           const consoleLogStub = sandbox.stub(console, 'log');
@@ -263,7 +262,7 @@ describe('CLI: tests', function (): void {
         });
 
       it(`the Integrity 'create' function`,
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           pargs.command = 'create';
           const exitStub = sandbox.stub(process, 'exit');
           const consoleLogStub = sandbox.stub(console, 'log');
@@ -276,7 +275,7 @@ describe('CLI: tests', function (): void {
         });
 
       it(`the Integrity 'check' function`,
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           pargs.command = 'check';
           const exitStub = sandbox.stub(process, 'exit');
           const consoleLogStub = sandbox.stub(console, 'log');
@@ -290,10 +289,10 @@ describe('CLI: tests', function (): void {
 
     });
 
-    context('when signaled to exit', function (): void {
+    context('when signaled to exit', (): void => {
 
       it(`to call 'handleForcedExit'`,
-        function (): Promise<void> {
+        (): Promise<void> => {
           pargs.command = 'create';
           const exitStub = sandbox.stub(process, 'exit');
           const consoleLogStub = sandbox.stub(console, 'log');

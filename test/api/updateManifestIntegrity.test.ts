@@ -1,4 +1,3 @@
-/* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import { PathLike, WriteFileOptions } from 'fs';
@@ -7,20 +6,20 @@ import { Integrity } from '../../src/app/integrity';
 import * as fsAsync from '../../src/common/fsAsync';
 import { IntegrityObject } from '../../src/interfaces/integrityObject';
 
-describe(`Integrity: function 'updateManifestIntegrity' tests`, function (): void {
+describe(`Integrity: function 'updateManifestIntegrity' tests`, (): void => {
 
-  context('expects', function (): void {
+  context('expects', (): void => {
 
     type WriteFileType = [PathLike | number, string | NodeJS.ArrayBufferView, (WriteFileOptions)?];
 
-    context('to update the manifest with the integrity object', function (): void {
+    context('to update the manifest with the integrity object', (): void => {
 
       let sandbox: sinon.SinonSandbox;
       let writeFileAsyncStub: sinon.SinonStub<WriteFileType, Promise<void>>;
       let getManifestStub: sinon.SinonStub;
       let integrityTestObject: IntegrityObject;
 
-      beforeEach(function (): void {
+      beforeEach((): void => {
         sandbox = createSandbox();
         writeFileAsyncStub = sandbox.stub(fsAsync, 'writeFileAsync');
         // @ts-ignore
@@ -28,12 +27,12 @@ describe(`Integrity: function 'updateManifestIntegrity' tests`, function (): voi
         integrityTestObject = { hashes: {}, version: '' };
       });
 
-      afterEach(function (): void {
+      afterEach((): void => {
         sandbox.restore();
       });
 
       it('using the indentation indent',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           getManifestStub.resolves({ manifest: {}, indentation: { indent: '  ' } });
           await Integrity.updateManifestIntegrity(integrityTestObject);
           expect(getManifestStub.calledOnce).to.be.true;
@@ -43,7 +42,7 @@ describe(`Integrity: function 'updateManifestIntegrity' tests`, function (): voi
         });
 
       it('using the indentation amount',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           getManifestStub.resolves({ manifest: {}, indentation: { amount: 2 } });
           await Integrity.updateManifestIntegrity(integrityTestObject);
           expect(getManifestStub.calledOnce).to.be.true;
@@ -53,7 +52,7 @@ describe(`Integrity: function 'updateManifestIntegrity' tests`, function (): voi
         });
 
       it('replacing the existing manifest integrity property',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           getManifestStub.resolves({ manifest: { integrity: { hash: '' } }, indentation: { amount: 2 } });
           await Integrity.updateManifestIntegrity(integrityTestObject);
           expect(getManifestStub.calledOnce).to.be.true;

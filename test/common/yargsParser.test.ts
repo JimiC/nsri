@@ -1,4 +1,3 @@
-/* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import fs from 'fs';
@@ -6,7 +5,7 @@ import path from 'path';
 import sinon, { createSandbox } from 'sinon';
 import { YargsParser } from '../../src/common/yargsParser';
 
-describe('YargsParser: tests', function (): void {
+describe('YargsParser: tests', (): void => {
 
   let sandbox: sinon.SinonSandbox;
   let argv: sinon.SinonStub;
@@ -14,7 +13,7 @@ describe('YargsParser: tests', function (): void {
   let args: string[];
   let fsStatsMock: sinon.SinonStubbedInstance<fs.Stats>;
 
-  beforeEach(function (): void {
+  beforeEach((): void => {
     sandbox = createSandbox();
     argv = sandbox.stub(process, 'argv');
     fsStatsMock = sandbox.createStubInstance(fs.Stats);
@@ -22,14 +21,14 @@ describe('YargsParser: tests', function (): void {
     args = ['node', 'nsri', 'create', '-s', '.'];
   });
 
-  afterEach(function (): void {
+  afterEach((): void => {
     sandbox.restore();
   });
 
-  context('expects', function (): void {
+  context('expects', (): void => {
 
     it('the returned parsed arguments object to have the correct properties',
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         argv.value([...args]);
         const sut = await parser.parse();
         const props = ['dirAlgorithm', 'fileAlgorithm', 'command', 'encoding',
@@ -41,7 +40,7 @@ describe('YargsParser: tests', function (): void {
       });
 
     it(`that the 'fileAlgorithm' option gets parsed correctly`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         args = [...args, '--fa', 'sha'];
         argv.value(args);
         const pargs = await parser.parse();
@@ -49,7 +48,7 @@ describe('YargsParser: tests', function (): void {
       });
 
     it(`that the 'dirAlgorithm' option gets parsed correctly`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         args = [...args, '--da', 'sha'];
         argv.value(args);
         const pargs = await parser.parse();
@@ -57,14 +56,14 @@ describe('YargsParser: tests', function (): void {
       });
 
     it(`that the 'command' gets parsed correctly`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         argv.value([...args]);
         const pargs = await parser.parse();
         expect(pargs).to.be.have.property('command', args[2]);
       });
 
     it(`that the 'encoding' option gets parsed correctly`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         args = [...args, '-e', 'base64'];
         argv.value(args);
         const pargs = await parser.parse();
@@ -72,7 +71,7 @@ describe('YargsParser: tests', function (): void {
       });
 
     it(`that the 'exclude' option gets parsed correctly`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         args = [...args, '-x', 'some/path'];
         argv.value(args);
         const pargs = await parser.parse();
@@ -80,7 +79,7 @@ describe('YargsParser: tests', function (): void {
       });
 
     it(`that the 'inPath' option gets parsed correctly`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         args = [...args];
         argv.value(args);
         const pargs = await parser.parse();
@@ -88,7 +87,7 @@ describe('YargsParser: tests', function (): void {
       });
 
     it(`that the 'integrity' option gets parsed correctly`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         args.splice(2, 1, 'check');
         args = [...args, '-i', '123456789'];
         argv.value(args);
@@ -97,7 +96,7 @@ describe('YargsParser: tests', function (): void {
       });
 
     it(`that the 'manifest' option gets parsed correctly`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         args = [...args, '-m', 'true'];
         argv.value(args);
         const pargs = await parser.parse();
@@ -105,7 +104,7 @@ describe('YargsParser: tests', function (): void {
       });
 
     it(`that the 'outPath' option gets parsed correctly`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         args = [...args, '-o', './out'];
         argv.value(args);
         const pargs = await parser.parse();
@@ -113,7 +112,7 @@ describe('YargsParser: tests', function (): void {
       });
 
     it(`that the 'pretty' option gets parsed correctly`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         args = [...args, '-p', 'true'];
         argv.value(args);
         const pargs = await parser.parse();
@@ -121,7 +120,7 @@ describe('YargsParser: tests', function (): void {
       });
 
     it(`that the 'strict' option gets parsed correctly`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         args = [...args, '--st', 'true'];
         argv.value(args);
         const pargs = await parser.parse();
@@ -129,7 +128,7 @@ describe('YargsParser: tests', function (): void {
       });
 
     it(`that the 'verbose' option gets parsed correctly`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         args = [...args, '-v', 'true'];
         argv.value(args);
         const pargs = await parser.parse();
@@ -137,7 +136,7 @@ describe('YargsParser: tests', function (): void {
       });
 
     it('to throw an Error on invalid file path',
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         const consoleErrorStub = sandbox.stub(console, 'error');
         const stderrStub = sandbox.stub(process.stderr, 'write');
         const exitStub = sandbox.stub(process, 'exit');
@@ -159,7 +158,7 @@ describe('YargsParser: tests', function (): void {
       });
 
     it(`to throw an Error on invalid use of 'manifest' and 'integrity' options with the 'check' command`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         const consoleErrorStub = sandbox.stub(console, 'error');
         const stderrStub = sandbox.stub(process.stderr, 'write');
         const exitStub = sandbox.stub(process, 'exit');
@@ -181,7 +180,7 @@ describe('YargsParser: tests', function (): void {
       });
 
     it(`to throw an Error on invalid use of 'integrity' options with the 'check' command`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         const consoleErrorStub = sandbox.stub(console, 'error');
         const stderrStub = sandbox.stub(process.stderr, 'write');
         const exitStub = sandbox.stub(process, 'exit');
@@ -201,10 +200,10 @@ describe('YargsParser: tests', function (): void {
         exitStub.restore();
       });
 
-    context(`that the 'outPath' gets assigned to`, function (): void {
+    context(`that the 'outPath' gets assigned to`, (): void => {
 
       it(`the input directory when 'input' is a file`,
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           const filePath = path.resolve(__dirname, '../../../test/fixtures/fileToHash.txt');
           args.pop();
           args.push(filePath);
@@ -214,7 +213,7 @@ describe('YargsParser: tests', function (): void {
         });
 
       it(`the input when 'input' is a directory`,
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           const dirPath = path.resolve(__dirname, '../../../test/fixtures');
           args.pop();
           args.push(dirPath);

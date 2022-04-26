@@ -1,4 +1,3 @@
-/* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
 import Ajv from 'ajv';
 import { expect } from 'chai';
@@ -10,9 +9,9 @@ import * as fsAsync from '../../src/common/fsAsync';
 import { IntegrityOptions } from '../../src/interfaces/integrityOptions';
 import * as schema from '../../src/app/schemas/v1/schema.json';
 
-describe(`Integrity: function 'create' tests`, function (): void {
+describe(`Integrity: function 'create' tests`, (): void => {
 
-  context('expects', function (): void {
+  context('expects', (): void => {
 
     let fileToHashFilename: string;
     let fixturesDirPath: string;
@@ -21,14 +20,14 @@ describe(`Integrity: function 'create' tests`, function (): void {
     let sandbox: sinon.SinonSandbox;
     let fsStatsMock: sinon.SinonStubbedInstance<fs.Stats>;
 
-    before(function (): void {
-      schemaValidator = new Ajv({allowUnionTypes: true});
+    before((): void => {
+      schemaValidator = new Ajv({ allowUnionTypes: true });
       fileToHashFilename = 'fileToHash.txt';
     });
 
     let options: IntegrityOptions;
 
-    beforeEach(function (): void {
+    beforeEach((): void => {
       sandbox = createSandbox();
       fsStatsMock = sandbox.createStubInstance(fs.Stats);
       fixturesDirPath = path.resolve(__dirname, '../../../test/fixtures');
@@ -40,12 +39,12 @@ describe(`Integrity: function 'create' tests`, function (): void {
       };
     });
 
-    afterEach(function (): void {
+    afterEach((): void => {
       sandbox.restore();
     });
 
     it('to return an empty object when path is not a file or directory',
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         fsStatsMock.isDirectory.returns(false);
         fsStatsMock.isFile.returns(false);
         const lstatStub = sandbox.stub(fsAsync, 'lstatAsync')
@@ -58,10 +57,10 @@ describe(`Integrity: function 'create' tests`, function (): void {
         expect(sut).to.haveOwnProperty('version').that.matches(/\d/);
       });
 
-    context('to produce a valid schema when hashing', function (): void {
+    context('to produce a valid schema when hashing', (): void => {
 
       it('a directory non-verbosely',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           options.verbose = false;
           const sut = await Integrity.create(fixturesDirPath, options);
           expect(schemaValidator.validate(schema, sut)).to.be.true;
@@ -69,14 +68,14 @@ describe(`Integrity: function 'create' tests`, function (): void {
         });
 
       it('a directory verbosely',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           const sut = await Integrity.create(fixturesDirPath);
           expect(schemaValidator.validate(schema, sut)).to.be.true;
           expect(schemaValidator.errors).to.be.null;
         });
 
       it('a file',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           const sut = await Integrity.create(fileToHashFilePath);
           expect(schemaValidator.validate(schema, sut)).to.be.true;
           expect(schemaValidator.errors).to.be.null;

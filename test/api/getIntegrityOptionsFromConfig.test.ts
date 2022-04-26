@@ -1,4 +1,3 @@
-/* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import sinon, { createSandbox } from 'sinon';
@@ -7,19 +6,19 @@ import { ConfigExplorer } from '../../src/common/configExplorer';
 import { ConfigOptions } from '../../src/interfaces/configOptions';
 import { IntegrityOptions } from '../../src/interfaces/integrityOptions';
 
-describe(`Integrity: function 'getIntegrityOptionsFromConfig' tests`, function (): void {
+describe(`Integrity: function 'getIntegrityOptionsFromConfig' tests`, (): void => {
 
-  context('expects', function (): void {
+  context('expects', (): void => {
 
     let sandbox: sinon.SinonSandbox;
     let getConfigStub: sinon.SinonStub<[(string | undefined)?], Promise<ConfigOptions>>;
 
-    beforeEach(function (): void {
+    beforeEach((): void => {
       sandbox = createSandbox();
       getConfigStub = sandbox.stub(ConfigExplorer.prototype, 'getConfig');
     });
 
-    afterEach(function (): void {
+    afterEach((): void => {
       sandbox.restore();
     });
 
@@ -47,24 +46,24 @@ describe(`Integrity: function 'getIntegrityOptionsFromConfig' tests`, function (
     };
 
     it('to return an empty object, when failing to find a configuration',
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         rc = {};
         getConfigStub.resolves(rc);
         const config = await Integrity.getIntegrityOptionsFromConfig();
         expect(config).to.eql(expected(rc));
       });
 
-    context('to return the integrity options', function (): void {
+    context('to return the integrity options', (): void => {
 
       it('with all options',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           getConfigStub.resolves(rc);
           const config = await Integrity.getIntegrityOptionsFromConfig();
           expect(config).to.eql(expected(rc));
         });
 
       it('without `cryptoOptions`',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           rc.cryptoOptions = undefined;
           getConfigStub.resolves(rc);
           const config = await Integrity.getIntegrityOptionsFromConfig();
@@ -72,7 +71,7 @@ describe(`Integrity: function 'getIntegrityOptionsFromConfig' tests`, function (
         });
 
       it('with `dirAlgorithm` `undefined`',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           rc.cryptoOptions = {
             dirAlgorithm: undefined,
             encoding: 'hex',
@@ -84,7 +83,7 @@ describe(`Integrity: function 'getIntegrityOptionsFromConfig' tests`, function (
         });
 
       it('with `encoding` `undefined`',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           rc.cryptoOptions = {
             dirAlgorithm: 'mr',
             encoding: undefined,
@@ -96,7 +95,7 @@ describe(`Integrity: function 'getIntegrityOptionsFromConfig' tests`, function (
         });
 
       it('with `fileAlgorithm` `undefined`',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           rc.cryptoOptions = {
             dirAlgorithm: 'mr',
             encoding: 'hex',

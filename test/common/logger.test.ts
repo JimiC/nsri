@@ -1,30 +1,29 @@
-/* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import readline from 'readline';
 import sinon, { createSandbox } from 'sinon';
 import { Logger } from '../../src/common/logger';
 
-describe('Logger: tests', function (): void {
+describe('Logger: tests', (): void => {
 
   let sandbox: sinon.SinonSandbox;
   let logger: Logger;
 
-  beforeEach(function (): void {
+  beforeEach((): void => {
     sandbox = createSandbox();
     logger = new Logger();
     process.stdout.setMaxListeners(Infinity);
     process.stdin.setMaxListeners(Infinity);
   });
 
-  afterEach(function (): void {
+  afterEach((): void => {
     sandbox.restore();
   });
 
-  context('expects', function (): void {
+  context('expects', (): void => {
 
     it('to correctly implement BaseLogger',
-      function (): void {
+      (): void => {
         expect(logger).to.have.deep.property('constructor');
         expect(logger).to.have.deep.property('log');
         expect(logger).to.have.deep.property('error');
@@ -34,34 +33,34 @@ describe('Logger: tests', function (): void {
       });
 
     it(`to have own 'frames' property`,
-      function (): void {
+      (): void => {
         expect(logger).to.haveOwnProperty('frames');
       });
 
     it(`to have own 'countLines' property`,
-      function (): void {
+      (): void => {
         expect(logger).to.haveOwnProperty('countLines');
       });
 
-    context('when calling', function (): void {
+    context('when calling', (): void => {
 
       let isTTY: boolean;
       let timer: sinon.SinonFakeTimers;
 
-      beforeEach(function (): void {
+      beforeEach((): void => {
         isTTY = process.stdout.isTTY;
         timer = sandbox.useFakeTimers();
       });
 
-      afterEach(function (): void {
+      afterEach((): void => {
         process.stdout.isTTY = isTTY;
         timer.restore();
       });
 
-      context(`function 'log'`, function (): void {
+      context(`function 'log'`, (): void => {
 
         it('the process stdout write function is called',
-          function (): void {
+          (): void => {
             const stub = sandbox.stub(process.stdout, 'write');
             logger.log('test');
             stub.restore();
@@ -70,7 +69,7 @@ describe('Logger: tests', function (): void {
           });
 
         it('the lines count to increase by one',
-          function (): void {
+          (): void => {
             expect(logger).to.have.property('countLines', 1);
             const stub = sandbox.stub(process.stdout, 'write');
             logger.log('test');
@@ -80,7 +79,7 @@ describe('Logger: tests', function (): void {
           });
 
         it(`to display the 'groupId' when provided`,
-          function (): void {
+          (): void => {
             const stub = sandbox.stub(process.stdout, 'write');
             logger.log('test', 'Mocha');
             stub.restore();
@@ -89,10 +88,10 @@ describe('Logger: tests', function (): void {
 
       });
 
-      context(`function 'error'`, function (): void {
+      context(`function 'error'`, (): void => {
 
         it('the process stderr write function is called',
-          function (): void {
+          (): void => {
             const stub = sandbox.stub(process.stderr, 'write');
             logger.error('test');
             stub.restore();
@@ -101,7 +100,7 @@ describe('Logger: tests', function (): void {
           });
 
         it('the lines count to increase by one',
-          function (): void {
+          (): void => {
             expect(logger).to.have.property('countLines', 1);
             const stub = sandbox.stub(process.stderr, 'write');
             logger.error('test');
@@ -111,7 +110,7 @@ describe('Logger: tests', function (): void {
           });
 
         it(`to display the 'groupId' when provided`,
-          function (): void {
+          (): void => {
             const stub = sandbox.stub(process.stderr, 'write');
             logger.error('test', 'Mocha');
             stub.restore();
@@ -120,14 +119,14 @@ describe('Logger: tests', function (): void {
 
       });
 
-      context(`function 'updateLog'`, function (): void {
+      context(`function 'updateLog'`, (): void => {
 
-        context('if the terminal', function (): void {
+        context('if the terminal', (): void => {
 
-          context('is TTY', function (): void {
+          context('is TTY', (): void => {
 
             it(`to display the 'groupId' when provided`,
-              function (): void {
+              (): void => {
                 process.stdout.isTTY = true;
                 const stub = sandbox.stub(process.stdout, 'write');
                 logger.updateLog('test', 'Mocha');
@@ -135,10 +134,10 @@ describe('Logger: tests', function (): void {
                 expect(stub.calledWith('[Mocha]: test')).to.be.true;
               });
 
-            context('the cursor moves', function (): void {
+            context('the cursor moves', (): void => {
 
               it('and returns to the original line',
-                function (): void {
+                (): void => {
                   process.stdout.isTTY = true;
                   const writeStub = sandbox.stub(process.stdout, 'write');
                   const moveCursorSpy = sandbox.spy(readline, 'moveCursor');
@@ -155,7 +154,7 @@ describe('Logger: tests', function (): void {
                 });
 
               it('one line when no line parameter is provided',
-                function (): void {
+                (): void => {
                   process.stdout.isTTY = true;
                   const writeStub = sandbox.stub(process.stdout, 'write');
                   const moveCursorSpy = sandbox.spy(readline, 'moveCursor');
@@ -168,7 +167,7 @@ describe('Logger: tests', function (): void {
                 });
 
               it('that much lines when line parameter is provided',
-                function (): void {
+                (): void => {
                   process.stdout.isTTY = true;
                   const writeStub = sandbox.stub(process.stdout, 'write');
                   const moveCursorSpy = sandbox.spy(readline, 'moveCursor');
@@ -181,7 +180,7 @@ describe('Logger: tests', function (): void {
                 });
 
               it('that much lines and groupdId is displayed when both are provided',
-                function (): void {
+                (): void => {
                   process.stdout.isTTY = true;
                   const stub = sandbox.stub(process.stdout, 'write');
                   const moveCursorSpy = sandbox.spy(readline, 'moveCursor');
@@ -198,10 +197,10 @@ describe('Logger: tests', function (): void {
 
           });
 
-          context('is not TTY', function (): void {
+          context('is not TTY', (): void => {
 
             it(`to display the 'groupId' when provided`,
-              function (): void {
+              (): void => {
                 process.stdout.isTTY = false;
                 const writeStub = sandbox.stub(process.stdout, 'write');
                 logger.updateLog('test', 'Mocha');
@@ -210,7 +209,7 @@ describe('Logger: tests', function (): void {
               });
 
             it('the cursor does not move',
-              function (): void {
+              (): void => {
                 process.stdout.isTTY = false;
                 const writeStub = sandbox.stub(process.stdout, 'write');
                 const moveCursorSpy = sandbox.spy(readline, 'moveCursor');
@@ -230,16 +229,16 @@ describe('Logger: tests', function (): void {
 
       });
 
-      context(`function 'spinnerLogStart'`, function (): void {
+      context(`function 'spinnerLogStart'`, (): void => {
 
-        context('if the terminal', function (): void {
+        context('if the terminal', (): void => {
 
-          context('is TTY', function (): void {
+          context('is TTY', (): void => {
 
-            context('to display the spinner', function (): void {
+            context('to display the spinner', (): void => {
 
               it('before the message',
-                function (): void {
+                (): void => {
                   process.stdout.isTTY = true;
                   const writeStub = sandbox.stub(process.stdout, 'write');
                   const logSpy = sandbox.spy(logger, 'log');
@@ -257,7 +256,7 @@ describe('Logger: tests', function (): void {
                 });
 
               it(`and the 'groupId' when provided`,
-                function (): void {
+                (): void => {
                   process.stdout.isTTY = true;
                   const writeStub = sandbox.stub(process.stdout, 'write');
                   const logSpy = sandbox.spy(logger, 'log');
@@ -275,7 +274,7 @@ describe('Logger: tests', function (): void {
                 });
 
               it('after the message',
-                function (): void {
+                (): void => {
                   process.stdout.isTTY = true;
                   logger.showSpinnerInFront = false;
                   const writeStub = sandbox.stub(process.stdout, 'write');
@@ -294,7 +293,7 @@ describe('Logger: tests', function (): void {
                 });
 
               it(`and the 'groupId' when provided`,
-                function (): void {
+                (): void => {
                   process.stdout.isTTY = true;
                   logger.showSpinnerInFront = false;
                   const writeStub = sandbox.stub(process.stdout, 'write');
@@ -315,10 +314,10 @@ describe('Logger: tests', function (): void {
             });
           });
 
-          context('is not TTY', function (): void {
+          context('is not TTY', (): void => {
 
             it('to not display the spinner',
-              function (): void {
+              (): void => {
                 process.stdout.isTTY = false;
                 const writeStub = sandbox.stub(process.stdout, 'write');
                 const logSpy = sandbox.spy(logger, 'log');
@@ -338,14 +337,14 @@ describe('Logger: tests', function (): void {
 
       });
 
-      context(`function 'spinnerLogStop'`, function (): void {
+      context(`function 'spinnerLogStop'`, (): void => {
 
-        context('if the terminal', function (): void {
+        context('if the terminal', (): void => {
 
-          context('is TTY', function (): void {
+          context('is TTY', (): void => {
 
             it('the spinner to be stopped',
-              function (): void {
+              (): void => {
                 process.stdout.isTTY = true;
                 const writeStub = sandbox.stub(process.stdout, 'write');
                 const updateLogSpy = sandbox.spy(logger, 'updateLog');
@@ -359,7 +358,7 @@ describe('Logger: tests', function (): void {
               });
 
             it(`to display the 'groupId' when provided`,
-              function (): void {
+              (): void => {
                 process.stdout.isTTY = true;
                 const writeStub = sandbox.stub(process.stdout, 'write');
                 const updateLogSpy = sandbox.spy(logger, 'updateLog');
@@ -374,10 +373,10 @@ describe('Logger: tests', function (): void {
 
           });
 
-          context('is not TTY', function (): void {
+          context('is not TTY', (): void => {
 
             it('the cursor indicatior does not change',
-              function (): void {
+              (): void => {
                 process.stdout.isTTY = false;
                 const writeStub = sandbox.stub(process.stdout, 'write');
                 const spinner = logger.spinnerLogStart('test start');
@@ -394,14 +393,14 @@ describe('Logger: tests', function (): void {
 
       });
 
-      context(`function 'moveCursorTo'`, function (): void {
+      context(`function 'moveCursorTo'`, (): void => {
 
-        context('if the terminal', function (): void {
+        context('if the terminal', (): void => {
 
-          context('is TTY', function (): void {
+          context('is TTY', (): void => {
 
             it('moves the cursor',
-              function (): void {
+              (): void => {
                 process.stdout.isTTY = true;
                 const writeStub = sandbox.stub(process.stdout, 'write');
                 const moveCursorSpy = sandbox.spy(readline, 'moveCursor');
@@ -414,10 +413,10 @@ describe('Logger: tests', function (): void {
 
           });
 
-          context('is not TTY', function (): void {
+          context('is not TTY', (): void => {
 
             it('does not move the cursor',
-              function (): void {
+              (): void => {
                 process.stdout.isTTY = false;
                 const writeStub = sandbox.stub(process.stdout, 'write');
                 const moveCursorSpy = sandbox.spy(readline, 'moveCursor');
@@ -434,9 +433,9 @@ describe('Logger: tests', function (): void {
 
       });
 
-      context(`function 'handleForcedExit'`, function (): void {
+      context(`function 'handleForcedExit'`, (): void => {
 
-        context('if the terminal', function (): void {
+        context('if the terminal', (): void => {
 
           type Callback = (err?: Error) => void;
 
@@ -446,7 +445,7 @@ describe('Logger: tests', function (): void {
           let updateLogStub: sinon.SinonStub<[string, (number)?, (string)?], void>;
           let cursorShowStub: sinon.SinonStub<[string | Uint8Array, (BufferEncoding)?, (Callback)?], boolean>;
 
-          beforeEach(function (): void {
+          beforeEach((): void => {
             moveCursorStub = sandbox.stub(readline, 'moveCursor');
             clearLineStub = sandbox.stub(readline, 'clearLine');
             cursorToStub = sandbox.stub(readline, 'cursorTo');
@@ -454,7 +453,7 @@ describe('Logger: tests', function (): void {
             cursorShowStub = sandbox.stub(process.stdout, 'write');
           });
 
-          afterEach(function (): void {
+          afterEach((): void => {
             moveCursorStub.restore();
             clearLineStub.restore();
             cursorToStub.restore();
@@ -462,12 +461,12 @@ describe('Logger: tests', function (): void {
             cursorShowStub.restore();
           });
 
-          context('is TTY', function (): void {
+          context('is TTY', (): void => {
 
-            context('and shows informative messages', function (): void {
+            context('and shows informative messages', (): void => {
 
               it('the cursor moves up two lines and the process exits',
-                function (): void {
+                (): void => {
                   process.stdout.isTTY = true;
                   const exitStub = sandbox.stub(process, 'exit');
                   logger.handleForcedExit(true);
@@ -483,10 +482,10 @@ describe('Logger: tests', function (): void {
 
             });
 
-            context('and does not show informative messages', function (): void {
+            context('and does not show informative messages', (): void => {
 
               it('the cursor moves up one line and the process exits',
-                function (): void {
+                (): void => {
                   process.stdout.isTTY = true;
                   const exitStub = sandbox.stub(process, 'exit');
                   logger.handleForcedExit(false);
@@ -504,12 +503,12 @@ describe('Logger: tests', function (): void {
 
           });
 
-          context('is not TTY', function (): void {
+          context('is not TTY', (): void => {
 
-            context('and shows informative messages', function (): void {
+            context('and shows informative messages', (): void => {
 
               it('the cursor does not move and the process exits',
-                function (): void {
+                (): void => {
                   process.stdout.isTTY = false;
                   const exitStub = sandbox.stub(process, 'exit');
                   logger.handleForcedExit(true);
@@ -525,10 +524,10 @@ describe('Logger: tests', function (): void {
 
             });
 
-            context('and does not show informative messages', function (): void {
+            context('and does not show informative messages', (): void => {
 
               it('the cursor does not move and the process exits',
-                function (): void {
+                (): void => {
                   process.stdout.isTTY = false;
                   const exitStub = sandbox.stub(process, 'exit');
                   logger.handleForcedExit(false);

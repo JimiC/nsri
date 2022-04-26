@@ -1,4 +1,3 @@
-/* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import { PathLike, WriteFileOptions } from 'fs';
@@ -8,9 +7,9 @@ import { Integrity } from '../../src/app/integrity';
 import * as fsAsync from '../../src/common/fsAsync';
 import { IntegrityObject } from '../../src/interfaces/integrityObject';
 
-describe(`Integrity: function 'persist' tests`, function (): void {
+describe(`Integrity: function 'persist' tests`, (): void => {
 
-  context('expects', function (): void {
+  context('expects', (): void => {
 
     type WriteFileType = [PathLike | number, string | NodeJS.ArrayBufferView, (WriteFileOptions)?];
 
@@ -20,25 +19,25 @@ describe(`Integrity: function 'persist' tests`, function (): void {
     let integrityTestObject: IntegrityObject;
     let fixturesDirPath: string;
 
-    before(function (): void {
+    before((): void => {
       integrityTestFilename = '.integrity.json';
     });
 
-    beforeEach(function (): void {
+    beforeEach((): void => {
       sandbox = createSandbox();
       writeFileAsyncStub = sandbox.stub(fsAsync, 'writeFileAsync');
       fixturesDirPath = path.resolve(__dirname, '../../../test/fixtures');
       integrityTestObject = { hashes: {}, version: '' };
     });
 
-    afterEach(function (): void {
+    afterEach((): void => {
       sandbox.restore();
     });
 
-    context('to persist the created hash file', function (): void {
+    context('to persist the created hash file', (): void => {
 
       it('on the provided path',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           const dirPath = path.resolve(fixturesDirPath, integrityTestFilename);
           const data = '{\n  "hashes": {},\n  "version": ""\n}';
           await Integrity.persist(integrityTestObject, fixturesDirPath, true);
@@ -46,7 +45,7 @@ describe(`Integrity: function 'persist' tests`, function (): void {
         });
 
       it('on the default path',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           const dirPath = path.resolve('./', integrityTestFilename);
           const data = '{\n  "hashes": {},\n  "version": ""\n}';
           await Integrity.persist(integrityTestObject, undefined, true);
@@ -54,7 +53,7 @@ describe(`Integrity: function 'persist' tests`, function (): void {
         });
 
       it('without prettifying the integrity object',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           const dirPath = path.resolve(fixturesDirPath, integrityTestFilename);
           const data = '{"hashes":{},"version":""}';
           await Integrity.persist(integrityTestObject, fixturesDirPath);

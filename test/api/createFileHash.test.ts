@@ -1,4 +1,3 @@
-/* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import { BinaryToTextEncoding } from 'crypto';
@@ -10,9 +9,9 @@ import * as utils from '../../src/common/utils';
 import { CryptoOptions } from '../../src/interfaces/cryptoOptions';
 import { checker } from '../helper';
 
-describe(`Integrity: function 'createFileHash' tests`, function (): void {
+describe(`Integrity: function 'createFileHash' tests`, (): void => {
 
-  context('expects', function (): void {
+  context('expects', (): void => {
 
     let sandbox: sinon.SinonSandbox;
     let fileToHashFilename: string;
@@ -23,7 +22,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
     let md5Length: number;
     let sha1Length: number;
 
-    before(function (): void {
+    before((): void => {
       fileToHashFilename = 'fileToHash.txt';
       integrityTestFilename = '.integrity.json';
 
@@ -31,21 +30,21 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
       sha1Length = 40;
     });
 
-    beforeEach(function (): void {
+    beforeEach((): void => {
       sandbox = createSandbox();
       fixturesDirPath = path.resolve(__dirname, '../../../test/fixtures');
       fileToHashFilePath = path.resolve(fixturesDirPath, fileToHashFilename);
       integrityTestFilePath = path.resolve(fixturesDirPath, integrityTestFilename);
     });
 
-    afterEach(function (): void {
+    afterEach((): void => {
       sandbox.restore();
     });
 
-    context('to throw an Error when', function (): void {
+    context('to throw an Error when', (): void => {
 
       it('the provided algorithm is not supported',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           const cryptoOptions = { fileAlgorithm: 'md1' };
           try {
             await Integrity.createFileHash(fileToHashFilePath, cryptoOptions);
@@ -55,7 +54,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
         });
 
       it('the provided encoding is not supported',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           const cryptoOptions: CryptoOptions = { encoding: 'ascii' as BinaryToTextEncoding };
           try {
             await Integrity.createFileHash(fileToHashFilePath, cryptoOptions);
@@ -65,7 +64,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
         });
 
       it('the provided path is not a file',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           try {
             await Integrity.createFileHash(fixturesDirPath);
           } catch (error) {
@@ -74,7 +73,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
         });
 
       it('the provided path is not allowed',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           try {
             await Integrity.createFileHash(integrityTestFilePath);
           } catch (error) {
@@ -83,7 +82,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
         });
 
       it('the file can not be read',
-        async function (): Promise<void> {
+        async (): Promise<void> => {
           sandbox.stub(fs, 'createReadStream').returns({
             pipe: sandbox.stub().returnsThis(),
             on: sandbox.stub().callsFake((_, cb: (err: Error) => void) =>
@@ -99,7 +98,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
     });
 
     it(`to return by default an 'sha1' and 'base64' encoded hash string`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         const sut = await Integrity.createFileHash(fileToHashFilePath);
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty(fileToHashFilename)
@@ -108,7 +107,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
       });
 
     it(`to return a 'sha1' and 'hex' encoded hash string`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         const sut = await Integrity.createFileHash(fileToHashFilePath, { encoding: 'hex' });
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty(fileToHashFilename)
@@ -119,7 +118,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
       });
 
     it(`to return a 'sha1' and 'base64url' encoded hash string`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         const sut = await Integrity.createFileHash(fileToHashFilePath, { encoding: 'base64url' });
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty(fileToHashFilename)
@@ -130,7 +129,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
       });
 
     it(`to return an 'md5' and 'base64' encoded hash string`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         const sut = await Integrity.createFileHash(fileToHashFilePath, { fileAlgorithm: 'md5' });
         expect(sut).to.be.an('object')
           .and.to.haveOwnProperty(fileToHashFilename)
@@ -139,7 +138,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
       });
 
     it(`to return an 'md5' and 'hex' encoded hash string`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         const sut = await Integrity.createFileHash(
           fileToHashFilePath,
           { fileAlgorithm: 'md5', encoding: 'hex' });
@@ -150,7 +149,7 @@ describe(`Integrity: function 'createFileHash' tests`, function (): void {
       });
 
     it(`to support relative paths`,
-      async function (): Promise<void> {
+      async (): Promise<void> => {
         const sut = await Integrity.createFileHash('test/fixtures/fileToHash.txt');
 
         expect(sut).to.be.an('object')
