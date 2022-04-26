@@ -5,6 +5,8 @@ on:
   pull_request:
     branches:
       - master
+    tags:
+      - '!*'
 
 jobs:
   test:
@@ -82,13 +84,6 @@ jobs:
           node --version
           npm --version
 
-      - name: Setting up coverage reporter
-        if: (matrix.os == 'ubuntu-latest' && matrix.minimum)
-        run: |
-          curl -sL "https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64" > cc-test-reporter
-          chmod +x cc-test-reporter
-          ./cc-test-reporter before-build
-
       - name: Installing dependencies
         run: npm ci
 
@@ -96,6 +91,8 @@ jobs:
         continue-on-error: ${{ matrix.experimental }}
         run: npm test
 
-      - name: Test coverage report
+      - name: Sending coverage report
         if: (success() && matrix.os == 'ubuntu-latest' && matrix.minimum)
-        run: ./cc-test-reporter after-build -r ${{ secrets.CC_TEST_REPORTER_ID }}
+        uses: paambaati/codeclimate-action@v3.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
