@@ -1,9 +1,9 @@
 <!-- markdownlint-disable MD033-->
-# nsri (NodeJS Subresource Integrity) <img src="https://raw.githubusercontent.com/jimic/nsri/master/media/nsri-logo.png" width="50" align="left">
+# nsri (NodeJS Subresource Integrity) <img src="https://raw.githubusercontent.com/jimic/nsri/main/media/nsri-logo.png" width="50" align="left">
 
 ### General Info
 
-[![License](https://img.shields.io/github/license/jimic/nsri)](https://raw.githubusercontent.com/jimic/nsri/master/LICENSE)
+[![License](https://img.shields.io/github/license/jimic/nsri)](https://raw.githubusercontent.com/jimic/nsri/main/LICENSE)
 ![Semantic Version](https://img.shields.io/badge/semver-2.0.0-green)
 ![npm type definitions](https://img.shields.io/npm/types/nsri)
 
@@ -27,7 +27,7 @@
 
 ---
 
-A [Node.js](https://nodejs.org) utility tool that creates an integrity object containing the hash checksums of a file or a directory structure, that can be saved to an `.integrity.json` file [<img src="https://raw.githubusercontent.com/jimic/nsri/master/media/integrity_file.png" width="16" />], or put inside the project's manifest file (`project.json`).
+A [Node.js](https://nodejs.org) utility tool that creates an integrity object containing the hash checksums of a file or a directory structure, that can be saved to an `.integrity.json` file [<img src="https://raw.githubusercontent.com/jimic/nsri/main/media/integrity_file.png" width="16" />], or put inside the project's manifest file (`project.json`).
 
 The hashes are computed using, by default, the `sha1` algorithm for files and `sha512` algorithm for directories, with `base64` encoding, complying to [Subresource Integrity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity) spec, but other [Node.js crypto](https://nodejs.org/api/crypto.html) supported [algorithms](https://nodejs.org/api/crypto.html#cryptogethashes) and [encodings](https://nodejs.org/api/crypto.html#hashdigestencoding) can be used.
 
@@ -99,13 +99,13 @@ and for available `command` options type:
 nsri <command> -h
 ```
 
-More info an be found at the [CLI](https://github.com/JimiC/nsri/blob/master/docs/cli.md) section.
+More info an be found at the [CLI](https://github.com/JimiC/nsri/blob/main/docs/cli.md) section.
 
 ### API
 
 `nsri` can also be used programatically ([TypeScript](https://www.typescriptlang.org/) types are included).
 
-More info can be found at the [API](https://github.com/JimiC/nsri/blob/master/docs/api.md) section.
+More info can be found at the [API](https://github.com/JimiC/nsri/blob/main/docs/api.md) section.
 
 ### Configuration
 
@@ -132,7 +132,7 @@ Exclusions also can be set via an ignore file (`.nsriignore`), which supports th
 }
 ```
 
-More info on the used schema can be found [here](https://github.com/JimiC/nsri/blob/master/src/schemas).
+More info on the used schema can be found [here](https://github.com/JimiC/nsri/blob/main/src/schemas).
 
 #### Verbosely hashes schema
 
@@ -148,7 +148,7 @@ More info on the used schema can be found [here](https://github.com/JimiC/nsri/b
 }
 ```
 
-Examples of a verbosely computed hash integrity file can be found [here](https://github.com/JimiC/nsri/blob/master/test/fixtures).
+Examples of a verbosely computed hash integrity file can be found [here](https://github.com/JimiC/nsri/blob/main/test/fixtures).
 
 #### Non-verbosely hashes schema
 
@@ -160,17 +160,17 @@ Examples of a verbosely computed hash integrity file can be found [here](https:/
 
 ### Examples
 
-Examples on how to use `nsri`, via `CLI` or `API`, can be found at the [examples](https://github.com/JimiC/nsri/blob/master/docs/examples) section.
+Examples on how to use `nsri`, via `CLI` or `API`, can be found at the [examples](https://github.com/JimiC/nsri/blob/main/docs/examples) section.
 
 If you believe that the examples are incomplete or incorrect, please submit an issue or better yet a PR.
 
 ## Contributing
 
-If you like to contribute make sure to check-out the [Contribution Guidelines](https://github.com/JimiC/nsri/blob/master/.github/CONTRIBUTING.md) section.
+If you like to contribute make sure to check-out the [Contribution Guidelines](https://github.com/JimiC/nsri/blob/main/.github/CONTRIBUTING.md) section.
 
 ## License
 
-This project is licensed under the [MIT](https://github.com/JimiC/nsri/blob/master/LICENSE) license.
+This project is licensed under the [MIT](https://github.com/JimiC/nsri/blob/main/LICENSE) license.
 
 ## Versioning
 

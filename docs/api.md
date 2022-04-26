@@ -30,8 +30,8 @@ All `API` calls are `static` members of the `Integrity` class.
 
 `Examples`
 
-- [ES5](https://github.com/JimiC/nsri/blob/master/docs/examples/check-es5-js.md)
-- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/master/docs/examples/check-js-ts.md)
+- [ES5](https://github.com/JimiC/nsri/blob/main/docs/examples/check-es5-js.md)
+- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/main/docs/examples/check-js-ts.md)
 
 ---
 
@@ -52,8 +52,8 @@ All `API` calls are `static` members of the `Integrity` class.
 
 `Examples`
 
-- [ES5](https://github.com/JimiC/nsri/blob/master/docs/examples/create-es5-js.md)
-- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/master/docs/examples/create-js-ts.md)
+- [ES5](https://github.com/JimiC/nsri/blob/main/docs/examples/create-es5-js.md)
+- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/main/docs/examples/create-js-ts.md)
 
 ---
 
@@ -74,8 +74,8 @@ All `API` calls are `static` members of the `Integrity` class.
 
 `Examples`
 
-- [ES5](https://github.com/JimiC/nsri/blob/master/docs/examples/check-es5-js.md)
-- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/master/docs/examples/check-js-ts.md)
+- [ES5](https://github.com/JimiC/nsri/blob/main/docs/examples/check-es5-js.md)
+- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/main/docs/examples/check-js-ts.md)
 
 ---
 
@@ -96,8 +96,8 @@ All `API` calls are `static` members of the `Integrity` class.
 
 `Examples`
 
-- [ES5](https://github.com/JimiC/nsri/blob/master/docs/examples/createFileHash-es5-js.md)
-- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/master/docs/examples/createFileHash-js-ts.md)
+- [ES5](https://github.com/JimiC/nsri/blob/main/docs/examples/createFileHash-es5-js.md)
+- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/main/docs/examples/createFileHash-js-ts.md)
 
 ---
 
@@ -118,8 +118,8 @@ All `API` calls are `static` members of the `Integrity` class.
 
 `Examples`
 
-- [ES5](https://github.com/JimiC/nsri/blob/master/docs/examples/createFilesHash-es5-js.md)
-- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/master/docs/examples/createFilesHash-js-ts.md)
+- [ES5](https://github.com/JimiC/nsri/blob/main/docs/examples/createFilesHash-es5-js.md)
+- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/main/docs/examples/createFilesHash-js-ts.md)
 
 ---
 
@@ -141,8 +141,8 @@ All `API` calls are `static` members of the `Integrity` class.
 
 `Examples`
 
-- [ES5](https://github.com/JimiC/nsri/blob/master/docs/examples/persist-es5-js.md)
-- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/master/docs/examples/persist-js-ts.md)
+- [ES5](https://github.com/JimiC/nsri/blob/main/docs/examples/persist-es5-js.md)
+- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/main/docs/examples/persist-js-ts.md)
 
 ---
 
@@ -162,8 +162,8 @@ All `API` calls are `static` members of the `Integrity` class.
 
 `Examples`
 
-- [ES5](https://github.com/JimiC/nsri/blob/master/docs/examples/getManifestIntegrity-es5-js.md)
-- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/master/docs/examples/getManifestIntegrity-js-ts.md)
+- [ES5](https://github.com/JimiC/nsri/blob/main/docs/examples/getManifestIntegrity-es5-js.md)
+- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/main/docs/examples/getManifestIntegrity-js-ts.md)
 
 ---
 
@@ -184,8 +184,8 @@ All `API` calls are `static` members of the `Integrity` class.
 
 `Examples`
 
-- [ES5](https://github.com/JimiC/nsri/blob/master/docs/examples/updateManifestIntegrity-es5-js.md)
-- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/master/docs/examples/updateManifestIntegrity-js-ts.md)
+- [ES5](https://github.com/JimiC/nsri/blob/main/docs/examples/updateManifestIntegrity-es5-js.md)
+- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/main/docs/examples/updateManifestIntegrity-js-ts.md)
 
 ---
 
@@ -201,8 +201,8 @@ All `API` calls are `static` members of the `Integrity` class.
 
 `Examples`
 
-- [ES5](https://github.com/JimiC/nsri/blob/master/docs/examples/getIntegrityOptionsFromConfig-es5-js.md)
-- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/master/docs/examples/getIntegrityOptionsFromConfig-js-ts.md)
+- [ES5](https://github.com/JimiC/nsri/blob/main/docs/examples/getIntegrityOptionsFromConfig-es5-js.md)
+- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/main/docs/examples/getIntegrityOptionsFromConfig-js-ts.md)
 
 ---
 
@@ -222,8 +222,8 @@ All `API` calls are `static` members of the `Integrity` class.
 
 `Examples`
 
-- [ES5](https://github.com/JimiC/nsri/blob/master/docs/examples/getExclusionsFromIgnoreFile-es5-js.md)
-- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/master/docs/examples/getExclusionsFromIgnoreFile-js-ts.md)
+- [ES5](https://github.com/JimiC/nsri/blob/main/docs/examples/getExclusionsFromIgnoreFile-es5-js.md)
+- [ES6+, Typescript](https://github.com/JimiC/nsri/blob/main/docs/examples/getExclusionsFromIgnoreFile-js-ts.md)
 
 ---
 
@@ -250,4 +250,4 @@ All `API` calls are `static` members of the `Integrity` class.
 
 ## Importation
 
-See [here](https://github.com/JimiC/nsri/blob/master/docs/importation.md) how to import the library.
+See [here](https://github.com/JimiC/nsri/blob/main/docs/importation.md) how to import the library.
