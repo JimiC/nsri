@@ -9,6 +9,8 @@ jobs:
   publish:
     name: Publish
 
+    if: github.repository_owner == 'JimiC'
+
     runs-on: ubuntu-latest
 
     steps:
