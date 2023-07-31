@@ -28,7 +28,7 @@ jobs:
         arch:
           - x64
         node-version:
-          - 16
+          - 18
         experimental: [false]
         minimum: [false]
         include:
@@ -48,21 +48,21 @@ jobs:
             experimental: true
             minimum: false
 
-          - os: ubuntu-latest
-            node-version: 18 # minimum
-            arch: x64
-            experimental: false
-            minimum: true
-          - os: macOS-latest
-            arch: x64
-            node-version: 18 # minimum
-            experimental: false
-            minimum: true
-          - os: windows-latest
-            arch: x64
-            node-version: 18 # minimum
-            experimental: false
-            minimum: true
+          # - os: ubuntu-latest
+          #   node-version: 18 # minimum
+          #   arch: x64
+          #   experimental: false
+          #   minimum: true
+          # - os: macOS-latest
+          #   arch: x64
+          #   node-version: 18 # minimum
+          #   experimental: false
+          #   minimum: true
+          # - os: windows-latest
+          #   arch: x64
+          #   node-version: 18 # minimum
+          #   experimental: false
+          #   minimum: true
 
     steps:
       - name: Cloning repository
