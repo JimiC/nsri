@@ -1,7 +1,7 @@
 import Ajv, { Schema } from 'ajv';
 import { createHash, getHashes, Hash, BinaryToTextEncoding, BinaryLike } from 'crypto';
 import { createReadStream, Stats } from 'fs';
-import mm from 'minimatch';
+import { minimatch } from 'minimatch';
 import * as path from 'path';
 import { ConfigExplorer } from '../common/configExplorer';
 import * as constants from '../common/constants';
@@ -439,7 +439,7 @@ export class Integrity {
 
   /** @internal */
   private static match = (target: string, pattern: string): boolean =>
-    mm(target, pattern, { dot: true });
+    minimatch(target, pattern, { dot: true });
 
   /** @internal */
   private static excludePath(curPath: string, options: NormalizedIntegrityOptions): boolean {

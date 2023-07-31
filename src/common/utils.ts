@@ -1,5 +1,4 @@
 import { getHashes } from 'crypto';
-// eslint-disable-next-line import/default
 import detectIndent from 'detect-indent';
 
 /** @internal */
