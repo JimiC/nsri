@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import { BaseEncodingOptions, PathLike, Stats } from 'fs';
+import { ObjectEncodingOptions, PathLike, Stats } from 'fs';
 import path from 'path';
 import sinon, { createSandbox } from 'sinon';
 import { Integrity } from '../../src/app/integrity';
@@ -13,7 +13,7 @@ describe(`Integrity: function 'check' tests`, (): void => {
   context('expects', (): void => {
 
     type ReadFileType = [PathLike | number,
-      (BaseEncodingOptions & { flag?: string | undefined } | BufferEncoding | null)?];
+      (ObjectEncodingOptions & { flag?: string | undefined } | BufferEncoding | null)?];
 
     let anotherFileToHashFilename: string;
     let fileToHashFilename: string;

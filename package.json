@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/JimiC/nsri#readme",
   "engines": {
-    "node": ">=14"
+    "node": ">=18"
   },
   "keywords": [
     "node",
@@ -48,7 +48,7 @@
   ],
   "types": "lib/nsri.d.ts",
   "scripts": {
-    "reinstall": "rimraf ./yarn.lock ./package-lock.json ./node_modules && npm i",
+    "reinstall": "rimraf ./package-lock.json ./node_modules && npm i",
     "start": "node ./out/src/cli.js",
     "lint": "eslint --ext .ts .",
     "prebuild:dev": "npm run lint",
@@ -59,42 +59,41 @@
     "pretest": "npm run build:dev",
     "test": "nyc mocha",
     "posttest": "nyc report -r lcov",
-    "prepublishOnly": "npm run build && npx api-extractor run && npx rollup -c"
+    "prepublishOnly": "npm run cleanup && npx rollup -c --bundleConfigAsCjs"
   },
   "dependencies": {
-    "ajv": "^8.11.0",
-    "cosmiconfig": "^7.0.1",
+    "ajv": "^8.12.0",
+    "cosmiconfig": "^8.2.0",
     "detect-indent": "^6.1.0",
-    "minimatch": "^5.0.1",
-    "yargs": "^17.4.1"
+    "minimatch": "^9.0.3",
+    "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.23.2",
-    "@rollup/plugin-typescript": "^8.3.2",
-    "@types/chai": "^4.3.1",
-    "@types/minimatch": "^3.0.5",
-    "@types/mocha": "^9.1.1",
-    "@types/node": "14",
-    "@types/sinon": "^10.0.11",
-    "@types/yargs": "^17.0.10",
-    "@typescript-eslint/eslint-plugin": "^5.23.0",
-    "@typescript-eslint/parser": "^5.23.0",
-    "builtin-modules": "^3.2.0",
-    "chai": "^4.3.6",
-    "eslint": "^8.15.0",
-    "eslint-plugin-import": "^2.26.0",
-    "husky": "^8.0.1",
-    "lint-staged": "^12.4.1",
-    "mocha": "^10.0.0",
+    "@microsoft/api-extractor": "^7.36.3",
+    "@rollup/plugin-terser": "^0.4.3",
+    "@rollup/plugin-typescript": "^11.1.2",
+    "@types/chai": "^4.3.5",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "18",
+    "@types/sinon": "^10.0.15",
+    "@types/yargs": "^17.0.24",
+    "@typescript-eslint/eslint-plugin": "^6.2.0",
+    "@typescript-eslint/parser": "^6.2.0",
+    "builtin-modules": "^3.3.0",
+    "chai": "^4.3.7",
+    "eslint": "^8.46.0",
+    "eslint-plugin-import": "^2.28.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
+    "mocha": "^10.2.0",
     "nyc": "^15.1.0",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.72.1",
+    "rimraf": "^5.0.1",
+    "rollup": "^3.27.0",
+    "rollup-plugin-api-extractor": "0.2.5",
     "rollup-plugin-copy": "^3.4.0",
-    "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-preserve-shebangs": "^0.2.0",
-    "rollup-plugin-terser": "^7.0.2",
-    "sinon": "^14.0.0",
-    "tslib": "^2.4.0",
-    "typescript": "^4.6.4"
+    "sinon": "^15.2.0",
+    "tslib": "^2.6.1",
+    "typescript": "^5.1.6"
   }
 }

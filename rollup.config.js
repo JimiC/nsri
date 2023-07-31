@@ -1,9 +1,9 @@
-import builtins from 'builtin-modules';
-import copy from 'rollup-plugin-copy';
-import del from 'rollup-plugin-delete';
-import { preserveShebangs } from 'rollup-plugin-preserve-shebangs';
-import { terser } from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 import ts from '@rollup/plugin-typescript';
+import builtins from 'builtin-modules';
+import { apiExtractor } from "rollup-plugin-api-extractor";
+import copy from 'rollup-plugin-copy';
+import { preserveShebangs } from 'rollup-plugin-preserve-shebangs';
 import typescript from 'typescript';
 import pkg from './package.json';
 
@@ -30,21 +30,22 @@ export default [
     plugins: [
       ts({
         typescript,
-        removeComments: true,
       }),
       terser(),
       copy({
         targets: [
           { src: 'src/app/schemas', dest: 'lib' },
-          { src: 'dist/lib', dest: '.' }
+          { src: 'dist/lib', dest: '.' },
         ],
         copyOnce: true,
         hook: 'writeBundle'
       }),
-      del({
-        targets: 'dist/out',
-        runOnce: true,
-        hook: 'buildEnd'
+      apiExtractor({
+        configuration: {
+          projectFolder: ".",
+        },
+        configFile: "./api-extractor.json",
+        cleanUpRollup: false
       })
     ],
   },
@@ -65,22 +66,23 @@ export default [
     plugins: [
       ts({
         typescript,
-        removeComments: true,
       }),
       preserveShebangs(),
       terser(),
       copy({
         targets: [
           { src: 'src/app/schemas', dest: 'lib' },
-          { src: 'dist/lib', dest: '.' }
+          { src: 'dist/lib', dest: '.' },
         ],
         copyOnce: true,
         hook: 'writeBundle'
       }),
-      del({
-        targets: 'dist/out',
-        runOnce: true,
-        hook: 'buildEnd'
+      apiExtractor({
+        configuration: {
+          projectFolder: ".",
+        },
+        configFile: "./api-extractor.json",
+        cleanUpRollup: false
       })
     ],
   }
