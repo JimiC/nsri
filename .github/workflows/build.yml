@@ -21,60 +21,57 @@ jobs:
     strategy:
       max-parallel: 3
       matrix:
-        os:
-          - ubuntu-latest
-          - macOS-latest
-          - windows-latest
-        arch:
-          - x64
-        node-version:
-          - 18
-        experimental: [false]
-        minimum: [false]
+        # os:
+        #   - ubuntu-latest
+        #   - macOS-latest
+        #   - windows-latest
+        # arch:
+        #   - x64
+        # node-version:
+        #   - 18
+        # experimental:
+        #   - false
+        # send_coverage:
+        #   - false
         include:
           - os: ubuntu-latest
             arch: x64
             node-version: 20 # latest
             experimental: true
-            minimum: false
+            node_minimum: false
           - os: macOS-latest
             arch: x64
             node-version: 20 # latest
             experimental: true
-            minimum: false
+            send_coverage: false
           - os: windows-latest
             arch: x64
             node-version: 20 # latest
             experimental: true
-            minimum: false
+            send_coverage: false
 
-          # - os: ubuntu-latest
-          #   node-version: 18 # minimum
-          #   arch: x64
-          #   experimental: false
-          #   minimum: true
-          # - os: macOS-latest
-          #   arch: x64
-          #   node-version: 18 # minimum
-          #   experimental: false
-          #   minimum: true
-          # - os: windows-latest
-          #   arch: x64
-          #   node-version: 18 # minimum
-          #   experimental: false
-          #   minimum: true
+          - os: ubuntu-latest
+            node-version: 18 # minimum
+            arch: x64
+            experimental: false
+            send_coverage: true
+          - os: macOS-latest
+            arch: x64
+            node-version: 18 # minimum
+            experimental: false
+            send_coverage: false
+          - os: windows-latest
+            arch: x64
+            node-version: 18 # minimum
+            experimental: false
+            send_coverage: false
 
     steps:
-      - name: Cloning repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 5
-
       - name: Check concurrency
-        uses: styfle/cancel-workflow-action@0.9.1
+        uses: styfle/cancel-workflow-action@0.11.0
         with:
           all_but_latest: true
-          access_token: ${{ github.token }}
+          access_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Setting up Node.js: ${{ matrix.node-version }}"
         uses: actions/setup-node@v3
@@ -86,6 +83,11 @@ jobs:
           node --version
           npm --version
 
+      - name: Cloning repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 5
+
       - name: Installing dependencies
         run: npm ci
 
@@ -94,7 +96,13 @@ jobs:
         run: npm test
 
       - name: Sending coverage report
-        if: (success() && matrix.os == 'ubuntu-latest' && matrix.minimum && github.actor != 'dependabot[bot]' && github.repository_owner == 'JimiC')
-        uses: paambaati/codeclimate-action@v3.0.0
+        if: >
+          (
+            success() &&
+            matrix.send_coverage &&
+            github.actor != 'dependabot[bot]' &&
+            github.repository_owner == 'JimiC'
+          )
+        uses: paambaati/codeclimate-action@v5
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
