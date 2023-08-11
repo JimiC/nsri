@@ -10,6 +10,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     name: 'Node.js: ${{ matrix.node-version }} | ${{ matrix.os }} | ${{ matrix.arch }}'
@@ -67,12 +71,6 @@ jobs:
             send_coverage: false
 
     steps:
-      - name: Check concurrency
-        uses: styfle/cancel-workflow-action@0.11.0
-        with:
-          all_but_latest: true
-          access_token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: "Setting up Node.js: ${{ matrix.node-version }}"
         uses: actions/setup-node@v3
         with:
