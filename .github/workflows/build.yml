@@ -2,10 +2,10 @@ name: build
 
 on:
   push:
-    tags:
-      - '!*'
-    branches:
+    tags-ignore:
       - '*'
+    branches:
+      - main
   pull_request:
     branches:
       - main
@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   test:
-    name: 'Node.js: ${{ matrix.node-version }} | ${{ matrix.os }} | ${{ matrix.arch }}'
+    name: Node.js ${{ matrix.node-version }} | ${{ matrix.os }} | ${{ matrix.arch }}
 
     timeout-minutes: 5
 
@@ -24,6 +24,7 @@ jobs:
 
     strategy:
       max-parallel: 3
+      fail-fast: false
       matrix:
         # os:
         #   - ubuntu-latest
@@ -71,7 +72,7 @@ jobs:
             send_coverage: false
 
     steps:
-      - name: "Setting up Node.js: ${{ matrix.node-version }}"
+      - name: Setting up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
@@ -93,14 +94,29 @@ jobs:
         continue-on-error: ${{ matrix.experimental }}
         run: npm test
 
-      - name: Sending coverage report
+      - name: Uploading code coverage report
         if: >
           (
             success() &&
             matrix.send_coverage &&
-            github.actor != 'dependabot[bot]' &&
-            github.repository_owner == 'JimiC'
+            github.event_name == 'push' &&
+            github.repository_owner == 'JimiC' &&
+            github.actor != 'dependabot[bot]'
           )
         uses: paambaati/codeclimate-action@v5
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+
+      - name: Uploading code coverage artifact
+        if: >
+          (
+            success() &&
+            matrix.send_coverage &&
+            github.event_name == 'pull_request' &&
+            github.actor != 'dependabot[bot]'
+          )
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage-report
+          path: coverage/lcov.info
+          retention-days: 1
