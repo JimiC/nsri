@@ -88,7 +88,7 @@
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
     "rimraf": "^5.0.1",
-    "rollup": "^3.27.1",
+    "rollup": "^4.0.0",
     "rollup-plugin-api-extractor": "0.2.5",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-preserve-shebangs": "^0.2.0",
